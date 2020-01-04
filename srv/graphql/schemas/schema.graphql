@@ -1,0 +1,53 @@
+type Course {
+  title: String
+  desc: String
+  page: Int
+  author: String
+}
+type Info {
+  height: String
+  weight: String
+  hobby: [String]
+  studentId: ID
+  _id: ID
+}
+type Student {
+  name: String
+  sex: String
+  age: Int
+  _id: ID
+  info: Info
+}
+type User {
+  username: String
+  password: String
+}
+type Query {
+  getUser: [User]
+  getCourse: [Course]
+  getStudent: [Student]
+  getStudentInfo(id: ID): Info
+  getInfo: [Info]
+}
+type Mutation {
+  addCourse(post: CourseInput): Course
+  addStudent(post: StudentInput): Student
+  addStudentInfo(id: ID, height: String, weight: String, hobby: [String]): Info
+  changeStudentInfo(
+    id: ID
+    height: String
+    weight: String
+    hobby: [String]
+  ): Info
+}
+input CourseInput {
+  title: String
+  desc: String
+  page: Int
+  author: String
+}
+input StudentInput {
+  name: String
+  sex: String
+  age: Int
+}
