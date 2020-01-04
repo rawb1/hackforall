@@ -3,7 +3,7 @@ const config = require('../config');
 
 const logger = () => {
   let categories;
-  if (process.env.NODE_ENV !== 'production') {
+  if (config.env !== 'production') {
     categories = {
       default: { appenders: ['console'], level: 'DEBUG' },
       http: { appenders: ['console'], level: 'DEBUG' }
@@ -19,19 +19,19 @@ const logger = () => {
     appenders: {
       access: {
         type: 'dateFile',
-        filename: config.LOG_FOLDER + '/access.log',
+        filename: config.logs + '/access.log',
         pattern: '-yyyy-MM-dd',
         category: 'http'
       },
       app: {
         type: 'file',
-        filename: config.LOG_FOLDER + '/app.log',
+        filename: config.logs + '/app.log',
         maxLogSize: 10485760,
         numBackups: 3
       },
       errorFile: {
         type: 'file',
-        filename: config.LOG_FOLDER + '/errors.log'
+        filename: config.logs + '/errors.log'
       },
       errors: {
         type: 'logLevelFilter',

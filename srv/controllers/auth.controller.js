@@ -18,7 +18,7 @@ const register = async (ctx, next) => {
     next();
   }
   logger.info('registration successful');
-  ctx.body = user;
+  ctx.body = user.username;
 };
 
 const login = async (ctx, next) => {
@@ -32,7 +32,7 @@ const login = async (ctx, next) => {
     ctx.throw(400, err.name, err.message);
     next();
   }
-  ctx.body = user;
+  ctx.body = user.username;
 };
 
 module.exports = {

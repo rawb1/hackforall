@@ -1,4 +1,3 @@
-const process = require('process');
 const logger = require('koa-log4').getLogger('mongoose');
 const mongoose = require('mongoose');
 const config = require('../config');
@@ -9,7 +8,7 @@ require('./schema/student');
 require('./schema/course');
 
 const database = () => {
-  if (process.env.NODE_ENV !== 'production') {
+  if (config.env !== 'production') {
     mongoose.set('debug', true);
     mongoose.set('debug', (collectionName, method, query, doc, options) => {
       logger.debug(`${collectionName}.${method}`, JSON.stringify(query), doc);
@@ -18,16 +17,16 @@ const database = () => {
   mongoose.set('useUnifiedTopology', true);
   mongoose.set('useNewUrlParser', true);
   mongoose.set('useCreateIndex', true);
-  mongoose.connect(config.DB_PATH);
+  mongoose.connect(config.mongo.uri);
+
   mongoose.connection.on('disconnected', () => {
-    mongoose.connect(config.DB_PATH);
+    mongoose.connect(config.mongo.uri);
   });
   mongoose.connection.on('error', err => {
     logger.fatal(err);
   });
-
   mongoose.connection.on('open', () => {
-    logger.info('Connected to MongoDB ', config.DB_PATH);
+    logger.info('Connected to MongoDB ', config.mongo.uri);
   });
 };
 

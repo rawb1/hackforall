@@ -1,4 +1,4 @@
-const { register, login } = require('../controllers/auth');
+const { register, login } = require('../controllers/auth.controller');
 const { saveInfo, fetchInfo } = require('../controllers/info');
 const {
   saveStudent,

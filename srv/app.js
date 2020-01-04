@@ -12,6 +12,7 @@ require('dotenv').config();
 require('./logger');
 require('./mongodb');
 require('./auth');
+require('./mailer');
 
 const logger = log4js.getLogger('app');
 
@@ -19,7 +20,7 @@ const routerMap = require('./router');
 const schema = require('./graphql');
 
 const app = new Koa();
-const router = new Router();
+const router = new Router({ prefix: '/api' });
 const apollo = new ApolloServer({
   schema,
   context: ({ ctx }) => {
