@@ -13,7 +13,7 @@
   "dependencies": {
     "apollo-server-koa": "^2.9.15",
     "core-js": "^3.6.1",
-    "dotenv-safe": "^8.2.0",
+    "dotenv": "^8.2.0",
     "koa": "^2.11.0",
     "koa-bodyparser": "^4.2.1",
     "koa-log4": "^2.3.2",

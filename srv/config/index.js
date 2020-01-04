@@ -1,20 +1,19 @@
-const path = require('path');
+const env = require('dotenv').config();
 
-require('dotenv-safe').config({
-  path: path.join(__dirname, '../../.env'),
-  sample: path.join(__dirname, '../../.env.example')
-});
+if (env.error) {
+  const logger = require('koa-log4').getLogger('config');
+  logger.level = 'fatal';
+  logger.fatal('.env file not found');
+  process.exit(1);
+}
 
 module.exports = {
-  env: process.env.NODE_ENV,
   port: process.env.PORT,
   mongo: {
     uri: 'mongodb://localhost/graphql'
   },
   logs: 'log',
   emailConfig: {
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
     username: process.env.EMAIL_USERNAME,
     password: process.env.EMAIL_PASSWORD
   }

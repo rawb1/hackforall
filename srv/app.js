@@ -8,7 +8,7 @@ const bodyParser = require('koa-bodyparser');
 const passport = require('koa-passport');
 const { ApolloServer } = require('apollo-server-koa');
 
-require('dotenv').config();
+require('./config');
 require('./logger');
 require('./mongodb');
 require('./auth');
