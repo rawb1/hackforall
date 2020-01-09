@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "watch": "nodemon ./srv/app.js",
+    "watch": "nodemon --inspect ./srv/app.js",
     "build": "vue-cli-service build",
     "client:lint": "vue-cli-service lint",
     "server:lint": "eslint ./srv",
