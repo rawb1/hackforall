@@ -24,7 +24,7 @@ const routes = [
     children: [
       {
         path: '/login',
-        name: 'dash',
+        name: 'login',
         component: () => import('@/views/auth/Login.vue')
       },
       {
@@ -58,4 +58,4 @@ const router = new VueRouter({
   routes
 });
 
-export default router;
+export { router };
