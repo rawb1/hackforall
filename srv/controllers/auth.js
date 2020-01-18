@@ -17,13 +17,13 @@ const register = async (ctx, next) => {
     ctx.throw(400, err.name, err.message);
     next();
   }
-  logger.info('registration successful');
+  logger.info(`new user : ${user.username}`);
   ctx.body = user.username;
 };
 
 const login = async (ctx, next) => {
   const opts = ctx.request.body;
-  logger.debug('register', opts);
+  logger.debug('login', opts);
   let user;
   try {
     user = await User.authenticate()(opts.username, opts.password);
