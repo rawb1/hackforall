@@ -5,6 +5,9 @@ const {
 const { defaultFieldResolver } = require('graphql');
 
 // source : https://jkettmann.com/authorization-with-graphql-and-custom-directives/
+// ctx.isAuthenticated()
+// ctx.isUnauthenticated()
+// ctx.state.user
 
 const assertOwner = (typename, user, data) => {
   if (typename === 'Message' && user.id !== data.receiverId) {

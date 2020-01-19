@@ -40,6 +40,7 @@ const resolvers = {
       const { username, password } = args.user;
       const { user } = await User.authenticate()(username, password);
       await ctx.login(user);
+      await ctx.setJwtCookie();
       return user;
     },
     logout: async (parent, args, ctx, info) => {

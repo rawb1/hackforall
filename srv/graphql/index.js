@@ -1,6 +1,6 @@
 const { gql, makeExecutableSchema } = require('apollo-server-koa');
 const { merge } = require('lodash');
-const generate = require('./generate');
+const generate = require('./utils/generate');
 const logger = require('koa-log4').getLogger('graphql');
 
 const { User, UserResolvers } = require('./schemas/user.js');

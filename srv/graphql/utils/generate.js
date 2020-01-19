@@ -1,4 +1,4 @@
-const { isDev } = require('../config');
+const { isDev } = require('../../config');
 
 const generate = async schema => {
   if (isDev) {

@@ -7,3 +7,4 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 require('./strategies/local');
+require('./strategies/jwt');
