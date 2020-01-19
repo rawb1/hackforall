@@ -11,7 +11,7 @@ const { ApolloServer } = require('apollo-server-koa');
 require('./config');
 require('./logger');
 require('./mongodb');
-require('./auth');
+require('./passport');
 require('./mailer');
 
 const logger = log4js.getLogger('app');
@@ -23,10 +23,12 @@ const app = new Koa();
 const router = new Router({ prefix: '/api' });
 const apollo = new ApolloServer({
   schema,
-  context: ({ ctx }) => {
-    const user = ctx.state.user;
-    return { user };
-  }
+  context: ({ ctx }) => ctx
+  // ctx.isAuthenticated()
+  // ctx.isUnauthenticated()
+  // await ctx.login()
+  // ctx.logout()
+  // ctx.state.user
 });
 
 app.keys = ['your-session-secret'];

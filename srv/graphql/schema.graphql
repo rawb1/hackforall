@@ -1,0 +1,29 @@
+directive @auth(requires: Role!) on FIELD_DEFINITION
+
+type Mutation {
+  register(user: UserInput): User
+}
+
+type Query {
+  _empty: String
+  login(user: UserInput): User
+  logout: User
+}
+
+enum Role {
+  ADMIN
+  OWNER
+  USER
+}
+
+type User {
+  _id: ID
+  username: String!
+  name: String
+  role: Role!
+}
+
+input UserInput {
+  username: String
+  password: String
+}

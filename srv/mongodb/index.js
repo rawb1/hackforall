@@ -8,7 +8,7 @@ require('./schema/student');
 require('./schema/course');
 
 const database = () => {
-  if (config.env !== 'production') {
+  if (config.isDev) {
     mongoose.set('debug', true);
     mongoose.set('debug', (collectionName, method, query, doc, options) => {
       logger.debug(`${collectionName}.${method}`, JSON.stringify(query), doc);

@@ -1,6 +1,6 @@
 <template>
-  <div class="container mx-auto">
-    <!-- ... -->
+  <div class="container">
+    <router-view></router-view>
   </div>
 </template>
 <script>

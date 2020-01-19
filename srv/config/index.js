@@ -1,6 +1,6 @@
-const env = require('dotenv').config();
+const config = require('dotenv').config();
 
-if (env.error) {
+if (config.error) {
   const logger = require('koa-log4').getLogger('config');
   logger.level = 'fatal';
   logger.fatal('.env file not found');
@@ -8,6 +8,7 @@ if (env.error) {
 }
 
 module.exports = {
+  isDev: (process.env.NODE_ENV || 'development') !== 'production',
   port: process.env.PORT,
   mongo: {
     uri: 'mongodb://localhost/graphql'

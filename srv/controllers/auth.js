@@ -8,17 +8,18 @@ const register = async (ctx, next) => {
   logger.debug('register', opts);
   let user;
   try {
-    user = await User.register(
+    const res = await User.register(
       new User({ username: opts.username }),
       opts.password
     );
+    user = res.user;
   } catch (err) {
     logger.error('registration error', err.name, err.message);
     ctx.throw(400, err.name, err.message);
     next();
   }
   logger.info(`new user : ${user.username}`);
-  ctx.body = user.username;
+  ctx.body = user;
 };
 
 const login = async (ctx, next) => {
@@ -32,7 +33,7 @@ const login = async (ctx, next) => {
     ctx.throw(400, err.name, err.message);
     next();
   }
-  ctx.body = user.username;
+  ctx.body = user;
 };
 
 module.exports = {

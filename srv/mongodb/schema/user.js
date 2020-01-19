@@ -4,9 +4,14 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
+  // username: String,
+  // hash: String,
+  // salt: String,
   name: String,
-  sex: String,
-  age: Number,
+  role: {
+    type: String,
+    default: 'USER'
+  },
   meta: {
     createdAt: {
       type: Date,

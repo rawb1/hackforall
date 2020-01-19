@@ -8,7 +8,8 @@
     "build": "vue-cli-service build",
     "client:lint": "vue-cli-service lint",
     "server:lint": "eslint ./srv",
-    "mongo": "docker run -d -p 27017:27017 --name mongodb mongo:4 -v /data/db:/data/db"
+    "mongo": "docker run -d -p 27017:27017 --name mongodb mongo",
+    "configure": "cp -u .env.example .env"
   },
   "dependencies": {
     "apollo-boost": "^0.4.7",

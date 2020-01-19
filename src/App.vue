@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="h-screen bg-gray-100">
+  <div id="app" class="h-screen inset-0 bg-gray-100">
     {{ getUser }}
     <router-view></router-view>
   </div>
