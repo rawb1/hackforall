@@ -18,7 +18,6 @@ const logger = log4js.getLogger('app');
 
 const routerMap = require('./router');
 const schema = require('./graphql');
-const jwt = require('./passport/strategies/jwt');
 
 const app = new Koa();
 const router = new Router({ prefix: '/api' });
@@ -34,8 +33,7 @@ app.use(log4js.koaLogger(log4js.getLogger('http'), { level: 'auto' }));
 app.use(serve(path.join(__dirname, '../dist')));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(jwt);
-// app.use(passport.authenticate('jwt', { session: false }));
+app.use(passport.authenticate('jwt', { session: false }));
 router.use(routerMap.routes());
 app.use(router.routes());
 app.use(router.allowedMethods());
