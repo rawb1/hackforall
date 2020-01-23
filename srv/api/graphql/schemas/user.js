@@ -1,7 +1,10 @@
 const { gql } = require('apollo-server-koa');
+const log4js = require('koa-log4');
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 const User = mongoose.model('User');
+const logger = log4js.getLogger('user');
 
 const typeDefs = gql`
   directive @auth(requires: Role!) on FIELD_DEFINITION
@@ -37,21 +40,25 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     login: async (parent, args, ctx, info) => {
-      const { username, password } = args.user;
-      const { user } = await User.authenticate()(username, password);
-      await ctx.login(user);
-      await ctx.setJwtCookie();
-      return user;
+      try {
+        const user = await User.findOne(args);
+        const token = jwt.sign({ sub: user._id }, 'shhhhh');
+        ctx.cookies.set('jwt', token);
+        return user;
+      } catch (err) {
+        logger.debug(err);
+        return null;
+      }
     },
     logout: async (parent, args, ctx, info) => {
-      ctx.logout();
+      ctx.cookies.set('jwt', { expires: Date.now() });
     }
   },
   Mutation: {
     register: async (parent, args, ctx) => {
-      const { username, password } = args.user;
-      const user = await User.register(new User({ username }), password);
-      return user;
+      // const { username, password } = args.user;
+      // const user = await User.register(new User({ username }), password);
+      // return user;
     }
   }
 };

@@ -3,8 +3,8 @@ const { merge } = require('lodash');
 const generate = require('./utils/generate');
 const logger = require('koa-log4').getLogger('graphql');
 
-const { User, UserResolvers } = require('./schemas/user.js');
-const AuthDirective = require('./directives/AuthDirective');
+const { User, UserResolvers } = require('./schemas/user');
+const authDirective = require('./directives/authDirective');
 
 const Query = gql`
   type Query {
@@ -13,7 +13,7 @@ const Query = gql`
 `;
 
 const directiveResolvers = {
-  auth: AuthDirective
+  auth: authDirective
 };
 
 const schema = makeExecutableSchema({

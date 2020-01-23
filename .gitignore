@@ -2,6 +2,7 @@
 node_modules
 /dist
 /log
+/data
 
 # local env files
 .env

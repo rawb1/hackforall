@@ -1,12 +1,8 @@
 const mongoose = require('mongoose');
-const passportLocalMongoose = require('passport-local-mongoose');
 
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-  // username: String,
-  // hash: String,
-  // salt: String,
   name: String,
   role: {
     type: String,
@@ -23,9 +19,6 @@ const UserSchema = new Schema({
     }
   }
 });
-
-UserSchema.plugin(passportLocalMongoose);
-
 UserSchema.pre('save', function(next) {
   if (this.isNew) {
     this.meta.createdAt = this.meta.updatedAt = Date.now();

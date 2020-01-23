@@ -1,12 +1,12 @@
 const nodemailer = require('nodemailer');
-const config = require('../config');
+const env = require('./dotenv');
 const logger = require('koa-log4').getLogger('mailer');
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: config.emailConfig.username,
-    pass: config.emailConfig.password
+    user: env.emailConfig.username,
+    pass: env.emailConfig.password
   }
 });
 

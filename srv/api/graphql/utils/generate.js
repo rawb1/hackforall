@@ -1,4 +1,4 @@
-const { isDev } = require('../../config');
+const { isDev } = require('../../../config/dotenv');
 
 const generate = async schema => {
   if (isDev) {
@@ -10,7 +10,7 @@ const generate = async schema => {
 
     const writeFile = promisify(fs.writeFile);
     const schemaDefs = printSchema(schema);
-    const schemaDefsPath = path.join(__dirname, '/schema.graphql');
+    const schemaDefsPath = path.join(__dirname, '../schema.graphql');
 
     try {
       await writeFile(schemaDefsPath, schemaDefs);

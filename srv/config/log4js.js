@@ -1,9 +1,9 @@
 const log4js = require('koa-log4');
-const config = require('../config');
+const env = require('./dotenv');
 
 const logger = () => {
   let categories;
-  if (config.env !== 'production') {
+  if (env.isDev) {
     categories = {
       default: { appenders: ['console'], level: 'DEBUG' },
       http: { appenders: ['console'], level: 'DEBUG' }
@@ -19,19 +19,19 @@ const logger = () => {
     appenders: {
       access: {
         type: 'dateFile',
-        filename: config.logs + '/access.log',
+        filename: env.logs + '/access.log',
         pattern: '-yyyy-MM-dd',
         category: 'http'
       },
       app: {
         type: 'file',
-        filename: config.logs + '/app.log',
+        filename: env.logs + '/app.log',
         maxLogSize: 10485760,
         numBackups: 3
       },
       errorFile: {
         type: 'file',
-        filename: config.logs + '/errors.log'
+        filename: env.logs + '/errors.log'
       },
       errors: {
         type: 'logLevelFilter',
