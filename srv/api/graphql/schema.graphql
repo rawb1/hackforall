@@ -8,6 +8,7 @@ type Query {
   _empty: String
   login(user: UserInput): User
   logout: User
+  me: User
 }
 
 enum Role {

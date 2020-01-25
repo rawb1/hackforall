@@ -1,9 +1,11 @@
 const { gql, makeExecutableSchema } = require('apollo-server-koa');
 const { merge } = require('lodash');
 const generate = require('./utils/generate');
-const logger = require('koa-log4').getLogger('graphql');
+const log4js = require('koa-log4');
 
-const { User, UserResolvers } = require('./schemas/user');
+const logger = log4js.getLogger('graphql');
+
+const { User, UserResolvers } = require('./schemas/user.schema');
 const authDirective = require('./directives/authDirective');
 
 const Query = gql`
@@ -19,7 +21,7 @@ const directiveResolvers = {
 const schema = makeExecutableSchema({
   typeDefs: [Query, User],
   resolvers: merge(UserResolvers),
-  logger,
+  logger: { log: e => logger.debug(e) },
   directiveResolvers
 });
 

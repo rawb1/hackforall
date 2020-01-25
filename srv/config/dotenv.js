@@ -18,5 +18,10 @@ module.exports = {
     username: process.env.EMAIL_USERNAME,
     password: process.env.EMAIL_PASSWORD
   },
-  secret: 'ssshhhhh'
+  secret: 'ssshhhhh',
+  playground: {
+    settings: {
+      'request.credentials': 'same-origin' // allow cookies
+    }
+  }
 };

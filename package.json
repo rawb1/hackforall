@@ -18,6 +18,7 @@
     "apollo-link": "^1.2.13",
     "apollo-link-http": "^1.5.16",
     "apollo-server-koa": "^2.9.15",
+    "bcrypt": "^3.0.7",
     "core-js": "^3.6.1",
     "dotenv": "^8.2.0",
     "graphql": "^14.5.8",
