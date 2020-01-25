@@ -14,7 +14,6 @@ const Query = gql`
 
   enum Role {
     ADMIN
-    OWNER
     USER
   }
 

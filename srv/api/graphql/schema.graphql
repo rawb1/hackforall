@@ -13,14 +13,12 @@ type Query {
 
 enum Role {
   ADMIN
-  OWNER
   USER
 }
 
 type User {
   _id: ID
   username: String!
-  name: String
   role: Role!
 }
 
