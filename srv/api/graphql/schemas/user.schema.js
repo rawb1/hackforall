@@ -8,19 +8,11 @@ const {
 } = require('../../controllers/user.controller');
 
 const typeDefs = gql`
-  directive @auth(requires: Role!) on FIELD_DEFINITION
-
-  enum Role {
-    ADMIN
-    OWNER
-    USER
-  }
-
-  type User {
-    _id: ID
+  type User @auth(requires: USER) {
+    _id: ID @auth(requires: ADMIN)
     username: String!
     name: String
-    role: Role!
+    role: Role! @auth(requires: ADMIN)
   }
 
   extend type Query {

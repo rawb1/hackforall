@@ -28,4 +28,7 @@ UserSchema.methods.verifyPassword = function(password) {
   return bcrypt.compare(password, this.password);
 };
 
+UserSchema.methods.hasRole = function(role) {
+  return this.role === role;
+};
 mongoose.model('User', UserSchema);

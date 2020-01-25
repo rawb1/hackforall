@@ -35,11 +35,11 @@ const register = async (ctx, args) => {
 const login = async (ctx, args) => {
   const user = await User.findOne({ username: args.username });
   if (!user) {
-    throw new UserInputError('No user found');
+    throw new UserInputError('no user found');
   }
   const verified = await user.verifyPassword(args.password);
   if (!verified) {
-    throw new UserInputError('Wrong password');
+    throw new UserInputError('wrong password');
   }
   const token = jwt.sign({ sub: user._id }, 'shhhhh');
   ctx.cookies.set('jwt', token);

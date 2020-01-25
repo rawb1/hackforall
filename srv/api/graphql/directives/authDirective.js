@@ -1,45 +1,47 @@
 const {
-  AuthenticationError,
-  SchemaDirectiveVisitor
+  SchemaDirectiveVisitor,
+  AuthenticationError
 } = require('apollo-server-koa');
-const { defaultFieldResolver } = require('graphql');
 
-// source : https://jkettmann.com/authorization-with-graphql-and-custom-directives/
-// ctx.isAuthenticated()
-// ctx.isUnauthenticated()
-// ctx.state.user
-
-const assertOwner = (typename, user, data) => {
-  if (typename === 'Message' && user.id !== data.receiverId) {
-    throw new AuthenticationError('You need to be the receiver of the message');
-  }
-};
+// https://blog.apollographql.com/reusable-graphql-schema-directives-131fb3a177d1
 
 class AuthDirective extends SchemaDirectiveVisitor {
-  visitFieldDefinition(field) {
-    const requiredRole = this.args.requires;
-    const originalResolve = field.resolve || defaultFieldResolver;
+  visitObject(type) {
+    this.ensureFieldsWrapped(type);
+    type._requiredAuthRole = this.args.requires;
+  }
 
-    field.resolve = async function(...args) {
-      const context = args[2];
-      const user = context.user || {};
-      const requiresOwner = requiredRole === 'OWNER';
-      const isUnauthorized = !requiresOwner && user.role !== requiredRole;
+  visitFieldDefinition(field, details) {
+    this.ensureFieldsWrapped(details.objectType);
+    field._requiredAuthRole = this.args.requires;
+  }
 
-      if (isUnauthorized) {
-        throw new AuthenticationError(
-          `You need following role: ${requiredRole}`
-        );
-      }
+  ensureFieldsWrapped(objectType) {
+    if (objectType._authFieldsWrapped) return;
+    objectType._authFieldsWrapped = true;
 
-      const data = await originalResolve.apply(this, args);
+    const fields = objectType.getFields();
 
-      if (requiresOwner) {
-        assertOwner(field.type.name, user, data);
-      }
+    Object.keys(fields).forEach(fieldName => {
+      const field = fields[fieldName];
+      const { resolve } = field;
 
-      return data;
-    };
+      field.resolve = async function(...args) {
+        const requiredRole =
+          field._requiredAuthRole || objectType._requiredAuthRole;
+
+        if (!requiredRole) {
+          return resolve.apply(this, args);
+        }
+
+        const user = args[2].state.user;
+        if (!user || !user.hasRole(requiredRole)) {
+          throw new AuthenticationError('not authorized');
+        }
+
+        return resolve.apply(this, args);
+      };
+    });
   }
 }
 
