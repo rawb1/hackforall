@@ -13,6 +13,7 @@ const cache = new InMemoryCache();
 
 const apolloClient = new ApolloClient({
   link: httpLink,
+  credentials: 'include',
   cache
 });
 

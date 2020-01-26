@@ -43,7 +43,7 @@ const login = async (ctx, args) => {
   }
   const token = jwt.sign({ sub: user._id }, 'shhhhh');
   ctx.cookies.set('jwt', token);
-  return user;
+  return !!user;
 };
 
 const logout = ctx => {

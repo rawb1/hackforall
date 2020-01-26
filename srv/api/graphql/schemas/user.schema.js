@@ -15,7 +15,7 @@ const typeDefs = gql`
   }
 
   extend type Query {
-    login(user: UserInput): User
+    login(user: UserInput): Boolean
     logout: User
     me: User
   }

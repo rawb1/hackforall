@@ -24,5 +24,8 @@ module.exports = {
     settings: {
       'request.credentials': 'same-origin' // allow cookies
     }
+  },
+  sessionSettings: {
+    renew: true
   }
 };
