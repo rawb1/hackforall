@@ -1,32 +1,22 @@
 <template>
   <div id="app" class="h-screen inset-0 bg-gray-100">
-    hello {{ me.username }}
+    hello {{ user }}
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-// import ME_QUERY from '@/graphql/user';
-import gql from 'graphql-tag';
+import { ME_QUERY } from '@/graphql/user';
 
 export default {
   name: 'app',
   data() {
     return {
-      me: null
+      user: null
     };
   },
   apollo: {
-    me: gql`
-      # query {
-      #   me {
-      #     username
-      #   }
-      # }
-      query {
-        me: login(user: { username: "robin", password: "proqrobi" })
-      }
-    `
+    user: ME_QUERY
   }
 };
 </script>
