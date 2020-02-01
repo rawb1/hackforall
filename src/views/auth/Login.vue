@@ -1,13 +1,9 @@
 <template><div></div></template>
 <script>
-import gql from 'graphql-tag';
+import { LOGIN_QUERY } from '@/graphql/user';
 export default {
   apollo: {
-    login: gql`
-      query {
-        login: login(user: { username: "robin", password: "proqrobi" })
-      }
-    `
+    login: LOGIN_QUERY
   }
 };
 </script>

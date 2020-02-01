@@ -2,8 +2,14 @@ import gql from 'graphql-tag';
 
 export const ME_QUERY = gql`
   query {
-    user: me {
+    me {
       username
     }
+  }
+`;
+
+export const LOGIN_QUERY = gql`
+  query {
+    ogin(user: { username: "robin", password: "proqrobi" })
   }
 `;

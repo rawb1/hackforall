@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="h-screen inset-0 bg-gray-100">
-    hello {{ user }}
+    hello {{ me.username }}
     <router-view></router-view>
   </div>
 </template>
@@ -12,11 +12,11 @@ export default {
   name: 'app',
   data() {
     return {
-      user: null
+      me: null
     };
   },
   apollo: {
-    user: ME_QUERY
+    me: ME_QUERY
   }
 };
 </script>
