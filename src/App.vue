@@ -24,9 +24,7 @@ export default {
       #   }
       # }
       query {
-        me: login(user: { username: "robin", password: "proqrobi" }) {
-          username
-        }
+        me: login(user: { username: "robin", password: "proqrobi" })
       }
     `
   }
