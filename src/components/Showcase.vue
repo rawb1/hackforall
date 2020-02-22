@@ -1,6 +1,8 @@
 <template>
   <el-container direction="vertical">
-    <h1>HackForAll</h1>
+    <el-row>
+      <h1><i type="primary" class="el-icon-eleme"></i> Hackforall</h1>
+    </el-row>
     <el-main>
       <el-card class="box-card" shadow="hover">
         <el-carousel :autoplay="false" height="60vh">
@@ -38,6 +40,7 @@ export default {
   display: flex;
   justify-content: center;
   flex-direction: column;
+  padding: 0 20px 20px;
 }
 
 .el-carousel__item {
@@ -48,5 +51,9 @@ export default {
 .el-card {
   border: none;
   border-radius: 0;
+}
+
+h1 {
+  margin: 30px 0;
 }
 </style>
