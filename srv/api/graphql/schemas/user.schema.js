@@ -10,12 +10,12 @@ const {
 const typeDefs = gql`
   type User @auth(requires: USER) {
     _id: ID @auth(requires: ADMIN)
-    username: String!
+    email: String!
     role: Role! @auth(requires: ADMIN)
   }
 
   extend type Query {
-    login(user: UserInput): Boolean
+    login(user: UserInput): User
     logout: User
     me: User
   }
@@ -25,7 +25,7 @@ const typeDefs = gql`
   }
 
   input UserInput {
-    username: String
+    email: String
     password: String
   }
 `;

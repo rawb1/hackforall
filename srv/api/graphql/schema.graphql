@@ -6,7 +6,7 @@ type Mutation {
 
 type Query {
   _empty: String
-  login(user: UserInput): Boolean
+  login(user: UserInput): User
   logout: User
   me: User
 }
@@ -18,11 +18,11 @@ enum Role {
 
 type User {
   _id: ID
-  username: String!
+  email: String!
   role: Role!
 }
 
 input UserInput {
-  username: String
+  email: String
   password: String
 }

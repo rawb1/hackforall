@@ -5,24 +5,16 @@
 </template>
 
 <script>
-import { ME_QUERY } from '@/graphql/user';
-
 export default {
-  name: 'App',
-  data() {
-    return {
-      me: null
-    };
-  },
-  apollo: {
-    me: ME_QUERY
-  }
+  name: 'App'
 };
 </script>
 
-<style scoped>
+<style>
 #app {
   max-height: 100vh;
   width: 100%;
+  font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', '微软雅黑', Arial, sans-serif;
 }
 </style>

@@ -13,7 +13,7 @@
   ],
   "rules": {
     "no-console": "error",
-    "no-debugger": "error",
+    "vue/max-attributes-per-line": "off",
     "space-before-function-paren": [
       "error",
       {

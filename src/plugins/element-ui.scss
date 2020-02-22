@@ -1,0 +1,15 @@
+/* theme color */
+$--color-primary: #0b6e4f;
+
+.bg-color {
+    background-color: transparentize($--color-primary, 0.9);
+}
+
+.primary--text {
+    color: $--color-primary;
+}
+
+/* icon font path, required */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+
+@import "~element-ui/packages/theme-chalk/src/index";

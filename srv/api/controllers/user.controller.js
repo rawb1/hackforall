@@ -21,29 +21,30 @@ const authenticate = async ({ ctx }) => {
 };
 
 const register = async (ctx, args) => {
-  let user = await User.findOne({ username: args.username });
+  let user = await User.findOne({ email: args.email });
   if (user) {
     throw new UserInputError('Username already taken');
   }
-  user = await User.create(args);
+  ctx.state.user = user = await User.create(args);
   const token = jwt.sign({ sub: user._id }, 'shhhhh');
   ctx.cookies.set('jwt', token);
-  logger.info(`New user ${user.username}`);
+  logger.info(`New user ${user.email}`);
   return user;
 };
 
 const login = async (ctx, args) => {
-  const user = await User.findOne({ username: args.username });
+  const user = await User.findOne({ email: args.email });
   if (!user) {
-    throw new UserInputError('no user found');
+    throw new UserInputError('Incorrect email or password');
   }
   const verified = await user.verifyPassword(args.password);
   if (!verified) {
-    throw new UserInputError('wrong password');
+    throw new UserInputError('Incorrect email or password');
   }
+  ctx.state.user = user;
   const token = jwt.sign({ sub: user._id }, 'shhhhh');
   ctx.cookies.set('jwt', token);
-  return !!user;
+  return user;
 };
 
 const logout = ctx => {

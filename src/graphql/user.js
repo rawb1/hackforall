@@ -9,7 +9,9 @@ export const ME_QUERY = gql`
 `;
 
 export const LOGIN_QUERY = gql`
-  query {
-    ogin(user: { username: "robin", password: "proqrobi" })
+  query($email: String!, $password: String!) {
+    login(user: { email: $email, password: $password }) {
+      email
+    }
   }
 `;
