@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="h-screen inset-0 bg-gray-100">
+  <div id="app">
     <router-view></router-view>
   </div>
 </template>
@@ -8,7 +8,7 @@
 import { ME_QUERY } from '@/graphql/user';
 
 export default {
-  name: 'app',
+  name: 'App',
   data() {
     return {
       me: null
@@ -19,3 +19,10 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+#app {
+  max-height: 100vh;
+  width: 100%;
+}
+</style>
