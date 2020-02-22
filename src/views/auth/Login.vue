@@ -1,12 +1,14 @@
 <template>
   <el-container>
     <el-main>
-      <h2>Welcome Back :)</h2>
-      <p>
-        To keep connected with us please login with your personnal informations
-        by email address and password
-        <i class="el-icon-bell" style="background-color: yellow"></i>
-      </p>
+      <el-row>
+        <h2>Welcome Back :)</h2>
+        <p>
+          To keep connected with us please login with your personnal
+          informations by email address and password
+          <i class="el-icon-bell" style="background-color: yellow"></i>
+        </p>
+      </el-row>
       <el-form
         ref="form"
         :model="form"

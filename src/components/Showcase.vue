@@ -41,6 +41,7 @@ export default {
   justify-content: center;
   flex-direction: column;
   padding: 0 20px 20px;
+  align-items: center;
 }
 
 .el-carousel__item {
@@ -51,6 +52,12 @@ export default {
 .el-card {
   border: none;
   border-radius: 0;
+  width: 800px;
+  max-width: 100%;
+}
+
+img {
+  height: inherit;
 }
 
 h1 {
