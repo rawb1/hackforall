@@ -7,7 +7,7 @@
       <el-card class="box-card" shadow="hover">
         <el-carousel :autoplay="false" height="60vh">
           <el-carousel-item v-for="(image, index) in images" :key="index">
-            <img :src="image" alt="" align="center" />
+            <el-image :src="image" alt="" fit="cover" />
           </el-carousel-item>
         </el-carousel>
       </el-card>
@@ -19,9 +19,9 @@ export default {
   data: () => {
     return {
       images: [
-        'https://images.pexels.com/photos/2115217/pexels-photo-2115217.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-        'https://images.pexels.com/photos/450035/pexels-photo-450035.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-        'https://images.pexels.com/photos/572056/pexels-photo-572056.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
+        'https://images.pexels.com/photos/4827/nature-forest-trees-fog.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+        'https://images.pexels.com/photos/917494/pexels-photo-917494.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+        'https://images.pexels.com/photos/113338/pexels-photo-113338.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
       ]
     };
   }
@@ -56,7 +56,7 @@ export default {
   max-width: 100%;
 }
 
-img {
+.el-image {
   height: inherit;
 }
 
