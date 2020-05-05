@@ -7,7 +7,7 @@ const log4js = require('koa-log4');
 const logger = log4js.getLogger('graphql');
 
 const { User, UserResolvers } = require('./schemas/user.schema');
-const AuthDirective = require('./directives/authDirective');
+const AuthDirective = require('./directives/auth.directive');
 
 const Query = gql`
   directive @auth(requires: Role!) on OBJECT | FIELD_DEFINITION
