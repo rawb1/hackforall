@@ -12,8 +12,9 @@ export default {
 
 <style>
 #app {
-  max-height: 100vh;
+  height: 100vh;
   width: 100%;
   font-family: 'Open Sans';
+  background-color: #f8f8fb;
 }
 </style>
