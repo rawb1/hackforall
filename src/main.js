@@ -4,7 +4,7 @@ import { router } from '@/plugins/router';
 import { apolloProvider } from '@/plugins/apollo';
 
 import '@/plugins/logger';
-import '@/plugins/element-ui';
+import '@/plugins/buefy';
 
 Vue.config.productionTip = false;
 

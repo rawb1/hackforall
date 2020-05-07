@@ -1,60 +1,14 @@
 <template>
-  <el-card :body-style="{ padding: '0px' }">
-    <div slot="header">
-      <h2>Welcome Back :)</h2>
-      <p>
-        To keep connected with us please login with your personnal informations
-        by email address and password
-        <i class="el-icon-bell" style="background-color: yellow"></i>
-      </p>
-    </div>
-    <el-form ref="form" :model="form" status-icon :rules="rules" size="medium">
-      <el-form-item prop="email" :error="error">
-        <el-input
-          v-model="form.email"
-          prefix-icon="el-icon-user"
-          placeholder="Email"
-        ></el-input>
-      </el-form-item>
-      <el-form-item prop="password" :error="error">
-        <el-input
-          v-model="form.password"
-          type="password"
-          autocomplete="off"
-          prefix-icon="el-icon-lock"
-          placeholder="Password"
-        ></el-input>
-      </el-form-item>
-      <el-form-item class="space-between">
-        <el-radio v-model="form.remember" label="1">Remember me</el-radio>
-        <el-link href="https://element.eleme.io" target="_blank"
-          >Forgot password ?</el-link
-        >
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" round @click="submitForm('form')"
-          >Login Now</el-button
-        >
-        <el-button round @click="submitForm('form')">Create Account</el-button>
-      </el-form-item>
-    </el-form>
-    <p>Or you can join with</p>
-    <el-row>
-      <el-button icon="el-icon-search" circle disabled></el-button>
-      <el-button type="primary" icon="el-icon-edit" circle disabled></el-button>
-      <el-button
-        type="success"
-        icon="el-icon-check"
-        circle
-        disabled
-      ></el-button>
-    </el-row>
-  </el-card>
+  <auth-card> </auth-card>
 </template>
 <script>
+import AuthCard from '@/components/AuthCard.vue';
 import { LOGIN_QUERY } from '@/graphql/user';
 
 export default {
+  components: {
+    'auth-card': AuthCard
+  },
   data() {
     return {
       error: null,
