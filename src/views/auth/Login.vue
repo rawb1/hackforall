@@ -8,8 +8,8 @@
           </figure>
         </div>
         <div class="media-content">
-          <p class="title is-4">HACKFORALL</p>
-          <p class="subtitle is-6">@rob2b</p>
+          <p class="title is-4 has-text-primary">Welcome back :)</p>
+          <p class="subtitle is-6">Sign in to continue to HACKFORALL</p>
         </div>
       </div>
       <form>

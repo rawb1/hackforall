@@ -1,87 +1,54 @@
 <template>
-  <el-container>
-    <Terms v-model="drawer"></Terms>
-    <el-main>
-      <el-row>
-        <h2>Wanna join ?</h2>
-        <p>
-          To connect with us please login with your personnal informations by
-          email address and password
-          <i class="el-icon-bell" style="background-color: yellow"></i>
-        </p>
-      </el-row>
-      <el-form
-        ref="form"
-        :model="form"
-        status-icon
-        :rules="rules"
-        size="medium"
-      >
-        <el-form-item prop="email" :error="error">
-          <el-input
-            v-model="form.email"
-            prefix-icon="el-icon-user"
-            placeholder="Email"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="password" :error="error">
-          <el-input
-            v-model="form.password"
-            type="password"
-            autocomplete="off"
-            prefix-icon="el-icon-lock"
-            placeholder="Password"
-          ></el-input>
-        </el-form-item>
-        <el-form-item prop="checkPassword">
-          <el-input
-            v-model="form.checkPassword"
-            type="password"
-            autocomplete="off"
-            prefix-icon="el-icon-lock"
-            placeholder="Password verification"
-          ></el-input>
-        </el-form-item>
-        <el-form-item class="space-between">
-          <el-radio v-model="form.terms" label="1">I accept the terms</el-radio>
-          <el-link @click="drawer = true"
-            ><i class="el-icon-document"></i> read the terms</el-link
-          >
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" round @click="submitForm('form')"
-            >Join us</el-button
-          >
-          <el-button round @click="submitForm('form')"
-            >Already a member</el-button
-          >
-        </el-form-item>
-      </el-form>
-      <p>Or you can join with</p>
-      <el-row>
-        <el-button icon="el-icon-search" circle disabled></el-button>
-        <el-button
-          type="primary"
-          icon="el-icon-edit"
-          circle
-          disabled
-        ></el-button>
-        <el-button
-          type="success"
-          icon="el-icon-check"
-          circle
-          disabled
-        ></el-button>
-      </el-row>
-    </el-main>
-  </el-container>
+  <div class="card">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-left">
+          <figure class="image is-48x48">
+            <img src="@/assets/logo.png" alt="Placeholder image" />
+          </figure>
+        </div>
+        <div class="media-content">
+          <p class="title is-4 has-text-primary">Welcome back :)</p>
+          <p class="subtitle is-6">Sign in to continue to HACKFORALL</p>
+        </div>
+      </div>
+      <form>
+        <b-field label="Email">
+          <b-input type="email" value=""> </b-input>
+        </b-field>
+        <b-field label="Password">
+          <b-input type="password" value="iwantmytreasure" password-reveal>
+          </b-input>
+        </b-field>
+        <b-field>
+          <b-checkbox v-model="checkbox">
+            Remember me
+          </b-checkbox>
+        </b-field>
+        <b-field>
+          <b-button type="is-primary" expanded>Login</b-button>
+        </b-field>
+      </form>
+    </div>
+    <footer class="card-footer">
+      <p class="card-footer-item">
+        <span>
+          Don't have an account ?
+          <a href="#">Signup now</a>
+        </span>
+      </p>
+      <p class="card-footer-item">
+        <span><a href="#">Forgot your password ?</a> </span>
+      </p>
+    </footer>
+  </div>
 </template>
 <script>
 import { LOGIN_QUERY } from '@/graphql/user';
-import Terms from '@/components/Terms.vue';
+// import Terms from '@/components/Terms.vue';
 
 export default {
-  components: { Terms },
+  // components: { Terms },
   data() {
     return {
       drawer: false,
@@ -159,40 +126,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-.el-container {
-  height: 100%;
-}
-
-.el-main {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 360px;
-  margin: 0 auto;
-}
-
-.el-drawer__body {
-  overflow: auto;
-}
-
-.el-form-item {
-  margin-bottom: 1.5rem;
-}
-
-.el-button--medium.is-round {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-p {
-  font-size: 0.9rem;
-  margin: 0 0 1.5rem;
-}
-
-.space-between {
-  display: flex;
-  justify-content: space-between;
-}
-</style>
