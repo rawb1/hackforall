@@ -1,16 +1,60 @@
 <template>
-  <auth-card> </auth-card>
+  <div class="card">
+    <div class="card-content">
+      <div class="media">
+        <div class="media-left">
+          <figure class="image is-48x48">
+            <img src="@/assets/logo.png" alt="Placeholder image" />
+          </figure>
+        </div>
+        <div class="media-content">
+          <p class="title is-4">HACKFORALL</p>
+          <p class="subtitle is-6">@rob2b</p>
+        </div>
+      </div>
+      <form>
+        <b-field label="Email">
+          <b-input type="email" value=""> </b-input>
+        </b-field>
+        <b-field label="Password">
+          <b-input type="password" value="iwantmytreasure" password-reveal>
+          </b-input>
+        </b-field>
+        <b-field>
+          <b-checkbox v-model="checkbox">
+            Remember me
+          </b-checkbox>
+        </b-field>
+        <b-field>
+          <b-button type="is-primary" expanded>Login</b-button>
+        </b-field>
+      </form>
+    </div>
+    <footer class="card-footer">
+      <p class="card-footer-item">
+        <span>
+          Don't have an account ?
+          <a href="#">Signup now</a>
+        </span>
+      </p>
+      <p class="card-footer-item">
+        <span><a href="#">Forgot your password ?</a> </span>
+      </p>
+    </footer>
+  </div>
 </template>
 <script>
-import AuthCard from '@/components/AuthCard.vue';
+// import AuthCard from '@/components/AuthCard.vue';
 import { LOGIN_QUERY } from '@/graphql/user';
 
 export default {
   components: {
-    'auth-card': AuthCard
+    // 'auth-card': AuthCard
   },
   data() {
     return {
+      name: 'John Silver',
+      checkbox: false,
       error: null,
       form: {
         email: '',
@@ -70,37 +114,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.el-container {
-  height: 100%;
-}
-
-.el-main {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  max-width: 360px;
-  margin: 0 auto;
-}
-
-.el-form-item {
-  margin-bottom: 1.5rem;
-}
-
-.el-button--medium.is-round {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-p {
-  font-size: 0.9rem;
-  margin: 0 0 1.5rem;
-}
-
-.space-between {
-  display: flex;
-  justify-content: space-between;
-}
-</style>

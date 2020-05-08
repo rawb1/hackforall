@@ -1,19 +1,24 @@
 <template>
-  <el-container class="authLayout">
-    <el-main>
-      <el-row type="flex" justify="center" align="middle" style="height:100%">
-        <el-col :xs="24" :sm="16" :md="12" :lg="8" :xl="6">
-          <router-view></router-view>
-        </el-col>
-      </el-row>
-    </el-main>
-    <el-footer>
-      footer for now
-    </el-footer>
-  </el-container>
+  <section class="auth columns is-flex is-centered is-vcentered">
+    <div class="column has-margin-10 is-auth-card-width">
+      <router-view class="has-margin-bottom-25"></router-view>
+      <Footer class="has-padding-10"></Footer>
+    </div>
+  </section>
 </template>
-<style>
-.authLayout {
-  height: 100vh;
+<script>
+import Footer from '@/components/Footer.vue';
+export default {
+  components: {
+    Footer
+  }
+};
+</script>
+<style lang="scss" scoped>
+.auth {
+  min-height: 100%;
+}
+.is-auth-card-width {
+  max-width: 480px;
 }
 </style>
