@@ -8,11 +8,14 @@
           </figure>
         </div>
         <div class="media-content">
-          <p class="title is-4 has-text-primary">Welcome back :)</p>
-          <p class="subtitle is-6">Sign in to continue to HACKFORALL</p>
+          <p class="title is-4">HACKFORALL</p>
+          <p class="subtitle is-6">@register</p>
         </div>
       </div>
       <form>
+        <b-field label="Username">
+          <b-input v-model="username"></b-input>
+        </b-field>
         <b-field label="Email">
           <b-input type="email" value=""> </b-input>
         </b-field>
@@ -21,24 +24,31 @@
           </b-input>
         </b-field>
         <b-field>
-          <b-checkbox v-model="checkbox">
-            Remember me
-          </b-checkbox>
+          <b-button type="is-primary" expanded>Register</b-button>
         </b-field>
-        <b-field>
-          <b-button type="is-primary" expanded>Login</b-button>
-        </b-field>
+        <p class="has-text-centered">
+          By registering you agree to the
+          <router-link :to="'terms'">
+            Terms of Use
+          </router-link>
+        </p>
       </form>
     </div>
     <footer class="card-footer">
       <p class="card-footer-item">
         <span>
-          Don't have an account ?
-          <a href="#">Signup now</a>
+          Already have an account ?
+          <router-link :to="'login'">
+            Login now
+          </router-link>
         </span>
       </p>
       <p class="card-footer-item">
-        <span><a href="#">Forgot your password ?</a> </span>
+        <span>
+          <router-link :to="'forgot'">
+            Forgot your password ?
+          </router-link>
+        </span>
       </p>
     </footer>
   </div>

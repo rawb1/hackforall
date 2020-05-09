@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import App from './App.vue';
-import { router } from '@/plugins/router';
+import { router } from '@/router';
 import { apolloProvider } from '@/plugins/apollo';
 
 import '@/plugins/logger';
 import '@/plugins/buefy';
+import '@/plugins/vuelidate';
 
 Vue.config.productionTip = false;
 

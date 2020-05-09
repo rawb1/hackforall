@@ -9,24 +9,15 @@
         </div>
         <div class="media-content">
           <p class="title is-4">HACKFORALL</p>
-          <p class="subtitle is-6">@login</p>
+          <p class="subtitle is-6">@forgot password</p>
         </div>
       </div>
       <form>
         <b-field label="Email">
           <b-input type="email" value=""> </b-input>
         </b-field>
-        <b-field label="Password">
-          <b-input type="password" value="iwantmytreasure" password-reveal>
-          </b-input>
-        </b-field>
         <b-field>
-          <b-checkbox v-model="checkbox">
-            Remember me
-          </b-checkbox>
-        </b-field>
-        <b-field>
-          <b-button type="is-primary" expanded>Login</b-button>
+          <b-button type="is-primary" expanded>Reset</b-button>
         </b-field>
       </form>
     </div>
@@ -41,8 +32,9 @@
       </p>
       <p class="card-footer-item">
         <span>
-          <router-link :to="'forgot'">
-            Forgot your password ?
+          Remember It ?
+          <router-link :to="'login'">
+            Login here
           </router-link>
         </span>
       </p>
