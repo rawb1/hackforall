@@ -9,8 +9,8 @@ export const ME_QUERY = gql`
 `;
 
 export const LOGIN_QUERY = gql`
-  query($email: String!, $password: String!) {
-    login(user: { email: $email, password: $password }) {
+  query($email: String!, $password: String!, $remember: Boolean) {
+    login(user: { email: $email, password: $password, remember: $remember }) {
       email
     }
   }

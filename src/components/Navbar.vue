@@ -26,7 +26,6 @@
         </b-navbar-item>
       </b-navbar-dropdown>
     </template>
-
     <template slot="end">
       <b-navbar-dropdown label="Info" :hoverable="true">
         <b-navbar-item href="#">

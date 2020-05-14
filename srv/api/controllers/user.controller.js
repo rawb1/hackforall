@@ -43,7 +43,10 @@ const login = async (ctx, args) => {
   }
   ctx.state.user = user;
   const token = jwt.sign({ sub: user._id }, 'shhhhh');
-  ctx.cookies.set('jwt', token);
+  const expires = args.remember
+    ? new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)
+    : false;
+  ctx.cookies.set('jwt', token, { expires });
   return user;
 };
 

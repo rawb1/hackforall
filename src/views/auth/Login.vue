@@ -12,21 +12,32 @@
           <p class="subtitle is-6">@login</p>
         </div>
       </div>
-      <form>
+      <form @submit.prevent="submitForm">
         <b-field label="Email">
-          <b-input type="email" value=""> </b-input>
+          <b-input ref="email" v-model="form.email" type="email" required>
+          </b-input>
         </b-field>
         <b-field label="Password">
-          <b-input type="password" value="iwantmytreasure" password-reveal>
+          <b-input
+            ref="password"
+            v-model="form.password"
+            type="password"
+            minlength="8"
+            maxlength="36"
+            required
+            password-reveal
+          >
           </b-input>
         </b-field>
         <b-field>
-          <b-checkbox v-model="checkbox">
+          <b-checkbox v-model="form.remember">
             Remember me
           </b-checkbox>
         </b-field>
         <b-field>
-          <b-button type="is-primary" expanded>Login</b-button>
+          <b-button type="is-primary" expanded @click.prevent="submitForm"
+            >Login</b-button
+          >
         </b-field>
       </form>
     </div>
@@ -50,57 +61,27 @@
   </div>
 </template>
 <script>
-// import AuthCard from '@/components/AuthCard.vue';
 import { LOGIN_QUERY } from '@/graphql/user';
 
 export default {
-  components: {
-    // 'auth-card': AuthCard
-  },
   data() {
     return {
-      name: 'John Silver',
-      checkbox: false,
-      error: null,
       form: {
         email: '',
         password: '',
-        remember: '1'
-      },
-      rules: {
-        email: [
-          {
-            type: 'email',
-            required: true,
-            message: 'Please enter a valid email',
-            trigger: 'blur'
-          }
-        ],
-        password: [
-          {
-            type: 'string',
-            required: true,
-            message: 'Please enter a password',
-            trigger: 'blur'
-          },
-          {
-            min: 8,
-            max: 16,
-            message: 'Password length must be between 8 & 16 characters',
-            trigger: 'blur'
-          }
-        ]
+        remember: false
       }
     };
   },
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate(async valid => {
-        if (valid) {
-          const me = await this.login();
-          this.$log.debug(me);
-        }
-      });
+    async submitForm() {
+      const isEmailValid = this.$refs.email.checkHtml5Validity();
+      const isPasswordValid = this.$refs.password.checkHtml5Validity();
+
+      if (isEmailValid && isPasswordValid) {
+        const me = await this.login();
+        this.$log.debug(me);
+      }
     },
     async login() {
       try {
@@ -109,9 +90,12 @@ export default {
           query: LOGIN_QUERY,
           variables: {
             email: this.form.email,
-            password: this.form.password
+            password: this.form.password,
+            remember: this.form.remember
           }
         });
+        // eslint-disable-next-line no-console
+        console.log(this.data);
         return this.data.data.login;
       } catch (err) {
         this.error = err.graphQLErrors[0].message;

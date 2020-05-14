@@ -25,8 +25,9 @@ const typeDefs = gql`
   }
 
   input UserInput {
-    email: String
-    password: String
+    email: String!
+    password: String!
+    remember: Boolean
   }
 `;
 

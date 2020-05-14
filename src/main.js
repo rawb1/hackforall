@@ -5,7 +5,6 @@ import { apolloProvider } from '@/plugins/apollo';
 
 import '@/plugins/logger';
 import '@/plugins/buefy';
-import '@/plugins/vuelidate';
 
 Vue.config.productionTip = false;
 
