@@ -12,7 +12,7 @@
           <p class="subtitle is-6">@login</p>
         </div>
       </div>
-      <form @submit.prevent="submitForm">
+      <form @submit.prevent="submit">
         <b-field label="Email">
           <b-input ref="email" v-model="form.email" type="email" required>
           </b-input>
@@ -35,7 +35,7 @@
           </b-checkbox>
         </b-field>
         <b-field>
-          <b-button type="is-primary" expanded @click.prevent="submitForm"
+          <b-button type="is-primary" expanded @click.prevent="submit"
             >Login</b-button
           >
         </b-field>
@@ -67,14 +67,14 @@ export default {
   data() {
     return {
       form: {
-        email: '',
-        password: '',
+        email: 'proquotrobin@gmail.com',
+        password: 'proqrobi',
         remember: false
       }
     };
   },
   methods: {
-    async submitForm() {
+    async submit() {
       const isEmailValid = this.$refs.email.checkHtml5Validity();
       const isPasswordValid = this.$refs.password.checkHtml5Validity();
 
@@ -94,8 +94,6 @@ export default {
             remember: this.form.remember
           }
         });
-        // eslint-disable-next-line no-console
-        console.log(this.data);
         return this.data.data.login;
       } catch (err) {
         this.error = err.graphQLErrors[0].message;
