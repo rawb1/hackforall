@@ -6,7 +6,7 @@ type Mutation {
 
 type Query {
   _empty: String
-  login(user: UserInput): User
+  login(user: UserInput!, remember: Boolean): User
   logout: User
   me: User
 }
@@ -25,5 +25,4 @@ type User {
 input UserInput {
   email: String!
   password: String!
-  remember: Boolean
 }

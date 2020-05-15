@@ -15,7 +15,7 @@ const typeDefs = gql`
   }
 
   extend type Query {
-    login(user: UserInput): User
+    login(user: UserInput!, remember: Boolean): User
     logout: User
     me: User
   }
@@ -27,14 +27,13 @@ const typeDefs = gql`
   input UserInput {
     email: String!
     password: String!
-    remember: Boolean
   }
 `;
 
 const resolvers = {
   Query: {
     login: (parent, args, ctx, info) => {
-      return login(ctx, args.user);
+      return login(ctx, args);
     },
     logout: (parent, args, ctx, info) => {
       return logout(ctx);

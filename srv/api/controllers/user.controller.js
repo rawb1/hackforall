@@ -33,11 +33,11 @@ const register = async (ctx, args) => {
 };
 
 const login = async (ctx, args) => {
-  const user = await User.findOne({ email: args.email });
+  const user = await User.findOne({ email: args.user.email });
   if (!user) {
     throw new UserInputError('Incorrect email or password');
   }
-  const verified = await user.verifyPassword(args.password);
+  const verified = await user.verifyPassword(args.user.password);
   if (!verified) {
     throw new UserInputError('Incorrect email or password');
   }
