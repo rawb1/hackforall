@@ -79,7 +79,7 @@ export default {
       const isPasswordValid = this.$refs.password.checkHtml5Validity();
 
       if (isEmailValid && isPasswordValid) {
-        const me = await this.login();
+        const me = await this.$apollo.queries.login;
         this.$log.debug(me);
       }
     },
@@ -97,6 +97,33 @@ export default {
         return this.data.data.login;
       } catch (err) {
         this.error = err.graphQLErrors[0].message;
+      }
+    }
+  },
+  apollo: {
+    login: {
+      query: LOGIN_QUERY,
+      variables() {
+        return {
+          email: this.form.email,
+          password: this.form.password,
+          remember: this.form.remember
+        };
+      },
+      manual: true,
+      update(data) {
+        // eslint-disable-next-line no-console
+        console.log(data.login);
+        return data.login;
+      },
+      result({ data, loading, networkStatus }) {
+        // eslint-disable-next-line no-console
+        console.log('We got some result!');
+      },
+      // Error handling
+      error(error) {
+        // eslint-disable-next-line no-console
+        console.error("We've got an error!", error);
       }
     }
   }
