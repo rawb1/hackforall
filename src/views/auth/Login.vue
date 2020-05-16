@@ -13,6 +13,7 @@
         </div>
       </div>
       <form @submit.prevent="submit">
+        <b-field type="is-danger" :message="error"> </b-field>
         <b-field label="Email">
           <b-input ref="email" v-model="form.email" type="email" required>
           </b-input>
@@ -64,29 +65,29 @@
 import { LOGIN_QUERY } from '@/graphql/user';
 
 export default {
-  data() {
+  data: () => {
     return {
       form: {
         email: 'proquotrobin@gmail.com',
-        password: 'proqrobi',
+        password: 'proqrobia',
         remember: false
-      }
+      },
+      error: null
     };
   },
   methods: {
     async submit() {
+      this.error = null;
       const isEmailValid = this.$refs.email.checkHtml5Validity();
       const isPasswordValid = this.$refs.password.checkHtml5Validity();
 
       if (isEmailValid && isPasswordValid) {
-        const me = await this.$apollo.queries.login;
-        this.$log.debug(me);
+        this.login();
       }
     },
     async login() {
       try {
-        this.error = null;
-        this.data = await this.$apollo.query({
+        await this.$apollo.query({
           query: LOGIN_QUERY,
           variables: {
             email: this.form.email,
@@ -94,36 +95,9 @@ export default {
             remember: this.form.remember
           }
         });
-        return this.data.data.login;
       } catch (err) {
+        this.$log.error(err);
         this.error = err.graphQLErrors[0].message;
-      }
-    }
-  },
-  apollo: {
-    login: {
-      query: LOGIN_QUERY,
-      variables() {
-        return {
-          email: this.form.email,
-          password: this.form.password,
-          remember: this.form.remember
-        };
-      },
-      manual: true,
-      update(data) {
-        // eslint-disable-next-line no-console
-        console.log(data.login);
-        return data.login;
-      },
-      result({ data, loading, networkStatus }) {
-        // eslint-disable-next-line no-console
-        console.log('We got some result!');
-      },
-      // Error handling
-      error(error) {
-        // eslint-disable-next-line no-console
-        console.error("We've got an error!", error);
       }
     }
   }
