@@ -68,8 +68,8 @@ export default {
   data: () => {
     return {
       form: {
-        email: 'proquotrobin@gmail.com',
-        password: 'proqrobia',
+        email: '',
+        password: '',
         remember: false
       },
       error: null
