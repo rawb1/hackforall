@@ -21,9 +21,15 @@ const authenticate = async ({ ctx }) => {
 };
 
 const register = async (ctx, args) => {
-  let user = await User.findOne({ email: args.email });
+  let user = await User.findOne({
+    $or: [{ email: args.email }, { username: args.username }]
+  });
   if (user) {
-    throw new UserInputError('Username already taken');
+    if (user.email === args.email) {
+      throw new UserInputError('Email already used');
+    } else {
+      throw new UserInputError('Username already taken');
+    }
   }
   ctx.state.user = user = await User.create(args);
   const token = jwt.sign({ sub: user._id }, 'shhhhh');

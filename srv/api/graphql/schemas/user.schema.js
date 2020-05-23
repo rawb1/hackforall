@@ -15,16 +15,17 @@ const typeDefs = gql`
   }
 
   extend type Query {
-    login(user: UserInput!, remember: Boolean): User
+    login(user: UserInput!, remember: Boolean = false): User
     logout: User
     me: User
   }
 
   type Mutation {
-    register(user: UserInput): User
+    register(user: UserInput!): User
   }
 
   input UserInput {
+    username: String
     email: String!
     password: String!
   }

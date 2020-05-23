@@ -46,14 +46,14 @@
       <p class="card-footer-item">
         <span>
           Don't have an account ?
-          <router-link :to="'register'">
+          <router-link :to="{ name: 'register' }">
             Register now
           </router-link>
         </span>
       </p>
       <p class="card-footer-item">
         <span>
-          <router-link :to="'forgot'">
+          <router-link :to="{ name: 'forgot' }">
             Forgot your password ?
           </router-link>
         </span>
@@ -65,7 +65,7 @@
 import { LOGIN_QUERY } from '@/graphql/user';
 
 export default {
-  data: () => {
+  data() {
     return {
       form: {
         email: '',
@@ -77,7 +77,6 @@ export default {
   },
   methods: {
     async submit() {
-      this.error = null;
       const isEmailValid = this.$refs.email.checkHtml5Validity();
       const isPasswordValid = this.$refs.password.checkHtml5Validity();
 
@@ -95,8 +94,9 @@ export default {
             remember: this.form.remember
           }
         });
+        this.router.replace('dash');
       } catch (err) {
-        this.$log.error(err);
+        this.$log.debug(err);
         this.error = err.graphQLErrors[0].message;
       }
     }
