@@ -1,19 +1,15 @@
 const nodemailer = require('nodemailer');
 const logger = require('koa-log4').getLogger('mailer');
 
-// const env = require('./dotenv');
-// const transporter = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     user: env.mailer.username,
-//     pass: env.mailer.password
-//   }
-// });
+const { isDev, mailer } = require('./dotenv');
 
 const transporter = nodemailer.createTransport({
-  sendmail: true,
-  newline: 'unix',
-  path: '/usr/sbin/sendmail'
+  host: 'smtp.ethereal.email',
+  port: 587,
+  auth: {
+    user: mailer.user,
+    pass: mailer.pass
+  }
 });
 
 transporter.verify(err => {
@@ -24,6 +20,8 @@ transporter.verify(err => {
   logger.info('nodemailer transport created successfuly');
 });
 
-const sendMail = transporter.sendMail;
+transporter.preview = mail => {
+  return isDev ? nodemailer.getTestMessageUrl(mail) : null;
+};
 
-module.exports = sendMail;
+module.exports.mailer = transporter;

@@ -2,6 +2,8 @@ directive @auth(requires: Role!) on OBJECT | FIELD_DEFINITION
 
 type Mutation {
   register(user: UserInput!): User
+  forgot(email: String!): Boolean
+  reset(password: String!, resetToken: String!): Boolean
 }
 
 type Query {

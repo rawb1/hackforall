@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const { UserInputError } = require('apollo-server-koa');
 const User = mongoose.model('User');
 const logger = log4js.getLogger('user');
+const { mailer } = require('../../config/nodemailer');
 
 const authenticate = async ({ ctx }) => {
   try {
@@ -56,6 +57,39 @@ const login = async (ctx, args) => {
   return user;
 };
 
+const forgot = async (ctx, args) => {
+  const user = await User.findOne({ email: args.email });
+  if (!user) {
+    throw new UserInputError('Email not found');
+  }
+
+  const token = jwt.sign({ sub: user._id }, 'shhhhh', {
+    expiresIn: '1h'
+  });
+  const resetLink = `${ctx.origin}/reset/${token}`;
+
+  const mail = await mailer.sendMail({
+    from: '"Fred Foo 👻" <foo@example.com>',
+    to: 'bar@example.com, baz@example.com',
+    subject: 'resetPassword',
+    text: resetLink
+    // html: '<b>Hello world?</b>' // html body
+  });
+  logger.debug(`Reset mail sent: ${mail.messageId}`);
+  logger.debug('Preview URL: %s', mailer.preview(mail));
+  return true;
+};
+
+const reset = async (ctx, args) => {
+  const token = jwt.verify(args.resetToken, 'shhhhh');
+  const user = await User.findOne({ _id: token.sub });
+  if (user) {
+    throw new UserInputError('Invalid token');
+  }
+  logger.info(`New user ${user.email}`);
+  return user;
+};
+
 const logout = ctx => {
   const user = ctx.state.user;
   if (user) {
@@ -73,5 +107,7 @@ module.exports = {
   register,
   login,
   logout,
-  me
+  me,
+  forgot,
+  reset
 };

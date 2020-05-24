@@ -16,10 +16,10 @@ module.exports = {
   },
   logs: 'log',
   mailer: {
-    username: process.env.EMAIL_USERNAME,
-    password: process.env.EMAIL_PASSWORD
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
   },
-  secret: 'ssshhhhh',
+  secret: process.env.secret || 'shhhhh',
   playground: {
     settings: {
       'request.credentials': 'same-origin' // allow cookies

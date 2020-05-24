@@ -4,7 +4,9 @@ const {
   register,
   login,
   logout,
-  me
+  me,
+  reset,
+  forgot
 } = require('../../controllers/user.controller');
 
 const typeDefs = gql`
@@ -22,6 +24,8 @@ const typeDefs = gql`
 
   type Mutation {
     register(user: UserInput!): User
+    forgot(email: String!): Boolean
+    reset(password: String!, resetToken: String!): Boolean
   }
 
   input UserInput {
@@ -46,6 +50,12 @@ const resolvers = {
   Mutation: {
     register: (parent, args, ctx) => {
       return register(ctx, args.user);
+    },
+    forgot: (parent, args, ctx) => {
+      return forgot(ctx, args);
+    },
+    reset: (parent, args, ctx) => {
+      return reset(ctx, args);
     }
   }
 };

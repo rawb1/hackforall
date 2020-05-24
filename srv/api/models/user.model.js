@@ -9,6 +9,7 @@ const UserSchema = new Schema({
   username: { type: String, required: false, index: { unique: true } },
   email: { type: String, required: true, index: { unique: true } },
   password: { type: String, required: true },
+  resetToken: { type: String },
   role: { type: String, default: 'USER' }
 });
 
@@ -32,4 +33,5 @@ UserSchema.methods.verifyPassword = function(password) {
 UserSchema.methods.hasRole = function(role) {
   return this.role === role;
 };
+
 mongoose.model('User', UserSchema);
