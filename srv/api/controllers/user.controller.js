@@ -76,7 +76,7 @@ const forgot = async (ctx, args) => {
   });
   mailer.preview(mail);
   logger.debug(`Reset mail sent: ${mail.messageId}`);
-  return true;
+  return user.email;
 };
 
 const reset = async (ctx, args) => {

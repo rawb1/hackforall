@@ -19,7 +19,7 @@ const typeDefs = gql`
   extend type Query {
     login(user: UserInput!, remember: Boolean = false): User
     logout: User
-    forgot(email: String!): Boolean
+    forgot(email: String!): String
     me: User
   }
 
