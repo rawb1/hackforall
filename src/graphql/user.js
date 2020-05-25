@@ -16,6 +16,12 @@ export const LOGIN_QUERY = gql`
   }
 `;
 
+export const FORGOT_QUERY = gql`
+  query($email: String!) {
+    forgot(email: $email)
+  }
+`;
+
 export const REGISTER_MUTATION = gql`
   mutation($username: String, $email: String!, $password: String!) {
     register(

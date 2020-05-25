@@ -12,12 +12,16 @@
           <p class="subtitle is-6">@forgot password</p>
         </div>
       </div>
-      <form>
+      <form @submit.prevent="submit">
+        <b-field type="is-danger" :message="error"> </b-field>
         <b-field label="Email">
-          <b-input type="email" value=""> </b-input>
+          <b-input ref="email" v-model="form.email" type="email" required>
+          </b-input>
         </b-field>
         <b-field>
-          <b-button type="is-primary" expanded>Reset</b-button>
+          <b-button type="is-primary" expanded @click.prevent="submit"
+            >Reset</b-button
+          >
         </b-field>
       </form>
     </div>
@@ -42,70 +46,35 @@
   </div>
 </template>
 <script>
-// import AuthCard from '@/components/AuthCard.vue';
-import { LOGIN_QUERY } from '@/graphql/user';
+import { FORGOT_QUERY } from '@/graphql/user';
 
 export default {
-  components: {
-    // 'auth-card': AuthCard
-  },
   data() {
     return {
-      name: 'John Silver',
-      checkbox: false,
-      error: null,
       form: {
-        email: '',
-        password: '',
-        remember: '1'
+        email: 'proquotrobin@gmail.com'
       },
-      rules: {
-        email: [
-          {
-            type: 'email',
-            required: true,
-            message: 'Please enter a valid email',
-            trigger: 'blur'
-          }
-        ],
-        password: [
-          {
-            type: 'string',
-            required: true,
-            message: 'Please enter a password',
-            trigger: 'blur'
-          },
-          {
-            min: 8,
-            max: 16,
-            message: 'Password length must be between 8 & 16 characters',
-            trigger: 'blur'
-          }
-        ]
-      }
+      error: null
     };
   },
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate(async valid => {
-        if (valid) {
-          const me = await this.login();
-          this.$log.debug(me);
-        }
-      });
+    async submit() {
+      const isEmailValid = this.$refs.email.checkHtml5Validity();
+      if (isEmailValid) {
+        this.forgot();
+      }
     },
-    async login() {
+    async forgot() {
       try {
-        this.error = null;
-        this.data = await this.$apollo.query({
-          query: LOGIN_QUERY,
+        await this.$apollo.query({
+          query: FORGOT_QUERY,
           variables: {
-            email: this.form.email,
-            password: this.form.password
+            email: this.form.email
           }
         });
-        return this.data.data.login;
+        this.$router.replace('home');
       } catch (err) {
+        this.$log.debug(err);
         this.error = err.graphQLErrors[0].message;
       }
     }
