@@ -19,13 +19,13 @@ const typeDefs = gql`
   extend type Query {
     login(user: UserInput!, remember: Boolean = false): User
     logout: User
+    forgot(email: String!): Boolean
     me: User
   }
 
   type Mutation {
     register(user: UserInput!): User
-    forgot(email: String!): Boolean
-    reset(password: String!, resetToken: String!): Boolean
+    reset(newPassword: String!, resetToken: String!): Boolean
   }
 
   input UserInput {
@@ -43,6 +43,9 @@ const resolvers = {
     logout: (parent, args, ctx, info) => {
       return logout(ctx);
     },
+    forgot: (parent, args, ctx, info) => {
+      return forgot(ctx, args);
+    },
     me: (parent, args, ctx, info) => {
       return me(ctx);
     }
@@ -50,9 +53,6 @@ const resolvers = {
   Mutation: {
     register: (parent, args, ctx) => {
       return register(ctx, args.user);
-    },
-    forgot: (parent, args, ctx) => {
-      return forgot(ctx, args);
     },
     reset: (parent, args, ctx) => {
       return reset(ctx, args);

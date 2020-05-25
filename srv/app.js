@@ -6,7 +6,7 @@ const session = require('koa-session');
 const bodyParser = require('koa-bodyparser');
 const { ApolloServer } = require('apollo-server-koa');
 
-const { playground, sessionSettings } = require('./config/dotenv');
+const { playground, sessionSettings, keys } = require('./config/dotenv');
 require('./config/log4js');
 require('./config/nodemailer');
 require('./config/mongoose');
@@ -23,7 +23,7 @@ const apollo = new ApolloServer({
   playground
 });
 
-app.keys = ['your-session-secret'];
+app.keys = keys;
 app.use(session(app, sessionSettings));
 app.use(bodyParser());
 app.use(log4js.koaLogger(log4js.getLogger('http'), { level: 'auto' }));

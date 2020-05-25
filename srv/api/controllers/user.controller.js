@@ -1,16 +1,17 @@
 const log4js = require('koa-log4');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const { UserInputError } = require('apollo-server-koa');
+const { UserInputError, ApolloError } = require('apollo-server-koa');
+const { mailer } = require('../../config/nodemailer');
+const { secret } = require('../../config/dotenv');
 const User = mongoose.model('User');
 const logger = log4js.getLogger('user');
-const { mailer } = require('../../config/nodemailer');
 
 const authenticate = async ({ ctx }) => {
   try {
     const cookie = ctx.cookies.get('jwt');
     if (cookie) {
-      const token = jwt.verify(cookie, 'shhhhh');
+      const token = jwt.verify(cookie, secret);
       if (token) {
         ctx.state.user = await User.findOne({ _id: token.sub });
       }
@@ -33,7 +34,7 @@ const register = async (ctx, args) => {
     }
   }
   ctx.state.user = user = await User.create(args);
-  const token = jwt.sign({ sub: user._id }, 'shhhhh');
+  const token = jwt.sign({ sub: user._id }, secret);
   ctx.cookies.set('jwt', token);
   logger.info(`New user ${user.email}`);
   return user;
@@ -49,7 +50,7 @@ const login = async (ctx, args) => {
     throw new UserInputError('Incorrect email or password');
   }
   ctx.state.user = user;
-  const token = jwt.sign({ sub: user._id }, 'shhhhh');
+  const token = jwt.sign({ sub: user._id }, secret);
   const expires = args.remember
     ? new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)
     : false;
@@ -60,14 +61,12 @@ const login = async (ctx, args) => {
 const forgot = async (ctx, args) => {
   const user = await User.findOne({ email: args.email });
   if (!user) {
-    throw new UserInputError('Email not found');
+    throw new UserInputError('User not found');
   }
-
-  const token = jwt.sign({ sub: user._id }, 'shhhhh', {
+  const resetToken = jwt.sign({ sub: user._id }, secret, {
     expiresIn: '1h'
   });
-  const resetLink = `${ctx.origin}/reset/${token}`;
-
+  const resetLink = `${ctx.origin}/reset/${resetToken}`;
   const mail = await mailer.sendMail({
     from: '"Fred Foo 👻" <foo@example.com>',
     to: 'bar@example.com, baz@example.com',
@@ -75,19 +74,24 @@ const forgot = async (ctx, args) => {
     text: resetLink
     // html: '<b>Hello world?</b>' // html body
   });
+  mailer.preview(mail);
   logger.debug(`Reset mail sent: ${mail.messageId}`);
-  logger.debug('Preview URL: %s', mailer.preview(mail));
   return true;
 };
 
 const reset = async (ctx, args) => {
-  const token = jwt.verify(args.resetToken, 'shhhhh');
-  const user = await User.findOne({ _id: token.sub });
-  if (user) {
-    throw new UserInputError('Invalid token');
+  let token;
+  try {
+    token = jwt.verify(args.resetToken, secret);
+  } catch (err) {
+    throw new ApolloError(err.message, err.name);
   }
-  logger.info(`New user ${user.email}`);
-  return user;
+  const user = await User.findOne({ _id: token.sub });
+  if (!user) {
+    throw new UserInputError('User not found');
+  }
+  await user.resetPassword(args.newPassword);
+  return true;
 };
 
 const logout = ctx => {

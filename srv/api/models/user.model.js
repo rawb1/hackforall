@@ -9,7 +9,6 @@ const UserSchema = new Schema({
   username: { type: String, required: false, index: { unique: true } },
   email: { type: String, required: true, index: { unique: true } },
   password: { type: String, required: true },
-  resetToken: { type: String },
   role: { type: String, default: 'USER' }
 });
 
@@ -28,6 +27,11 @@ UserSchema.pre('save', async function(next) {
 
 UserSchema.methods.verifyPassword = function(password) {
   return bcrypt.compare(password, this.password);
+};
+
+UserSchema.methods.resetPassword = function(newPassword) {
+  this.password = newPassword;
+  return this.save();
 };
 
 UserSchema.methods.hasRole = function(role) {
