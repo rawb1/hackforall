@@ -31,3 +31,9 @@ export const REGISTER_MUTATION = gql`
     }
   }
 `;
+
+export const RESET_MUTATION = gql`
+  mutation($newPassword: String!, $resetToken: String!) {
+    reset(newPassword: $newPassword, resetToken: $resetToken)
+  }
+`;

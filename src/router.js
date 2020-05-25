@@ -36,6 +36,11 @@ const routes = [
         path: '/forgot',
         name: 'forgot',
         component: () => import('@/views/auth/Forgot.vue')
+      },
+      {
+        path: '/reset/:resetToken?',
+        name: 'reset',
+        component: () => import('@/views/auth/Reset.vue')
       }
     ]
   },

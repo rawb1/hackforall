@@ -9,13 +9,21 @@
         </div>
         <div class="media-content">
           <p class="title is-4">HACKFORALL</p>
-          <p class="subtitle is-6">@forgot password</p>
+          <p class="subtitle is-6">@reset password</p>
         </div>
       </div>
       <form @submit.prevent="submit">
         <b-field type="is-danger" :message="error"> </b-field>
-        <b-field label="Email">
-          <b-input ref="email" v-model="form.email" type="email" required>
+        <b-field label="New Password">
+          <b-input
+            ref="newPassword"
+            v-model="form.newPassword"
+            type="password"
+            minlength="8"
+            maxlength="36"
+            required
+            password-reveal
+          >
           </b-input>
         </b-field>
         <b-field>
@@ -45,33 +53,34 @@
   </div>
 </template>
 <script>
-import { FORGOT_QUERY } from '@/graphql/user';
+import { RESET_MUTATION } from '@/graphql/user';
 
 export default {
   data() {
     return {
       form: {
-        email: ''
+        newPassword: ''
       },
       error: null
     };
   },
   methods: {
     async submit() {
-      const isEmailValid = this.$refs.email.checkHtml5Validity();
-      if (isEmailValid) {
-        this.forgot();
+      const isNewPasswordValid = this.$refs.newPassword.checkHtml5Validity();
+      if (isNewPasswordValid && this.$route.params.resetToken) {
+        this.reset();
       }
     },
-    async forgot() {
+    async reset() {
       try {
-        await this.$apollo.query({
-          query: FORGOT_QUERY,
+        await this.$apollo.mutate({
+          mutation: RESET_MUTATION,
           variables: {
-            email: this.form.email
+            newPassword: this.form.newPassword,
+            resetToken: this.$route.params.resetToken
           }
         });
-        this.$router.replace({ name: 'home' });
+        this.$router.replace({ name: 'login' });
       } catch (err) {
         this.$log.debug(err);
         this.error = err.graphQLErrors[0].message;

@@ -80,9 +80,9 @@ export default {
   data() {
     return {
       form: {
-        username: 'rob',
-        email: 'rob@gmail.com',
-        password: 'proquot'
+        username: '',
+        email: '',
+        password: ''
       },
       error: null
     };
