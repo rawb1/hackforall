@@ -1,23 +1,5 @@
 import gql from 'graphql-tag';
 
-export const CONNECTED_QUERY = gql`
-  query {
-    connected @client
-  }
-`;
-
-export const CONNECT_MUTATION = gql`
-  mutation {
-    connect @client
-  }
-`;
-
-export const DISCONNECT_MUTATION = gql`
-  mutation {
-    disconnect @client
-  }
-`;
-
 export const ME_QUERY = gql`
   query {
     me {

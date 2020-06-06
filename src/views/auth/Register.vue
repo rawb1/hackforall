@@ -74,7 +74,7 @@
   </div>
 </template>
 <script>
-import { REGISTER_MUTATION, CONNECT_MUTATION } from '@/graphql/user';
+import { REGISTER_MUTATION } from '@/graphql/user';
 
 export default {
   data() {
@@ -110,7 +110,6 @@ export default {
             password: this.form.password
           }
         });
-        this.$apollo.mutate({ mutation: CONNECT_MUTATION });
         this.$router.replace('dash');
       } catch (err) {
         this.$log.debug(err);

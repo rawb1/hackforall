@@ -24,8 +24,13 @@ module.exports = {
   secret: process.env.secret || 'shhhhh',
   cookies: {
     keys: process.env.COOKIE_KEYS.split(',') || 'shhhhh',
-    expire: 1000 * 60 * 60 * 24 * 7,
-    attributes: { path: '', domain: '.yourdomain.com', sameSite: 'lax' }
+    expires: 1000 * 60 * 60 * 24 * 7,
+    attributes: {
+      path: '',
+      domain: '',
+      sameSite: 'lax',
+      secure: false
+    }
   },
   playground: {
     settings: {

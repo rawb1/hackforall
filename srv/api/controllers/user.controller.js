@@ -15,8 +15,10 @@ const authenticate = async ({ ctx }) => {
       if (token) {
         ctx.state.user = await User.findOne({ _id: token.sub });
         if (token.remember) {
-          const expires = new Date(Date.now() + cookies.expires);
-          ctx.cookies.set('jwt', token, { expires });
+          ctx.cookies.set('jwt', cookie, {
+            expires: new Date(Date.now() + cookies.expires),
+            ...cookies.attributes
+          });
         }
       }
     }
@@ -39,7 +41,7 @@ const register = async (ctx, args) => {
   }
   ctx.state.user = user = await User.create(args);
   const token = jwt.sign({ sub: user._id }, secret);
-  ctx.cookies.set('jwt', token);
+  ctx.cookies.set('jwt', token, ...cookies.attributes);
   logger.info(`New user ${user.email}`);
   return user;
 };
@@ -54,11 +56,11 @@ const login = async (ctx, args) => {
     throw new UserInputError('Incorrect email or password');
   }
   ctx.state.user = user;
-  const token = jwt.sign({ sub: user._id, remember: args.remember }, secret);
+  const token = jwt.sign({ sub: user._id, remember: !!args.remember }, secret);
   const expires = args.remember
     ? new Date(Date.now() + cookies.expires)
     : false;
-  ctx.cookies.set('jwt', token, { expires });
+  ctx.cookies.set('jwt', token, { expires, ...cookies.attributes });
   return user;
 };
 

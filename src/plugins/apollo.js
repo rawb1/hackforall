@@ -6,7 +6,7 @@ import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 
-import { typeDefs, resolvers } from '@/graphql/state';
+import { router } from '@/router';
 
 const cache = new InMemoryCache();
 
@@ -15,15 +15,13 @@ const httpLink = createHttpLink({
 });
 
 const errorLink = onError(
-  ({ graphQLErrors, networkError, operation, forward }) => {
+  ({ graphQLErrors, networkError, operation, response, forward }) => {
     if (graphQLErrors) {
       for (const err of graphQLErrors) {
         switch (err.extensions.code) {
           case 'UNAUTHENTICATED':
             Vue.$log.debug('UNAUTHENTICATED');
-            cache.writeData({
-              data: { connected: false }
-            });
+            router.replace({ name: 'login' });
         }
       }
     }
@@ -36,8 +34,6 @@ const errorLink = onError(
 const link = errorLink.concat(httpLink);
 
 const apolloClient = new ApolloClient({
-  typeDefs,
-  resolvers,
   link,
   cache
 });
