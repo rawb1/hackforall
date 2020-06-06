@@ -5,6 +5,8 @@ import Home from '@/views/Home.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import DashLayout from '@/layouts/DashLayout.vue';
 
+import { isAuthenticated } from '@/plugins/guards';
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -29,7 +31,7 @@ const routes = [
       },
       {
         path: '/register',
-        name: 'resgister',
+        name: 'register',
         component: () => import('@/views/auth/Register.vue')
       },
       {
@@ -42,7 +44,10 @@ const routes = [
         name: 'reset',
         component: () => import('@/views/auth/Reset.vue')
       }
-    ]
+    ],
+    beforeEnter: async (to, from, next) => {
+      (await isAuthenticated()) ? next({ name: 'dash' }) : next();
+    }
   },
   {
     path: '/dash',
@@ -58,7 +63,10 @@ const routes = [
         name: 'application',
         component: () => import('@/views/dash/Application.vue')
       }
-    ]
+    ],
+    beforeEnter: async (to, from, next) => {
+      (await isAuthenticated()) ? next() : next({ name: 'login' });
+    }
   }
 ];
 

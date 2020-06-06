@@ -22,7 +22,11 @@ module.exports = {
     pass: process.env.EMAIL_PASS
   },
   secret: process.env.secret || 'shhhhh',
-  keys: process.env.COOKIE_KEYS.split(',') || 'shhhhh',
+  cookies: {
+    keys: process.env.COOKIE_KEYS.split(',') || 'shhhhh',
+    expire: 1000 * 60 * 60 * 24 * 7,
+    attributes: { path: '', domain: '.yourdomain.com', sameSite: 'lax' }
+  },
   playground: {
     settings: {
       'request.credentials': 'same-origin' // allow cookies

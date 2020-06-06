@@ -20,7 +20,7 @@ const typeDefs = gql`
     login(user: UserInput!, remember: Boolean = false): User
     logout: User
     forgot(email: String!): String
-    me: User
+    me: User @auth(requires: USER)
   }
 
   type Mutation {

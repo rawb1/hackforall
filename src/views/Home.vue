@@ -1,8 +1,5 @@
 <template>
   <div class="home">
-    <router-link :to="{ name: 'login' }">Login</router-link>
-    <router-link :to="{ name: 'register' }">Register</router-link>
-
     <Navbar />
   </div>
 </template>

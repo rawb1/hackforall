@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const { UserInputError, ApolloError } = require('apollo-server-koa');
 const { mailer } = require('../../config/nodemailer');
-const { secret } = require('../../config/dotenv');
+const { secret, cookies } = require('../../config/dotenv');
 const User = mongoose.model('User');
 const logger = log4js.getLogger('user');
 
@@ -14,6 +14,10 @@ const authenticate = async ({ ctx }) => {
       const token = jwt.verify(cookie, secret);
       if (token) {
         ctx.state.user = await User.findOne({ _id: token.sub });
+        if (token.remember) {
+          const expires = new Date(Date.now() + cookies.expires);
+          ctx.cookies.set('jwt', token, { expires });
+        }
       }
     }
   } catch (err) {
@@ -50,9 +54,9 @@ const login = async (ctx, args) => {
     throw new UserInputError('Incorrect email or password');
   }
   ctx.state.user = user;
-  const token = jwt.sign({ sub: user._id }, secret);
+  const token = jwt.sign({ sub: user._id, remember: args.remember }, secret);
   const expires = args.remember
-    ? new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)
+    ? new Date(Date.now() + cookies.expires)
     : false;
   ctx.cookies.set('jwt', token, { expires });
   return user;
