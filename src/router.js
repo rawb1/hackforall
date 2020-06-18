@@ -63,7 +63,10 @@ const routes = [
         name: 'application',
         component: () => import('@/views/dash/Application.vue')
       }
-    ]
+    ],
+    beforeEnter: async (to, from, next) => {
+      next(await isAuthenticated());
+    }
   }
 ];
 

@@ -11,7 +11,7 @@
       </b-navbar-item>
     </template>
     <template slot="start">
-      <b-navbar-item href="#">
+      <b-navbar-item href="/dash">
         Home
       </b-navbar-item>
       <b-navbar-item href="#">
