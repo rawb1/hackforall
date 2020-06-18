@@ -1,7 +1,7 @@
 <template>
   <main>
     <Navbar />
-    {{ me }}
+    <h1>hey {{ me.email }}</h1>
     <router-view></router-view>
   </main>
 </template>

@@ -87,9 +87,6 @@ export default {
       error: null
     };
   },
-  mounted() {
-    this.$log.info(this.$refs);
-  },
   methods: {
     async submit() {
       const isUsernameValid = this.$refs.username.checkHtml5Validity();
@@ -110,7 +107,7 @@ export default {
             password: this.form.password
           }
         });
-        this.$router.replace('dash');
+        this.$router.replace({ name: 'dash' });
       } catch (err) {
         this.$log.debug(err);
         this.error = err.graphQLErrors[0].message;

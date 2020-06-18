@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueApollo from 'vue-apollo';
-
 import { ApolloClient } from 'apollo-client';
 import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -21,7 +20,7 @@ const errorLink = onError(
         switch (err.extensions.code) {
           case 'UNAUTHENTICATED':
             Vue.$log.debug('UNAUTHENTICATED');
-            router.replace({ name: 'login' });
+            router.push({ name: 'login' });
         }
       }
     }
