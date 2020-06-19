@@ -18,7 +18,7 @@ const typeDefs = gql`
 
   extend type Query {
     login(user: UserInput!, remember: Boolean = false): User
-    logout: User
+    logout: Boolean
     forgot(email: String!): String
     me: User @auth(requires: USER)
   }

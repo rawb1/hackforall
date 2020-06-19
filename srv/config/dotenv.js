@@ -22,7 +22,8 @@ module.exports = {
     pass: process.env.EMAIL_PASS
   },
   secret: process.env.secret || 'shhhhh',
-  cookies: {
+  cookie: {
+    name: process.env.COOKIE_NAME || 'cookie',
     keys: process.env.COOKIE_KEYS.split(',') || 'shhhhh',
     expires: 1000 * 60 * 60 * 24 * 7,
     attributes: {

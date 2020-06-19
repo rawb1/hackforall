@@ -65,7 +65,7 @@ const routes = [
       }
     ],
     beforeEnter: async (to, from, next) => {
-      next(await isAuthenticated());
+      (await isAuthenticated()) ? next() : next({ name: 'login' });
     }
   }
 ];

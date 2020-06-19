@@ -5,8 +5,6 @@ import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 
-import { router } from '@/router';
-
 const cache = new InMemoryCache();
 
 const httpLink = createHttpLink({
@@ -20,7 +18,6 @@ const errorLink = onError(
         switch (err.extensions.code) {
           case 'UNAUTHENTICATED':
             Vue.$log.debug('UNAUTHENTICATED');
-            router.push({ name: 'login' });
         }
       }
     }

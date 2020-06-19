@@ -3,21 +3,21 @@ const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const { UserInputError, ApolloError } = require('apollo-server-koa');
 const { mailer } = require('../../config/nodemailer');
-const { secret, cookies } = require('../../config/dotenv');
+const env = require('../../config/dotenv');
 const User = mongoose.model('User');
 const logger = log4js.getLogger('user');
 
 const authenticate = async ({ ctx }) => {
   try {
-    const cookie = ctx.cookies.get('jwt');
+    const cookie = ctx.cookies.get(env.cookie.name);
     if (cookie) {
-      const token = jwt.verify(cookie, secret);
+      const token = jwt.verify(cookie, env.secret);
       if (token) {
         ctx.state.user = await User.findOne({ _id: token.sub });
         if (token.remember) {
-          ctx.cookies.set('jwt', cookie, {
-            expires: new Date(Date.now() + cookies.expires),
-            ...cookies.attributes
+          ctx.cookies.set(cookie.name, cookie, {
+            expires: new Date(Date.now() + cookie.expires),
+            ...cookie.attributes
           });
         }
       }
@@ -40,8 +40,8 @@ const register = async (ctx, args) => {
     }
   }
   ctx.state.user = user = await User.create(args);
-  const token = jwt.sign({ sub: user._id }, secret);
-  ctx.cookies.set('jwt', token, ...cookies.attributes);
+  const token = jwt.sign({ sub: user._id }, env.secret);
+  ctx.cookies.set(env.cookie.name, token, ...env.cookie.attributes);
   logger.info(`New user ${user.email}`);
   return user;
 };
@@ -56,11 +56,17 @@ const login = async (ctx, args) => {
     throw new UserInputError('Incorrect email or password');
   }
   ctx.state.user = user;
-  const token = jwt.sign({ sub: user._id, remember: !!args.remember }, secret);
+  const token = jwt.sign(
+    { sub: user._id, remember: !!args.remember },
+    env.secret
+  );
   const expires = args.remember
-    ? new Date(Date.now() + cookies.expires)
+    ? new Date(Date.now() + env.cookie.expires)
     : false;
-  ctx.cookies.set('jwt', token, { expires, ...cookies.attributes });
+  ctx.cookies.set(env.cookie.name, token, {
+    expires,
+    ...env.cookie.attributes
+  });
   return user;
 };
 
@@ -69,7 +75,7 @@ const forgot = async (ctx, args) => {
   if (!user) {
     throw new UserInputError('User not found');
   }
-  const resetToken = jwt.sign({ sub: user._id }, secret, {
+  const resetToken = jwt.sign({ sub: user._id }, env.secret, {
     expiresIn: '1h'
   });
   const resetLink = `${ctx.origin}/reset/${resetToken}`;
@@ -88,7 +94,7 @@ const forgot = async (ctx, args) => {
 const reset = async (ctx, args) => {
   let token;
   try {
-    token = jwt.verify(args.resetToken, secret);
+    token = jwt.verify(args.resetToken, env.secret);
   } catch (err) {
     throw new ApolloError(err.message, err.name);
   }
@@ -103,9 +109,9 @@ const reset = async (ctx, args) => {
 const logout = ctx => {
   const user = ctx.state.user;
   if (user) {
-    ctx.cookies.set('jwt', null, { expires: Date.now() });
-    return user;
+    ctx.cookies.set(env.cookie.name, null, { expires: Date.now() });
   }
+  return !!user;
 };
 
 const me = ctx => {

@@ -26,15 +26,50 @@
         </b-navbar-item>
       </b-navbar-dropdown>
     </template>
-    <template slot="end">
-      <b-navbar-dropdown label="Info" :hoverable="true">
-        <b-navbar-item href="#">
-          About
-        </b-navbar-item>
-        <b-navbar-item href="#">
-          Contact
-        </b-navbar-item>
-      </b-navbar-dropdown>
+    <template v-if="!connected" slot="end">
+      <b-navbar-item tag="router-link" :to="{ name: 'login' }">
+        Login
+      </b-navbar-item>
+      <b-navbar-item tag="router-link" :to="{ name: 'register' }">
+        Register
+      </b-navbar-item>
+    </template>
+    <template v-else slot="end">
+      <b-navbar-item tag="router-link" :to="{ name: 'dash' }">
+        Dashboard
+      </b-navbar-item>
+      <b-navbar-item @click.prevent="logout">
+        Logout
+      </b-navbar-item>
     </template>
   </b-navbar>
 </template>
+<script>
+import { ME_QUERY, LOGOUT_QUERY } from '@/graphql/user';
+export default {
+  data: () => ({
+    me: null
+  }),
+  computed: {
+    connected() {
+      return !!this.me;
+    }
+  },
+  methods: {
+    async logout() {
+      await this.$apollo.query({
+        query: LOGOUT_QUERY
+      });
+      // eslint-disable-next-line no-console
+      console.log(this.$apollo);
+      this.$router.push({ name: 'home' });
+    }
+  },
+  apollo: {
+    me: {
+      query: ME_QUERY,
+      errorPolicy: 'ignore'
+    }
+  }
+};
+</script>

@@ -8,7 +8,7 @@ type Mutation {
 type Query {
   _empty: String
   login(user: UserInput!, remember: Boolean = false): User
-  logout: User
+  logout: Boolean
   forgot(email: String!): String
   me: User
 }

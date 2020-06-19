@@ -94,7 +94,7 @@ export default {
             remember: this.form.remember
           }
         });
-        this.$router.replace({ name: 'dash' });
+        this.$router.push({ name: 'dash' });
       } catch (err) {
         this.$log.debug(err);
         this.error = err.graphQLErrors[0].message;

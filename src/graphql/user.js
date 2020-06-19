@@ -16,6 +16,12 @@ export const LOGIN_QUERY = gql`
   }
 `;
 
+export const LOGOUT_QUERY = gql`
+  query {
+    logout
+  }
+`;
+
 export const FORGOT_QUERY = gql`
   query($email: String!) {
     forgot(email: $email)
