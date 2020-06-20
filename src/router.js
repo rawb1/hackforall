@@ -5,7 +5,7 @@ import Home from '@/views/Home.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import DashLayout from '@/layouts/DashLayout.vue';
 
-import { isAuthenticated } from '@/plugins/guards';
+import { isConnected } from '@/guards';
 
 Vue.use(VueRouter);
 
@@ -46,7 +46,7 @@ const routes = [
       }
     ],
     beforeEnter: async (to, from, next) => {
-      (await isAuthenticated()) ? next({ name: 'dash' }) : next();
+      (await isConnected()) ? next({ name: 'dash' }) : next();
     }
   },
   {
@@ -65,7 +65,7 @@ const routes = [
       }
     ],
     beforeEnter: async (to, from, next) => {
-      (await isAuthenticated()) ? next() : next({ name: 'login' });
+      (await isConnected()) ? next() : next({ name: 'login' });
     }
   }
 ];
@@ -76,4 +76,4 @@ const router = new VueRouter({
   routes
 });
 
-export { router };
+export default router;

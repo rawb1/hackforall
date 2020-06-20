@@ -15,9 +15,9 @@ const authenticate = async ({ ctx }) => {
       if (token) {
         ctx.state.user = await User.findOne({ _id: token.sub });
         if (token.remember) {
-          ctx.cookies.set(cookie.name, cookie, {
-            expires: new Date(Date.now() + cookie.expires),
-            ...cookie.attributes
+          ctx.cookies.set(env.cookie.name, cookie, {
+            expires: new Date(Date.now() + env.cookie.expires),
+            ...env.cookie.attributes
           });
         }
       }
@@ -41,7 +41,7 @@ const register = async (ctx, args) => {
   }
   ctx.state.user = user = await User.create(args);
   const token = jwt.sign({ sub: user._id }, env.secret);
-  ctx.cookies.set(env.cookie.name, token, ...env.cookie.attributes);
+  ctx.cookies.set(env.cookie.name, token, env.cookie.attributes);
   logger.info(`New user ${user.email}`);
   return user;
 };
@@ -109,7 +109,10 @@ const reset = async (ctx, args) => {
 const logout = ctx => {
   const user = ctx.state.user;
   if (user) {
-    ctx.cookies.set(env.cookie.name, null, { expires: Date.now() });
+    ctx.cookies.set(env.cookie.name, null, {
+      expires: Date.now(),
+      ...env.cookie.attributes
+    });
   }
   return !!user;
 };

@@ -45,30 +45,29 @@
   </b-navbar>
 </template>
 <script>
-import { ME_QUERY, LOGOUT_QUERY } from '@/graphql/user';
+import { CONNECTED_QUERY, CONNECTED_MUTATION } from '@/apollo/state';
+import { LOGOUT_QUERY } from '@/graphql/user';
+
 export default {
   data: () => ({
-    me: null
+    connected: false
   }),
-  computed: {
-    connected() {
-      return !!this.me;
-    }
-  },
   methods: {
     async logout() {
       await this.$apollo.query({
         query: LOGOUT_QUERY
       });
-      // eslint-disable-next-line no-console
-      console.log(this.$apollo);
-      this.$router.push({ name: 'home' });
+      await this.$apollo.mutate({
+        mutation: CONNECTED_MUTATION,
+        variables: {
+          connected: false
+        }
+      });
     }
   },
   apollo: {
-    me: {
-      query: ME_QUERY,
-      errorPolicy: 'ignore'
+    connected: {
+      query: CONNECTED_QUERY
     }
   }
 };

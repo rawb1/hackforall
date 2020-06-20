@@ -62,6 +62,7 @@
   </div>
 </template>
 <script>
+import { CONNECTED_MUTATION } from '@/apollo/state';
 import { LOGIN_QUERY } from '@/graphql/user';
 
 export default {
@@ -92,6 +93,12 @@ export default {
             email: this.form.email,
             password: this.form.password,
             remember: this.form.remember
+          }
+        });
+        await this.$apollo.mutate({
+          mutation: CONNECTED_MUTATION,
+          variables: {
+            connected: true
           }
         });
         this.$router.push({ name: 'dash' });
