@@ -7,17 +7,24 @@ const env = require('../../config/dotenv');
 const User = mongoose.model('User');
 const logger = log4js.getLogger('user');
 
+const _setCookie = (ctx, value, opts) => {
+  ctx.cookies.set(
+    env.cookie.name,
+    value,
+    Object.assign(env.cookie.attributes, opts)
+  );
+};
+
 const authenticate = async ({ ctx }) => {
   try {
-    const cookie = ctx.cookies.get(env.cookie.name);
-    if (cookie) {
-      const token = jwt.verify(cookie, env.secret);
-      if (token) {
+    const token = ctx.cookies.get(env.cookie.name);
+    if (token) {
+      const decoded = jwt.verify(token, env.secret);
+      if (decoded) {
         ctx.state.user = await User.findOne({ _id: token.sub });
         if (token.remember) {
-          ctx.cookies.set(env.cookie.name, cookie, {
-            expires: new Date(Date.now() + env.cookie.expires),
-            ...env.cookie.attributes
+          _setCookie(ctx, token, {
+            expires: new Date(Date.now() + env.cookie.expires)
           });
         }
       }
@@ -41,7 +48,7 @@ const register = async (ctx, args) => {
   }
   ctx.state.user = user = await User.create(args);
   const token = jwt.sign({ sub: user._id }, env.secret);
-  ctx.cookies.set(env.cookie.name, token, env.cookie.attributes);
+  _setCookie(ctx, token);
   logger.info(`New user ${user.email}`);
   return user;
 };
@@ -63,10 +70,7 @@ const login = async (ctx, args) => {
   const expires = args.remember
     ? new Date(Date.now() + env.cookie.expires)
     : false;
-  ctx.cookies.set(env.cookie.name, token, {
-    expires,
-    ...env.cookie.attributes
-  });
+  _setCookie(ctx, token, { expires });
   return user;
 };
 
@@ -109,10 +113,7 @@ const reset = async (ctx, args) => {
 const logout = ctx => {
   const user = ctx.state.user;
   if (user) {
-    ctx.cookies.set(env.cookie.name, null, {
-      expires: Date.now(),
-      ...env.cookie.attributes
-    });
+    _setCookie(ctx, null, { expires: Date.now() });
   }
   return !!user;
 };
