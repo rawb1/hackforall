@@ -8,8 +8,7 @@ if (config.error) {
 }
 
 module.exports = {
-  isDev: (process.env.NODE_ENV || 'development') !== 'production',
-  project: process.env.npm_package_name || 'hackforall',
+  dev: (process.env.NODE_ENV || 'development') !== 'production',
   port: process.env.PORT,
   mongo: {
     uri: 'mongodb://localhost/graphql'

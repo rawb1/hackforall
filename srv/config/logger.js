@@ -3,7 +3,7 @@ const env = require('./env');
 
 const logger = () => {
   let categories;
-  if (env.isDev) {
+  if (env.dev) {
     categories = {
       default: { appenders: ['console'], level: 'DEBUG' },
       http: { appenders: ['console'], level: 'DEBUG' }

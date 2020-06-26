@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const env = require('./env');
 
 const database = () => {
-  if (env.isDev) {
+  if (env.dev) {
     mongoose.set('debug', true);
     mongoose.set('debug', (collectionName, method, query, doc, options) => {
       logger.debug(`${collectionName}.${method}`, JSON.stringify(query), doc);

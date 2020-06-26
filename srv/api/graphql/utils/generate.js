@@ -1,7 +1,7 @@
-const { isDev } = require('../../../config/env');
+const { dev } = require('../../../config/env');
 
 const generate = async schema => {
-  if (isDev) {
+  if (dev) {
     const fs = require('fs');
     const path = require('path');
     const { promisify } = require('util');
