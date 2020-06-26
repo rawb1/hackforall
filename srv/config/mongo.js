@@ -1,6 +1,6 @@
 const logger = require('koa-log4').getLogger('mongoose');
 const mongoose = require('mongoose');
-const env = require('./dotenv');
+const env = require('./env');
 
 const database = () => {
   if (env.isDev) {

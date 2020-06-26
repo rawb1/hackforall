@@ -1,5 +1,5 @@
 const log4js = require('koa-log4');
-const env = require('./dotenv');
+const env = require('./env');
 
 const logger = () => {
   let categories;

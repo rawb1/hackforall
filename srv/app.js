@@ -6,10 +6,10 @@ const session = require('koa-session');
 const bodyParser = require('koa-bodyparser');
 const { ApolloServer } = require('apollo-server-koa');
 
-const { playground, sessionSettings, cookie } = require('./config/dotenv');
-require('./config/log4js');
-require('./config/nodemailer');
-require('./config/mongoose');
+const { playground, sessionSettings, cookie } = require('./config/env');
+require('./config/logger');
+require('./config/mailer');
+require('./config/mongo');
 
 require('./api/models');
 const schema = require('./api/graphql');

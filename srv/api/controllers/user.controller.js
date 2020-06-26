@@ -2,8 +2,8 @@ const log4js = require('koa-log4');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const { UserInputError, ApolloError } = require('apollo-server-koa');
-const { mailer } = require('../../config/nodemailer');
-const env = require('../../config/dotenv');
+const { mailer } = require('../../config/mailer');
+const env = require('../../config/env');
 const User = mongoose.model('User');
 const logger = log4js.getLogger('user');
 

@@ -1,4 +1,4 @@
-const { isDev } = require('../../../config/dotenv');
+const { isDev } = require('../../../config/env');
 
 const generate = async schema => {
   if (isDev) {

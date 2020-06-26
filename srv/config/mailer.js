@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 const logger = require('koa-log4').getLogger('mailer');
 
-const { mailer } = require('./dotenv');
+const { mailer } = require('./env');
 
 const transporter = nodemailer.createTransport({
   host: mailer.host,
