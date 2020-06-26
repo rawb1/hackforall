@@ -4,6 +4,7 @@ import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import DashLayout from '@/layouts/DashLayout.vue';
+import LandingLayout from '@/layouts/LandingLayout.vue';
 
 import { isConnected } from '@/guards';
 
@@ -12,13 +13,19 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: () => import('@/views/About.vue')
+    component: LandingLayout,
+    children: [
+      {
+        path: '/',
+        name: 'home',
+        component: Home
+      },
+      {
+        path: '/about',
+        name: 'about',
+        component: () => import('@/views/About.vue')
+      }
+    ]
   },
   {
     path: '/auth',
@@ -47,7 +54,8 @@ const routes = [
     ],
     beforeEnter: async (to, from, next) => {
       (await isConnected()) ? next({ name: 'dash' }) : next();
-    }
+    },
+    props: { dash: true }
   },
   {
     path: '/dash',
@@ -67,7 +75,8 @@ const routes = [
     beforeEnter: async (to, from, next) => {
       (await isConnected()) ? next() : next({ name: 'login' });
     }
-  }
+  },
+  { path: '*', redirect: { name: 'home' } }
 ];
 
 const router = new VueRouter({

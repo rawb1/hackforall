@@ -1,17 +1,17 @@
 <template>
-  <b-navbar wrapper-class="container main-navbar" type="is-primary">
+  <b-navbar wrapper-class="container" type="is-primary" class="main-navbar">
     <template slot="brand">
-      <b-navbar-item tag="router-link" :to="'home'">
+      <b-navbar-item tag="router-link" :to="{ name: 'home' }">
         <img src="@/assets/logo.png" alt="Placeholder image" />
       </b-navbar-item>
-      <b-navbar-item tag="router-link" :to="'home'">
+      <b-navbar-item tag="router-link" :to="{ name: 'home' }">
         <span class="has-text-weight-bold is-capitalized is-size-4"
           >HACKFORALL</span
         >
       </b-navbar-item>
     </template>
     <template slot="start">
-      <b-navbar-item href="/dash">
+      <b-navbar-item tag="router-link" :to="{ name: 'home' }">
         Home
       </b-navbar-item>
       <b-navbar-item href="#">
@@ -26,19 +26,30 @@
         </b-navbar-item>
       </b-navbar-dropdown>
     </template>
-    <template v-if="!connected" slot="end">
-      <b-navbar-item tag="router-link" :to="{ name: 'login' }">
+    <template slot="end">
+      <b-navbar-item
+        v-if="!connected"
+        tag="router-link"
+        :to="{ name: 'login' }"
+      >
         Login
       </b-navbar-item>
-      <b-navbar-item tag="router-link" :to="{ name: 'register' }">
+      <b-navbar-item
+        v-if="!connected"
+        tag="router-link"
+        :to="{ name: 'register' }"
+      >
         Register
       </b-navbar-item>
-    </template>
-    <template v-else slot="end">
-      <b-navbar-item tag="router-link" :to="{ name: 'dash' }">
+
+      <b-navbar-item
+        v-if="connected && !dash"
+        tag="router-link"
+        :to="{ name: 'dash' }"
+      >
         Dashboard
       </b-navbar-item>
-      <b-navbar-item @click.prevent="logout">
+      <b-navbar-item v-if="connected" @click.prevent="logout">
         Logout
       </b-navbar-item>
     </template>
@@ -49,6 +60,7 @@ import { CONNECTED_QUERY, CONNECTED_MUTATION } from '@/apollo/state';
 import { LOGOUT_QUERY } from '@/graphql/user';
 
 export default {
+  props: { dash: Boolean },
   data: () => ({
     connected: false
   }),

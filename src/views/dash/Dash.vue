@@ -1,10 +1,11 @@
 <template>
-  <div class="home"></div>
+  <div class="home">
+    {{ $route.params.id }}
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'Dash',
-  components: {}
+  name: 'Dash'
 };
 </script>

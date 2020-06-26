@@ -12,4 +12,14 @@ export default {
 
 <style lang="scss">
 @import './style';
+
+.main-navbar {
+  z-index: 31;
+}
+
+@media screen and (min-width: $widescreen) {
+  .main-navbar {
+    height: 80px;
+  }
+}
 </style>

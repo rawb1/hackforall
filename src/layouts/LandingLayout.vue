@@ -1,15 +1,12 @@
 <template>
   <main>
-    <Navbar :dash="true" />
-    <DashNavbar />
+    <Navbar />
     <router-view></router-view>
   </main>
 </template>
 <script>
 import Navbar from '@/components/Navbar.vue';
-import DashNavbar from '@/components/DashNavbar.vue';
-
 export default {
-  components: { Navbar, DashNavbar }
+  components: { Navbar }
 };
 </script>
