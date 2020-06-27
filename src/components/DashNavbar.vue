@@ -6,8 +6,8 @@
       </b-navbar-item>
     </template>
     <template slot="start">
-      <b-navbar-item href="#">
-        Documentation
+      <b-navbar-item tag="router-link" :to="{ name: 'application' }">
+        Application
       </b-navbar-item>
       <b-navbar-dropdown label="Info" :hoverable="true">
         <b-navbar-item href="#">

@@ -2,7 +2,17 @@
   <main>
     <Navbar :dash="true" />
     <DashNavbar />
-    <router-view></router-view>
+    <section class="section py-5">
+      <div class="container">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Application</a></li>
+          </ul>
+        </nav>
+        <router-view></router-view>
+      </div>
+    </section>
   </main>
 </template>
 <script>
