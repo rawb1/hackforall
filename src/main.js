@@ -5,6 +5,7 @@ import apolloProvider from '@/plugins/apollo';
 
 import '@/plugins/logger';
 import '@/plugins/buefy';
+import '@/plugins/gravatar';
 
 Vue.config.productionTip = false;
 

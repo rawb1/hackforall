@@ -6,12 +6,13 @@ if (config.error) {
   logger.fatal('.env file not found');
   process.exit(1);
 }
-
+const project = process.env.npm_package_name || 'hackforall';
 module.exports = {
+  project,
   dev: (process.env.NODE_ENV || 'development') !== 'production',
   port: process.env.PORT,
   mongo: {
-    uri: 'mongodb://localhost/graphql'
+    uri: `mongodb://localhost/${project}`
   },
   logs: 'log',
   mailer: {

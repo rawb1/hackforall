@@ -19,7 +19,7 @@ export default {
 
 @media screen and (min-width: $widescreen) {
   .main-navbar {
-    height: 80px;
+    height: 75px;
   }
 }
 </style>

@@ -12,6 +12,7 @@ const {
 const typeDefs = gql`
   type User @auth(requires: USER) {
     _id: ID @auth(requires: ADMIN)
+    username: String!
     email: String!
     role: Role! @auth(requires: ADMIN)
   }

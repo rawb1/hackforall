@@ -20,6 +20,7 @@ enum Role {
 
 type User {
   _id: ID
+  username: String!
   email: String!
   role: Role!
 }
