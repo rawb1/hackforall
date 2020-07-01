@@ -17,6 +17,11 @@ export default {
   z-index: 31;
 }
 
+.step-navigation {
+  justify-content: center;
+  display: flex;
+}
+
 @media screen and (min-width: $widescreen) {
   .main-navbar {
     height: 75px;
