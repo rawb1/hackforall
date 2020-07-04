@@ -13,7 +13,7 @@
             label="Profile"
             :clickable="true"
           >
-            <h1 class="title has-text-centered">Profile</h1>
+            <h2 class="title has-text-centered">Profile</h2>
             <div class="columns">
               <div class="column">
                 <b-field label="Name*">
@@ -50,11 +50,18 @@
                 </b-field>
               </div>
               <div class="column">
-                <b-field label="Graduation year*">
+                <b-field
+                  label="Graduation year*"
+                  :type="{ 'is-danger': errors.garduationYear }"
+                  :message="{
+                    'Graduation year required': errors.garduationYear
+                  }"
+                >
                   <b-datepicker
                     v-model="application.garduationYear"
                     icon="fas fa-graduation-cap"
                     editable
+                    @blur="validate('garduationYear')"
                   >
                   </b-datepicker>
                 </b-field>
@@ -62,13 +69,30 @@
             </div>
             <div class="columns">
               <div class="column">
-                <b-field label="Study fields*">
-                  <b-taginput v-model="application.studyFields"> </b-taginput>
+                <b-field
+                  label="Study fields*"
+                  :type="{ 'is-danger': errors.studyFields }"
+                  :message="{ 'Study fields required': errors.studyFields }"
+                >
+                  <b-taginput
+                    v-model="application.studyFields"
+                    ellipsis
+                    icon="fas fa-user-graduate"
+                    placeholder="Add study"
+                    @blur="validate('studyFields')"
+                  >
+                  </b-taginput>
                 </b-field>
               </div>
               <div class="column">
                 <b-field label="Interests">
-                  <b-taginput v-model="application.interests"> </b-taginput>
+                  <b-taginput
+                    v-model="application.interests"
+                    ellipsis
+                    icon="fas fa-user-tag"
+                    placeholder="Add interest"
+                  >
+                  </b-taginput>
                 </b-field>
               </div>
             </div>
@@ -86,7 +110,6 @@
                   ></b-input>
                 </b-field>
               </div>
-
               <div class="column">
                 <b-field class="file" position="is-centered">
                   <b-upload
@@ -104,9 +127,13 @@
                 </b-field>
               </div>
             </div>
-
             <b-field label="Dietary restrictions">
-              <b-taginput v-model="application.dietaryRestrictions">
+              <b-taginput
+                v-model="application.dietaryRestrictions"
+                ellipsis
+                icon="fas fa-utensils"
+                placeholder="Add restriction"
+              >
               </b-taginput>
             </b-field>
             <b-field label="Tee-shirt">
@@ -143,13 +170,22 @@
               </b-checkbox>
             </div>
           </b-step-item>
-
           <b-step-item
             v-if="application.needHardware"
             icon="fas fa-microchip"
             label="Hardware"
             :clickable="true"
           >
+            <h2 class="title has-text-centered">Hardware</h2>
+            <b-field label="Hardware need">
+              <b-taginput
+                v-model="application.hardwareList"
+                ellipsis
+                icon="fas fa-microchip"
+                placeholder="Add hardware"
+              >
+              </b-taginput>
+            </b-field>
           </b-step-item>
           <b-step-item
             v-if="application.needTravelReimbursement"
@@ -157,6 +193,7 @@
             label="Travel"
             :clickable="true"
           >
+            <h2 class="title has-text-centered">Travel reimbursement</h2>
           </b-step-item>
           <b-step-item
             v-if="application.needAccomodation"
@@ -164,14 +201,14 @@
             label="Accomodation"
             :clickable="true"
           >
+            <h2 class="title has-text-centered">Accomodation</h2>
           </b-step-item>
           <b-step-item
             icon="fas fa-file-contract"
             label="Terms"
             :clickable="true"
           >
-            <h1 class="title has-text-centered">Terms</h1>
-
+            <h2 class="title has-text-centered">Terms</h2>
             <div class="field">
               <b-checkbox v-model="application.majority">
                 With tooltip I will be
@@ -195,6 +232,7 @@ export default {
   data: () => ({
     activeStep: 0,
     teeShirtSizes: ['XS', 'S', 'M', 'L', 'XL'],
+    errors: { garduationYear: false, studyFields: false },
     application: {
       // Profile
       name: '',
@@ -202,30 +240,26 @@ export default {
       majority: false,
       phone: null,
       // Studies
-      garduationYear: new Date(),
+      garduationYear: null,
       studyFields: null,
-      interests: [],
+      interests: null,
       github: '',
       resume: null,
       // Complementary informations
-      dietaryRestrictions: [],
+      dietaryRestrictions: null,
       teeShirtSize: 'M',
       // Needs
-      needHardware: false,
-      needAccomodation: false,
-      needTravelReimbursement: false,
-
+      needHardware: true,
+      needAccomodation: true,
+      needTravelReimbursement: true,
       // Hardware needs
-      hardwareList: [],
-
+      hardwareList: null,
       // Accomodation
-      AccomodationPreferences: [],
+      AccomodationPreferences: null,
       hostMatchingDetails: '',
-
       // Travel
       paypalAdresse: '',
       travelReceipt: null,
-
       // Terms
       liability: '',
       photoRelease: '',
@@ -241,11 +275,15 @@ export default {
       isValid = isValid && this.$refs.phone.checkHtml5Validity();
       isValid = isValid && this.$refs.school.checkHtml5Validity();
 
-      isValid = isValid && !!this.application.garduationYear;
-      isValid = isValid && this.$application.studyFields.length > 0;
+      isValid = isValid && !this.errors.garduationYear;
+      isValid = isValid && !this.errors.studyFields;
       return isValid;
     },
-    submit: async function() {}
+    validate: function(input) {
+      this.$log.debug(this.application[input]);
+      const val = this.application[input];
+      this.errors[input] = Array.isArray(val) ? val.length === 0 : !val;
+    }
   }
 };
 </script>
