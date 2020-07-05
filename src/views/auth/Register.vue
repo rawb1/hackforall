@@ -13,36 +13,57 @@
         </div>
       </div>
       <form @submit.prevent="submit">
-        <b-field type="is-danger" :message="error"> </b-field>
-        <b-field label="Username">
+        <b-field
+          :type="{ 'is-danger': errors.has('graphql') }"
+          :message="errors.collect('graphql')"
+        >
+        </b-field>
+        <b-field
+          label="Username"
+          :type="{ 'is-danger': errors.has('username') }"
+          :message="errors.collect('username')"
+        >
           <b-input
-            ref="username"
             v-model="form.username"
+            v-validate="'required|min:2|max:16'"
+            name="username"
             type="text"
-            minlength="2"
-            maxlength="16"
-            required
-            :has-counter="false"
           ></b-input>
         </b-field>
-        <b-field label="Email">
-          <b-input ref="email" v-model="form.email" type="email" required>
+        <b-field
+          label="Email"
+          :type="{ 'is-danger': errors.has('email') }"
+          :message="errors.collect('email')"
+        >
+          <b-input
+            v-model="form.email"
+            v-validate="'required|email'"
+            name="email"
+            type="email"
+          >
           </b-input>
         </b-field>
-        <b-field label="Password">
+        <b-field
+          label="Password"
+          :type="{ 'is-danger': errors.has('password') }"
+          :message="errors.collect('password')"
+        >
           <b-input
-            ref="password"
             v-model="form.password"
+            v-validate="'required|min:8|max:32'"
             type="password"
-            minlength="8"
-            maxlength="36"
-            required
+            name="password"
+            maxlength="32"
             password-reveal
           >
           </b-input>
         </b-field>
         <b-field>
-          <b-button type="is-primary" expanded @click.prevent="submit"
+          <b-button
+            type="is-primary"
+            expanded
+            native-type="submit"
+            @click.prevent="submit"
             >Register</b-button
           >
         </b-field>
@@ -90,35 +111,39 @@ export default {
   },
   methods: {
     async submit() {
-      const isUsernameValid = this.$refs.username.checkHtml5Validity();
-      const isEmailValid = this.$refs.email.checkHtml5Validity();
-      const isPasswordValid = this.$refs.password.checkHtml5Validity();
-
-      if (isUsernameValid && isEmailValid && isPasswordValid) {
-        this.register();
-      }
-    },
-    async register() {
-      try {
-        await this.$apollo.mutate({
-          mutation: REGISTER_MUTATION,
-          variables: {
-            username: this.form.username,
-            email: this.form.email,
-            password: this.form.password
-          }
-        });
-        await this.$apollo.mutate({
-          mutation: CONNECTED_MUTATION,
-          variables: {
-            connected: true
-          }
-        });
-        this.$router.push({ name: 'dash' });
-      } catch (err) {
-        this.$log.debug(err);
-        this.error = err.graphQLErrors[0].message;
-      }
+      this.$validator.validateAll().then(valid => {
+        if (valid) {
+          this.$apollo
+            .mutate({
+              mutation: REGISTER_MUTATION,
+              variables: {
+                username: this.form.username,
+                email: this.form.email,
+                password: this.form.password
+              }
+            })
+            .then(() =>
+              this.$apollo.mutate({
+                mutation: CONNECTED_MUTATION,
+                variables: {
+                  connected: true
+                }
+              })
+            )
+            .then(() => this.$router.push({ name: 'dash' }))
+            .catch(err => {
+              this.errors.remove('graphql');
+              err.graphQLErrors.forEach(err => {
+                this.errors.add({
+                  field: 'graphql',
+                  msg: err.message
+                });
+              });
+            });
+        } else {
+          this.errors.remove('graphql');
+        }
+      });
     }
   }
 };

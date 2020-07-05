@@ -27,7 +27,6 @@
             v-model="form.email"
             v-validate="'required|email'"
             name="email"
-            :error-messages="errors.collect('email')"
             type="email"
           >
           </b-input>
@@ -53,7 +52,11 @@
           </b-checkbox>
         </b-field>
         <b-field>
-          <b-button type="is-primary" expanded @click.prevent="submit"
+          <b-button
+            type="is-primary"
+            expanded
+            native-type="submit"
+            @click.prevent="submit"
             >Login</b-button
           >
         </b-field>
