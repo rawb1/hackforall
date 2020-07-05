@@ -13,19 +13,36 @@
         </div>
       </div>
       <form @submit.prevent="submit">
-        <b-field type="is-danger" :message="error"> </b-field>
-        <b-field label="Email">
-          <b-input ref="email" v-model="form.email" type="email" required>
+        <b-field
+          :type="{ 'is-danger': errors.has('graphql') }"
+          :message="errors.collect('graphql')"
+        >
+        </b-field>
+        <b-field
+          label="Email"
+          :type="{ 'is-danger': errors.has('email') }"
+          :message="errors.collect('email')"
+        >
+          <b-input
+            v-model="form.email"
+            v-validate="'required|email'"
+            name="email"
+            :error-messages="errors.collect('email')"
+            type="email"
+          >
           </b-input>
         </b-field>
-        <b-field label="Password">
+        <b-field
+          label="Password"
+          :type="{ 'is-danger': errors.has('password') }"
+          :message="errors.collect('password')"
+        >
           <b-input
-            ref="password"
             v-model="form.password"
+            v-validate="'required|min:8|max:32'"
+            name="password"
             type="password"
-            minlength="8"
-            maxlength="36"
-            required
+            maxlength="32"
             password-reveal
           >
           </b-input>
@@ -77,35 +94,40 @@ export default {
     };
   },
   methods: {
-    async submit() {
-      const isEmailValid = this.$refs.email.checkHtml5Validity();
-      const isPasswordValid = this.$refs.password.checkHtml5Validity();
-
-      if (isEmailValid && isPasswordValid) {
-        this.login();
-      }
-    },
-    async login() {
-      try {
-        await this.$apollo.query({
-          query: LOGIN_QUERY,
-          variables: {
-            email: this.form.email,
-            password: this.form.password,
-            remember: this.form.remember
-          }
-        });
-        await this.$apollo.mutate({
-          mutation: CONNECTED_MUTATION,
-          variables: {
-            connected: true
-          }
-        });
-        this.$router.push({ name: 'dash' });
-      } catch (err) {
-        this.$log.debug(err);
-        this.error = err.graphQLErrors[0].message;
-      }
+    submit() {
+      this.$validator.validateAll().then(valid => {
+        if (valid) {
+          this.$apollo
+            .query({
+              query: LOGIN_QUERY,
+              variables: {
+                email: this.form.email,
+                password: this.form.password,
+                remember: this.form.remember
+              }
+            })
+            .then(() =>
+              this.$apollo.mutate({
+                mutation: CONNECTED_MUTATION,
+                variables: {
+                  connected: true
+                }
+              })
+            )
+            .then(() => this.$router.push({ name: 'dash' }))
+            .catch(err => {
+              this.errors.remove('graphql');
+              err.graphQLErrors.forEach(err => {
+                this.errors.add({
+                  field: 'graphql',
+                  msg: err.message
+                });
+              });
+            });
+        } else {
+          this.errors.remove('graphql');
+        }
+      });
     }
   }
 };
