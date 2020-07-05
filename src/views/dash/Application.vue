@@ -16,12 +16,17 @@
             <h2 class="title has-text-centered">Profile</h2>
             <div class="columns">
               <div class="column">
-                <b-field label="Name*">
+                <b-field
+                  label="Name*"
+                  :type="{ 'is-danger': errors.has('name') }"
+                  :message="errors.first('name')"
+                >
                   <b-input
                     ref="name"
                     v-model="application.name"
+                    v-validate="'required|email'"
+                    name="name"
                     type="text"
-                    required
                   ></b-input>
                 </b-field>
               </div>
@@ -52,9 +57,9 @@
               <div class="column">
                 <b-field
                   label="Graduation year*"
-                  :type="{ 'is-danger': errors.garduationYear }"
+                  :type="{ 'is-danger': formErrors.garduationYear }"
                   :message="{
-                    'Graduation year required': errors.garduationYear
+                    'Graduation year required': formErrors.garduationYear
                   }"
                 >
                   <b-datepicker
@@ -71,8 +76,8 @@
               <div class="column">
                 <b-field
                   label="Study fields*"
-                  :type="{ 'is-danger': errors.studyFields }"
-                  :message="{ 'Study fields required': errors.studyFields }"
+                  :type="{ 'is-danger': formErrors.studyFields }"
+                  :message="{ 'Study fields required': formErrors.studyFields }"
                 >
                   <b-taginput
                     v-model="application.studyFields"
@@ -80,6 +85,7 @@
                     icon="fas fa-user-graduate"
                     placeholder="Add study"
                     @blur="validate('studyFields')"
+                    @remove="validate('studyFields')"
                   >
                   </b-taginput>
                 </b-field>
@@ -194,6 +200,33 @@
             :clickable="true"
           >
             <h2 class="title has-text-centered">Travel reimbursement</h2>
+            <div class="columns">
+              <div class="column">
+                <b-field label="Paypal address*">
+                  <b-input
+                    ref="name"
+                    v-model="application.paypalAddress"
+                    type="text"
+                  ></b-input>
+                </b-field>
+              </div>
+              <div class="column">
+                <b-field class="file" position="is-centered">
+                  <b-upload
+                    v-model="application.travelReceipt"
+                    accept="application/pdf"
+                  >
+                    <a class="button is-primary is-full-width">
+                      <b-icon icon="upload"></b-icon>
+                      <span>Upload your travel receipt*</span>
+                    </a>
+                  </b-upload>
+                  <span v-if="application.travelReceipt" class="file-name">
+                    {{ application.travelReceipt.name }}
+                  </span>
+                </b-field>
+              </div>
+            </div>
           </b-step-item>
           <b-step-item
             v-if="application.needAccomodation"
@@ -202,6 +235,29 @@
             :clickable="true"
           >
             <h2 class="title has-text-centered">Accomodation</h2>
+            <b-field label="Accomodation preferences">
+              <b-select
+                v-model="application.AccomodationPreferences"
+                placeholder="Accomodation preference"
+                expanded
+                multiple
+                required
+              >
+                <option
+                  v-for="preference in accomodationPreferencesList"
+                  :key="preference"
+                  :value="preference"
+                  >{{ preference }}</option
+                >
+              </b-select>
+            </b-field>
+            <b-field label="Host matching details">
+              <b-input
+                v-model="application.hostMatchingDetails"
+                maxlength="200"
+                type="textarea"
+              ></b-input>
+            </b-field>
           </b-step-item>
           <b-step-item
             icon="fas fa-file-contract"
@@ -211,7 +267,7 @@
             <h2 class="title has-text-centered">Terms</h2>
             <div class="field">
               <b-checkbox v-model="application.majority">
-                With tooltip I will be
+                I will be
                 <strong>&nbsp;18 years or older&nbsp;</strong>by the day of the
                 event.
                 <b-tooltip
@@ -221,6 +277,48 @@
                 </b-tooltip>
               </b-checkbox>
             </div>
+            <div class="field">
+              <b-checkbox v-model="application.photoRelease">
+                If we take photos or photos of you, we can share it with the
+                world.
+                <b-tooltip
+                  label="By checking, I affirm that I have read and accepted the terms of the photo release above."
+                >
+                  <b-icon size="is-small" icon="fas fa-info-circle"></b-icon>
+                </b-tooltip>
+              </b-checkbox>
+            </div>
+            <div class="field">
+              <b-checkbox v-model="application.codeOfConduct">
+                I affirm that I have read and agree to the terms of both
+                <a target="_blank" href="https://mlh.io/privacy" @click.stop
+                  >MLH Privacy Policy</a
+                >
+                and
+                <a
+                  target="_blank"
+                  href="https://github.com/MLH/mlh-policies/blob/master/prize-terms-and-conditions/contest-terms.md"
+                  @click.stop
+                  >MLH Contest Terms</a
+                >
+                <b-tooltip
+                  label="I further autorize you to share my application/registration information for event administration,
+                  ranking, MLH administration, pre- and post-event informational e-mails, and occasional messages about hackathons
+                  in-line with the MLP privacy policy"
+                >
+                  <b-icon size="is-small" icon="fas fa-info-circle"></b-icon>
+                </b-tooltip>
+              </b-checkbox>
+            </div>
+            <div class="divider">Complementary informations</div>
+            <b-field label="Additional notes">
+              <b-input
+                v-model="application.additionalNotes"
+                placeholder="If there's anything else you need to let us know, tell us here!"
+                maxlength="200"
+                type="textarea"
+              ></b-input>
+            </b-field>
           </b-step-item>
         </b-steps>
       </form>
@@ -231,13 +329,20 @@
 export default {
   data: () => ({
     activeStep: 0,
-    teeShirtSizes: ['XS', 'S', 'M', 'L', 'XL'],
-    errors: { garduationYear: false, studyFields: false },
+    teeShirtSizes: ['XS', 'S', 'M', 'L', 'XL'], // TODO move server side
+    accomodationPreferencesList: [
+      // TODO move server side
+      'None',
+      'No animal(s)',
+      'Small animal(s)',
+      'No smoking',
+      'Group hosting'
+    ],
+    formErrors: { garduationYear: false, studyFields: false },
     application: {
       // Profile
       name: '',
       school: '',
-      majority: false,
       phone: null,
       // Studies
       garduationYear: null,
@@ -254,17 +359,18 @@ export default {
       needTravelReimbursement: true,
       // Hardware needs
       hardwareList: null,
-      // Accomodation
-      AccomodationPreferences: null,
-      hostMatchingDetails: '',
       // Travel
-      paypalAdresse: '',
+      paypalAddress: '',
       travelReceipt: null,
+      // Accomodation
+      AccomodationPreferences: [],
+      hostMatchingDetails: '',
       // Terms
-      liability: '',
-      photoRelease: '',
-      codeOfConduct: '',
-      contestTerms: '',
+      majority: false,
+      liability: false,
+      photoRelease: false,
+      codeOfConduct: false,
+      contestTerms: false,
       additionalNotes: ''
     }
   }),
@@ -275,14 +381,14 @@ export default {
       isValid = isValid && this.$refs.phone.checkHtml5Validity();
       isValid = isValid && this.$refs.school.checkHtml5Validity();
 
-      isValid = isValid && !this.errors.garduationYear;
-      isValid = isValid && !this.errors.studyFields;
+      isValid = isValid && !this.formErrors.garduationYear;
+      isValid = isValid && !this.formErrors.studyFields;
       return isValid;
     },
     validate: function(input) {
       this.$log.debug(this.application[input]);
       const val = this.application[input];
-      this.errors[input] = Array.isArray(val) ? val.length === 0 : !val;
+      this.formErrors[input] = Array.isArray(val) ? val.length === 0 : !val;
     }
   }
 };

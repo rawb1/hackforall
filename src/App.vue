@@ -22,6 +22,10 @@ export default {
   display: flex;
 }
 
+.step-content {
+  margin-bottom: 1rem;
+}
+
 @media screen and (min-width: $widescreen) {
   .main-navbar {
     height: 75px;

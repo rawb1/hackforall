@@ -9,14 +9,9 @@
       <b-navbar-item tag="router-link" :to="{ name: 'application' }">
         Application
       </b-navbar-item>
-      <b-navbar-dropdown label="Info" :hoverable="true">
-        <b-navbar-item href="#">
-          About
-        </b-navbar-item>
-        <b-navbar-item href="#">
-          Contact
-        </b-navbar-item>
-      </b-navbar-dropdown>
+      <b-navbar-item tag="router-link" :to="{ name: 'application' }">
+        Team
+      </b-navbar-item>
     </template>
   </b-navbar>
 </template>
