@@ -13,21 +13,41 @@
         </div>
       </div>
       <form @submit.prevent="submit">
-        <b-field type="is-danger" :message="error"> </b-field>
+        <b-field
+          :type="{ 'is-danger': errors.has('graphql') }"
+          :message="errors.collect('graphql')"
+        >
+        </b-field>
+        <b-field
+          :type="{ 'is-danger': errors.has('resetToken') }"
+          :message="errors.collect('resetToken')"
+        >
+          <b-input
+            v-model="form.resetToken"
+            v-validate="'required'"
+            class="is-hidden"
+            type="text"
+            name="resetToken"
+          >
+          </b-input>
+        </b-field>
         <b-field label="New Password">
           <b-input
-            ref="newPassword"
             v-model="form.newPassword"
+            v-validate="'required|min:8|max:32'"
             type="password"
-            minlength="8"
-            maxlength="36"
-            required
+            name="password"
+            maxlength="32"
             password-reveal
           >
           </b-input>
         </b-field>
         <b-field>
-          <b-button type="is-primary" expanded @click.prevent="submit"
+          <b-button
+            type="is-primary"
+            expanded
+            native-type="submit"
+            @click.prevent="submit"
             >Reset</b-button
           >
         </b-field>
@@ -59,32 +79,40 @@ export default {
   data() {
     return {
       form: {
+        resetToken: null,
         newPassword: ''
-      },
-      error: null
+      }
     };
+  },
+  created() {
+    this.form.resetToken = this.$route.params.resetToken;
   },
   methods: {
     async submit() {
-      const isNewPasswordValid = this.$refs.newPassword.checkHtml5Validity();
-      if (isNewPasswordValid && this.$route.params.resetToken) {
-        this.reset();
-      }
-    },
-    async reset() {
-      try {
-        await this.$apollo.mutate({
-          mutation: RESET_MUTATION,
-          variables: {
-            newPassword: this.form.newPassword,
-            resetToken: this.$route.params.resetToken
-          }
-        });
-        this.$router.replace({ name: 'login' });
-      } catch (err) {
-        this.$log.debug(err);
-        this.error = err.graphQLErrors[0].message;
-      }
+      this.$validator.validateAll().then(valid => {
+        if (valid) {
+          this.$apollo
+            .mutate({
+              mutation: RESET_MUTATION,
+              variables: {
+                newPassword: this.form.newPassword,
+                resetToken: this.form.resetToken
+              }
+            })
+            .then(() => this.$router.replace({ name: 'login' }))
+            .catch(err => {
+              this.errors.remove('graphql');
+              err.graphQLErrors.forEach(err => {
+                this.errors.add({
+                  field: 'graphql',
+                  msg: err.message
+                });
+              });
+            });
+        } else {
+          this.errors.remove('graphql');
+        }
+      });
     }
   }
 };

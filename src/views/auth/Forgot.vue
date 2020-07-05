@@ -13,13 +13,30 @@
         </div>
       </div>
       <form @submit.prevent="submit">
-        <b-field type="is-danger" :message="error"> </b-field>
-        <b-field label="Email">
-          <b-input ref="email" v-model="form.email" type="email" required>
+        <b-field
+          :type="{ 'is-danger': errors.has('graphql') }"
+          :message="errors.collect('graphql')"
+        >
+        </b-field>
+        <b-field
+          label="Email"
+          :type="{ 'is-danger': errors.has('email') }"
+          :message="errors.collect('email')"
+        >
+          <b-input
+            v-model="form.email"
+            v-validate="'required|email'"
+            name="email"
+            type="email"
+          >
           </b-input>
         </b-field>
         <b-field>
-          <b-button type="is-primary" expanded @click.prevent="submit"
+          <b-button
+            type="is-primary"
+            native-type="submit"
+            expanded
+            @click.prevent="submit"
             >Reset</b-button
           >
         </b-field>
@@ -52,30 +69,34 @@ export default {
     return {
       form: {
         email: ''
-      },
-      error: null
+      }
     };
   },
   methods: {
     async submit() {
-      const isEmailValid = this.$refs.email.checkHtml5Validity();
-      if (isEmailValid) {
-        this.forgot();
-      }
-    },
-    async forgot() {
-      try {
-        await this.$apollo.query({
-          query: FORGOT_QUERY,
-          variables: {
-            email: this.form.email
-          }
-        });
-        this.$router.replace({ name: 'home' });
-      } catch (err) {
-        this.$log.debug(err);
-        this.error = err.graphQLErrors[0].message;
-      }
+      this.$validator.validateAll().then(valid => {
+        if (valid) {
+          this.$apollo
+            .query({
+              query: FORGOT_QUERY,
+              variables: {
+                email: this.form.email
+              }
+            })
+            .then(() => this.$router.replace({ name: 'home' }))
+            .catch(err => {
+              this.errors.remove('graphql');
+              err.graphQLErrors.forEach(err => {
+                this.errors.add({
+                  field: 'graphql',
+                  msg: err.message
+                });
+              });
+            });
+        } else {
+          this.errors.remove('graphql');
+        }
+      });
     }
   }
 };

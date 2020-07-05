@@ -92,8 +92,7 @@ export default {
         email: '',
         password: '',
         remember: false
-      },
-      error: null
+      }
     };
   },
   methods: {

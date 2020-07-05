@@ -105,8 +105,7 @@ export default {
         username: '',
         email: '',
         password: ''
-      },
-      error: null
+      }
     };
   },
   methods: {
