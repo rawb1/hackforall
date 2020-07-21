@@ -5,6 +5,7 @@ const serve = require('koa-static');
 const session = require('koa-session');
 const bodyParser = require('koa-bodyparser');
 const { ApolloServer } = require('apollo-server-koa');
+const graphqlUploadKoa = require('graphql-upload/public/graphqlUploadKoa');
 
 const { playground, sessionSettings, cookie } = require('./config/env');
 require('./config/logger');
@@ -14,7 +15,7 @@ require('./config/mongo');
 require('./api/models');
 const schema = require('./api/graphql');
 const logger = log4js.getLogger('app');
-const { authenticate } = require('./api/controllers/user.controller');
+const { authenticate } = require('./api/controllers/userController');
 
 const app = new Koa();
 const apollo = new ApolloServer({
@@ -26,6 +27,7 @@ const apollo = new ApolloServer({
 app.keys = cookie.keys;
 app.use(session(app, sessionSettings));
 app.use(bodyParser());
+app.use(graphqlUploadKoa({ maxFileSize: 10000000, maxFiles: 10 }));
 app.use(log4js.koaLogger(log4js.getLogger('http'), { level: 'auto' }));
 app.use(serve(path.join(__dirname, '../dist')));
 app.use(apollo.getMiddleware());

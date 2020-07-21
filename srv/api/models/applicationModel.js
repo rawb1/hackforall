@@ -16,4 +16,8 @@ const ApplicationSchema = new Schema({
   updatedAt: { type: Date, required: true, default: Date.now }
 });
 
+ApplicationSchema.pre('updateOne', function() {
+  this.set({ updatedAt: new Date() });
+});
+
 mongoose.model('Application', ApplicationSchema);

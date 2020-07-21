@@ -1,30 +1,24 @@
-const { gql, makeExecutableSchema } = require('apollo-server-koa');
-
+const { makeExecutableSchema } = require('apollo-server-koa');
 const { merge } = require('lodash');
-const generate = require('./utils/generate');
 const log4js = require('koa-log4');
 
 const logger = log4js.getLogger('graphql');
 
-const { User, UserResolvers } = require('./schemas/user.schema');
-const AuthDirective = require('./directives/auth.directive');
-
-const Query = gql`
-  directive @auth(requires: Role!) on OBJECT | FIELD_DEFINITION
-
-  enum Role {
-    ADMIN
-    USER
-  }
-
-  type Query {
-    _empty: String
-  }
-`;
+const generate = require('./utils/generate');
+const { baseSchema, userSchema, applicationSchema } = require('./schemas');
+const AuthDirective = require('./directives/authDirective');
 
 const schema = makeExecutableSchema({
-  typeDefs: [Query, User],
-  resolvers: merge(UserResolvers),
+  typeDefs: [
+    baseSchema.typeDefs,
+    userSchema.typeDefs,
+    applicationSchema.typeDefs
+  ],
+  resolvers: merge(
+    baseSchema.resolvers,
+    userSchema.resolvers,
+    applicationSchema.resolvers
+  ),
   logger: { log: e => logger.debug(e) },
   schemaDirectives: {
     auth: AuthDirective

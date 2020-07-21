@@ -1,13 +1,6 @@
 const { gql } = require('apollo-server-koa');
 
-const {
-  register,
-  login,
-  logout,
-  me,
-  reset,
-  forgot
-} = require('../../controllers/user.controller');
+const { userController } = require('../../controllers');
 
 const typeDefs = gql`
   type User @auth(requires: USER) {
@@ -24,7 +17,7 @@ const typeDefs = gql`
     me: User @auth(requires: USER)
   }
 
-  type Mutation {
+  extend type Mutation {
     register(user: UserInput!): User
     reset(newPassword: String!, resetToken: String!): Boolean
   }
@@ -39,29 +32,29 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     login: (parent, args, ctx, info) => {
-      return login(ctx, args);
+      return userController.login(ctx, args);
     },
     logout: (parent, args, ctx, info) => {
-      return logout(ctx);
+      return userController.logout(ctx);
     },
     forgot: (parent, args, ctx, info) => {
-      return forgot(ctx, args);
+      return userController.forgot(ctx, args);
     },
     me: (parent, args, ctx, info) => {
-      return me(ctx);
+      return userController.me(ctx);
     }
   },
   Mutation: {
     register: (parent, args, ctx) => {
-      return register(ctx, args.user);
+      return userController.register(ctx, args.user);
     },
     reset: (parent, args, ctx) => {
-      return reset(ctx, args);
+      return userController.reset(ctx, args);
     }
   }
 };
 
 module.exports = {
-  User: typeDefs,
-  UserResolvers: resolvers
+  typeDefs,
+  resolvers
 };
