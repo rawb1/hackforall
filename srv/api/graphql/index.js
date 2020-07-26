@@ -19,7 +19,7 @@ const schema = makeExecutableSchema({
     userSchema.resolvers,
     applicationSchema.resolvers
   ),
-  logger: { log: e => logger.debug(e) },
+  logger: { log: e => logger.error(e) },
   schemaDirectives: {
     auth: AuthDirective
   }

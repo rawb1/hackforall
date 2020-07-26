@@ -442,6 +442,8 @@
   </div>
 </template>
 <script>
+import { SAVE_APPLICATION_MUTATION } from '@/graphql/application';
+
 export default {
   data: () => ({
     activeStep: 0,
@@ -502,11 +504,10 @@ export default {
   methods: {
     submit() {
       this.$log.debug('submited');
-      this.$validator.validateAll().then(valid => {
-        if (valid) {
-          this.$log.debug('valid');
-        } else {
-          this.errors.remove('graphql');
+      this.$apollo.mutate({
+        mutation: SAVE_APPLICATION_MUTATION,
+        variables: {
+          name: this.application.name
         }
       });
     }

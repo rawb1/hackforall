@@ -33,7 +33,7 @@ export const resolvers = {
 };
 
 export const initializeState = async client => {
-  const isConnected = client
+  const isConnected = await client
     .query({ query: ME_QUERY })
     .then(res => {
       return true;
@@ -44,7 +44,7 @@ export const initializeState = async client => {
 
   client.cache.writeData({
     data: {
-      connected: await isConnected
+      connected: isConnected
     }
   });
 };
