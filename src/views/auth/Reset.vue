@@ -73,7 +73,7 @@
   </div>
 </template>
 <script>
-import { RESET_MUTATION } from '@/graphql/user';
+import { RESET_MUTATION } from '@/graphql/userQueries';
 
 export default {
   data() {

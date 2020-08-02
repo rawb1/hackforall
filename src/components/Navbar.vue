@@ -57,7 +57,7 @@
 </template>
 <script>
 import { CONNECTED_QUERY, CONNECTED_MUTATION } from '@/apollo/state';
-import { LOGOUT_QUERY } from '@/graphql/user';
+import { LOGOUT_QUERY } from '@/graphql/userQueries';
 
 export default {
   props: { dash: Boolean },

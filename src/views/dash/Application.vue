@@ -432,7 +432,10 @@
   </div>
 </template>
 <script>
-import { GET_APPLICATION_QUERY, APPLY_MUTATION } from '@/graphql/application';
+import {
+  GET_APPLICATION_QUERY,
+  APPLY_MUTATION
+} from '@/graphql/applicationQueries';
 
 export default {
   data: () => ({
@@ -518,13 +521,11 @@ export default {
       ) {
         this.activeStep =
           !!this.form.needHardware + !!this.form.needTravelReimbursement + 1;
-      } else {
-        this.$log.debug(
-          !!this.form.needHardware +
-            !!this.form.needAccomodation +
-            !!this.form.needTravelReimbursement +
-            1
-        );
+      } else if (
+        this.errors.has('majority') ||
+        this.errors.has('photoRelease') ||
+        this.errors.has('codeOfConduct')
+      ) {
         this.activeStep =
           !!this.form.needHardware +
           !!this.form.needAccomodation +
@@ -536,9 +537,14 @@ export default {
   apollo: {
     form: {
       query: GET_APPLICATION_QUERY,
-      update: data => {
+      update: function(data) {
+        if (!data.getApplication) {
+          return this.form;
+        }
         const form = data.getApplication.form;
-        form.garduationYear = new Date(form.garduationYear);
+        form.garduationYear = form.garduationYear
+          ? new Date(form.garduationYear)
+          : null;
         return form;
       }
     }

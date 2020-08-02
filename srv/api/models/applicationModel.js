@@ -13,7 +13,14 @@ const ApplicationSchema = new Schema({
     immutable: true
   },
   form: {
-    type: Schema.Types.Mixed
+    type: Schema.Types.Mixed,
+    required: true
+  },
+  status: {
+    type: String,
+    required: true,
+    enum: ['INCOMPLETE', 'PENDING', 'REFUSED', 'ACCEPTED'],
+    default: 'PENDING'
   },
   createdAt: { type: Date, required: true, default: Date.now },
   updatedAt: { type: Date, required: true, default: Date.now }

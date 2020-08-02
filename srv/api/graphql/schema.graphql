@@ -24,6 +24,7 @@ type Application {
   userId: ID
   hackathonId: ID
   form: ApplicationForm
+  status: ApplicationStatus
 }
 
 type ApplicationForm {

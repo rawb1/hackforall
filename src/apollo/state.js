@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { ME_QUERY } from '@/graphql/user';
+import { ME_QUERY } from '@/graphql/userQueries';
 
 export const typeDefs = gql`
   type Mutation {

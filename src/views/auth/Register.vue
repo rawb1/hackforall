@@ -96,7 +96,7 @@
 </template>
 <script>
 import { CONNECTED_MUTATION } from '@/apollo/state';
-import { REGISTER_MUTATION } from '@/graphql/user';
+import { REGISTER_MUTATION } from '@/graphql/userQueries';
 
 export default {
   data() {

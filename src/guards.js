@@ -1,5 +1,5 @@
 import client from '@/apollo/client';
-import { ME_QUERY } from '@/graphql/user';
+import { ME_QUERY } from '@/graphql/userQueries';
 import { CONNECTED_QUERY } from '@/apollo/state';
 
 export const isConnected = () => {

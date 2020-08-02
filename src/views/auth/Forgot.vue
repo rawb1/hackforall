@@ -62,7 +62,7 @@
   </div>
 </template>
 <script>
-import { FORGOT_QUERY } from '@/graphql/user';
+import { FORGOT_QUERY } from '@/graphql/userQueries';
 
 export default {
   data() {

@@ -15,6 +15,7 @@ const typeDefs = gql`
     userId: ID
     hackathonId: ID
     form: ApplicationForm
+    status: ApplicationStatus
   }
 
   extend type Query @auth(requires: USER) {

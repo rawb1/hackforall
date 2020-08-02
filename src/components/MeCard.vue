@@ -26,7 +26,7 @@
   </div>
 </template>
 <script>
-import { ME_QUERY } from '@/graphql/user';
+import { ME_QUERY } from '@/graphql/userQueries';
 
 export default {
   data: () => ({

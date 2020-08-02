@@ -83,7 +83,7 @@
 </template>
 <script>
 import { CONNECTED_MUTATION } from '@/apollo/state';
-import { LOGIN_QUERY } from '@/graphql/user';
+import { LOGIN_QUERY } from '@/graphql/userQueries';
 
 export default {
   data() {
