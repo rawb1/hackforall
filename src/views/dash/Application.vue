@@ -116,7 +116,7 @@
             </div>
             <div class="column">
               <b-field class="file" expanded>
-                <b-upload v-model="form.resume" accept="form/pdf">
+                <b-upload v-model="form.resume" accept="application/pdf">
                   <a class="button is-primary is-full-width">
                     <b-icon icon="upload"></b-icon>
                     <span>Upload your resume</span>
@@ -233,7 +233,7 @@
                   v-model="form.travelReceipt"
                   v-validate="'required_if:needTravelReimbursement,true'"
                   data-vv-validate-on="input"
-                  accept="form/pdf"
+                  accept="application/pdf"
                   name="travelReceipt"
                 >
                   <a class="button is-primary is-full-width">
@@ -464,9 +464,9 @@ export default {
       dietaryRestrictions: null,
       teeShirtSize: 'M',
       // Needs
-      needHardware: true,
-      needAccomodation: true,
-      needTravelReimbursement: true,
+      needHardware: false,
+      needAccomodation: false,
+      needTravelReimbursement: false,
       // Hardware needs
       hardwareList: null,
       // Travel

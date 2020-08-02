@@ -24,7 +24,6 @@ const typeDefs = gql`
 
   extend type Mutation @auth(requires: USER) {
     apply(form: ApplicationFormInput!): Application
-    uploadResume(resume: Upload): Boolean
   }
 
   type ApplicationForm {
@@ -88,12 +87,9 @@ const resolvers = {
   },
   Mutation: {
     apply: async (parent, args, ctx) => {
-      return applicationController.apply(ctx.state.user, args.form);
-    },
-    uploadResume: (parent, args, ctx) => {
       // eslint-disable-next-line no-console
-      console.log(args);
-      return true;
+      console.log(args.form.resume);
+      return applicationController.apply(ctx.state.user, args.form);
     }
   }
 };

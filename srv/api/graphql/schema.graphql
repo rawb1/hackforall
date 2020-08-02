@@ -97,7 +97,6 @@ type Mutation {
   register(user: UserInput!): User
   reset(newPassword: String!, resetToken: String!): Boolean
   apply(form: ApplicationFormInput!): Application
-  uploadResume(resume: Upload): Boolean
 }
 
 type Query {
