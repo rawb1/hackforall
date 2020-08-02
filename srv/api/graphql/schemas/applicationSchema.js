@@ -3,10 +3,18 @@ const { gql } = require('apollo-server-koa');
 const { applicationController } = require('../../controllers');
 
 const typeDefs = gql`
+  enum ApplicationStatus {
+    INCOMPLETE
+    PENDING
+    REFUSED
+    ACCEPTED
+  }
+
   type Application @auth(requires: USER) {
     _id: ID
     userId: ID
     hackathonId: ID
+    form: ApplicationForm
   }
 
   extend type Query @auth(requires: USER) {
@@ -14,10 +22,11 @@ const typeDefs = gql`
   }
 
   extend type Mutation @auth(requires: USER) {
-    saveApplication(application: ApplicationInput!): Application
+    apply(form: ApplicationFormInput!): Application
+    uploadResume(resume: Upload): Boolean
   }
 
-  input ApplicationInput {
+  type ApplicationForm {
     name: String
     school: String
     phone: String
@@ -42,17 +51,48 @@ const typeDefs = gql`
     codeOfConduct: Boolean
     additionalNotes: String
   }
+
+  input ApplicationFormInput {
+    name: String!
+    school: String!
+    phone: String!
+    garduationYear: String!
+    studyFields: [String]!
+    interests: [String]
+    github: String
+    resume: Upload
+    dietaryRestrictions: [String]
+    teeShirtSize: String!
+    needHardware: Boolean
+    needAccomodation: Boolean
+    needTravelReimbursement: Boolean
+    hardwareList: [String]
+    paypalAddress: String
+    travelReceipt: Upload
+    AccomodationPreferences: [String]
+    hostMatchingDetails: String
+    majority: Boolean!
+    liability: Boolean!
+    photoRelease: Boolean!
+    codeOfConduct: Boolean!
+    additionalNotes: String
+  }
 `;
 
 const resolvers = {
   Query: {
     getApplication: (parent, args, ctx, info) => {
-      return applicationController.get(ctx, args.id);
+      return applicationController.get(ctx.state.user, args.id);
     }
   },
   Mutation: {
-    saveApplication: (parent, args, ctx) => {
-      return applicationController.save(ctx, args.application);
+    apply: async (parent, args, ctx) => {
+      return applicationController.apply(ctx.state.user, args.form);
+    },
+    uploadResume: (parent, args, ctx) => {
+      // eslint-disable-next-line no-console
+      console.log(args);
+      return true;
     }
   }
 };

@@ -1,17 +1,52 @@
 import gql from 'graphql-tag';
 
-export const SAVE_APPLICATION_MUTATION = gql`
+export const GET_APPLICATION_QUERY = gql`
+  query($id: ID) {
+    getApplication(id: $id) {
+      _id
+      userId
+      hackathonId
+      form {
+        name
+        school
+        phone
+        garduationYear
+        studyFields
+        interests
+        github
+        resume
+        dietaryRestrictions
+        teeShirtSize
+        needHardware
+        needAccomodation
+        needTravelReimbursement
+        hardwareList
+        paypalAddress
+        travelReceipt
+        AccomodationPreferences
+        hostMatchingDetails
+        majority
+        liability
+        photoRelease
+        codeOfConduct
+        additionalNotes
+      }
+    }
+  }
+`;
+
+export const APPLY_MUTATION = gql`
   mutation(
-    $name: String
-    $school: String
-    $phone: String
-    $garduationYear: String
-    $studyFields: [String]
+    $name: String!
+    $school: String!
+    $phone: String!
+    $garduationYear: String!
+    $studyFields: [String]!
     $interests: [String]
     $github: String
     $resume: Upload
     $dietaryRestrictions: [String]
-    $teeShirtSize: String
+    $teeShirtSize: String!
     $needHardware: Boolean
     $needAccomodation: Boolean
     $needTravelReimbursement: Boolean
@@ -20,14 +55,14 @@ export const SAVE_APPLICATION_MUTATION = gql`
     $travelReceipt: Upload
     $AccomodationPreferences: [String]
     $hostMatchingDetails: String
-    $majority: Boolean
-    $liability: Boolean
-    $photoRelease: Boolean
-    $codeOfConduct: Boolean
+    $majority: Boolean!
+    $liability: Boolean!
+    $photoRelease: Boolean!
+    $codeOfConduct: Boolean!
     $additionalNotes: String
   ) {
-    saveApplication(
-      application: {
+    apply(
+      form: {
         name: $name
         school: $school
         phone: $phone
@@ -54,6 +89,14 @@ export const SAVE_APPLICATION_MUTATION = gql`
       }
     ) {
       _id
+      userId
+      hackathonId
     }
+  }
+`;
+
+export const UPLOAD_RESUME_MUTATION = gql`
+  mutation($resume: Upload) {
+    uploadResume(resume: $resume)
   }
 `;

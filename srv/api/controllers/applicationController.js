@@ -1,20 +1,39 @@
-const log4js = require('koa-log4');
 const mongoose = require('mongoose');
 
 const Application = mongoose.model('Application');
-const logger = log4js.getLogger('application');
 
-const get = () => {};
-const save = (ctx, application) => {
-  const user = ctx.state.user;
-  logger.debug(`new application ! ${application}`);
-  return Application.findOneAndUpdate(
-    { userId: user._id },
-    { userId: user._id, name: application.name }
-  );
+const activeHackathon = { _id: '5f1c10546a4ffd305b0f25b0' };
+
+const get = (user, id) => {
+  if (id) {
+    return Application.findById(id);
+  } else {
+    return Application.findOne({
+      userId: user._id,
+      hackathonId: activeHackathon._id
+    });
+  }
+};
+
+const apply = async (user, form) => {
+  const existingApplication = await Application.findOne({
+    userId: user._id,
+    hackathonId: activeHackathon._id
+  });
+  if (existingApplication) {
+    return Application.findByIdAndUpdate(existingApplication._id, {
+      form
+    });
+  } else {
+    return Application.create({
+      userId: user._id,
+      hackathonId: activeHackathon._id,
+      form
+    });
+  }
 };
 
 module.exports = {
   get,
-  save
+  apply
 };

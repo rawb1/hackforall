@@ -115,11 +115,7 @@ export default {
           this.$apollo
             .mutate({
               mutation: REGISTER_MUTATION,
-              variables: {
-                username: this.form.username,
-                email: this.form.email,
-                password: this.form.password
-              }
+              variables: this.form
             })
             .then(() =>
               this.$apollo.mutate({

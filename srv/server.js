@@ -5,9 +5,9 @@ const serve = require('koa-static');
 const session = require('koa-session');
 const bodyParser = require('koa-bodyparser');
 const { ApolloServer } = require('apollo-server-koa');
-const graphqlUploadKoa = require('graphql-upload/public/graphqlUploadKoa');
+const { graphqlUploadKoa } = require('graphql-upload');
 
-const { playground, sessionSettings, cookie } = require('./config/env');
+const { sessionSettings, cookie } = require('./config/env');
 require('./config/logger');
 require('./config/mailer');
 require('./config/mongo');
@@ -20,8 +20,11 @@ const { authenticate } = require('./api/controllers/userController');
 const app = new Koa();
 const apollo = new ApolloServer({
   schema,
-  context: authenticate,
-  playground
+  // Disable the built in file upload implementation that uses an outdated
+  // `graphql-upload` version, see:
+  // https://github.com/apollographql/apollo-server/issues/3508#issuecomment-662371289
+  uploads: false,
+  context: authenticate
 });
 
 app.keys = cookie.keys;

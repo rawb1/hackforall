@@ -19,7 +19,7 @@ const authenticate = async ({ ctx }) => {
     if (token) {
       const decoded = jwt.verify(token, secret);
       if (decoded) {
-        ctx.state.user = await User.findOne({ _id: decoded.sub });
+        ctx.state.user = await User.findById(decoded.sub);
         if (decoded.remember) {
           _setCookie(ctx, token, {
             expires: new Date(Date.now() + cookie.expires)
@@ -89,13 +89,13 @@ const forgot = async (ctx, args) => {
 };
 
 const reset = async (ctx, args) => {
-  let token;
+  let decoded;
   try {
-    token = jwt.verify(args.resetToken, secret);
+    decoded = jwt.verify(args.resetToken, secret);
   } catch (err) {
     throw new ApolloError(err.message, err.name);
   }
-  const user = await User.findOne({ _id: token.sub });
+  const user = await User.findById(decoded.sub);
   if (!user) {
     throw new UserInputError('User not found');
   }

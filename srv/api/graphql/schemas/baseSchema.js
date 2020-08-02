@@ -1,5 +1,5 @@
 const { gql } = require('apollo-server-koa');
-const GraphQLUpload = require('graphql-upload/public/GraphQLUpload');
+const { GraphQLUpload } = require('graphql-upload');
 
 const typeDefs = gql`
   directive @auth(requires: Role!) on OBJECT | FIELD_DEFINITION

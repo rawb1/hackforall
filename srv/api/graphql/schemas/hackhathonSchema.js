@@ -17,28 +17,12 @@ const typeDefs = gql`
   extend type Query @auth(requires: USER) {
     getHackathon(id: ID): hackathon
   }
-
-  type Mutation @auth(requires: USER) {
-    saveApplication(application: ApplicationInput!): Application
-  }
-
-  input ApplicationInput {
-    name: String
-    planing: {
-
-    }
-  }
 `;
 
 const resolvers = {
   Query: {
-    getApplication: (parent, args, ctx, info) => {
+    getHackathon: (parent, args, ctx, info) => {
       return hackathonController.get(ctx, args.id);
-    }
-  },
-  Mutation: {
-    saveApplication: (parent, args, ctx) => {
-      return hackathonController.save(ctx, args.application);
     }
   }
 };

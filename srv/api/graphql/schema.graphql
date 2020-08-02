@@ -1,12 +1,32 @@
+directive @constraint(
+  """String constraints"""
+  minLength: Int
+  maxLength: Int
+  startsWith: String
+  endsWith: String
+  contains: String
+  notContains: String
+  pattern: String
+  format: String
+
+  """Number constraints"""
+  min: Int
+  max: Int
+  exclusiveMin: Int
+  exclusiveMax: Int
+  multipleOf: Int
+) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
+
 directive @auth(requires: Role!) on OBJECT | FIELD_DEFINITION
 
 type Application {
   _id: ID
   userId: ID
   hackathonId: ID
+  form: ApplicationForm
 }
 
-input ApplicationInput {
+type ApplicationForm {
   name: String
   school: String
   phone: String
@@ -32,6 +52,39 @@ input ApplicationInput {
   additionalNotes: String
 }
 
+input ApplicationFormInput {
+  name: String!
+  school: String!
+  phone: String!
+  garduationYear: String!
+  studyFields: [String]!
+  interests: [String]
+  github: String
+  resume: Upload
+  dietaryRestrictions: [String]
+  teeShirtSize: String!
+  needHardware: Boolean
+  needAccomodation: Boolean
+  needTravelReimbursement: Boolean
+  hardwareList: [String]
+  paypalAddress: String
+  travelReceipt: Upload
+  AccomodationPreferences: [String]
+  hostMatchingDetails: String
+  majority: Boolean!
+  liability: Boolean!
+  photoRelease: Boolean!
+  codeOfConduct: Boolean!
+  additionalNotes: String
+}
+
+enum ApplicationStatus {
+  INCOMPLETE
+  PENDING
+  REFUSED
+  ACCEPTED
+}
+
 type File {
   filename: String!
   mimetype: String!
@@ -42,7 +95,8 @@ type Mutation {
   _empty: String
   register(user: UserInput!): User
   reset(newPassword: String!, resetToken: String!): Boolean
-  saveApplication(application: ApplicationInput!): Application
+  apply(form: ApplicationFormInput!): Application
+  uploadResume(resume: Upload): Boolean
 }
 
 type Query {

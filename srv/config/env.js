@@ -6,7 +6,9 @@ if (config.error) {
   logger.fatal('.env file not found');
   process.exit(1);
 }
+
 const project = process.env.npm_package_name || 'hackforall';
+
 module.exports = {
   project,
   dev: (process.env.NODE_ENV || 'development') !== 'production',
@@ -35,7 +37,7 @@ module.exports = {
   },
   playground: {
     settings: {
-      'request.credentials': 'same-origin' // allow cookies
+      'request.credentials': 'include' // allow cookies
     }
   },
   sessionSettings: {

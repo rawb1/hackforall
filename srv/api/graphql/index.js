@@ -1,4 +1,8 @@
 const { makeExecutableSchema } = require('apollo-server-koa');
+const {
+  constraintDirective,
+  constraintDirectiveTypeDefs
+} = require('graphql-constraint-directive');
 const { merge } = require('lodash');
 const log4js = require('koa-log4');
 
@@ -10,6 +14,7 @@ const AuthDirective = require('./directives/authDirective');
 
 const schema = makeExecutableSchema({
   typeDefs: [
+    constraintDirectiveTypeDefs,
     baseSchema.typeDefs,
     userSchema.typeDefs,
     applicationSchema.typeDefs
@@ -22,7 +27,8 @@ const schema = makeExecutableSchema({
   logger: { log: e => logger.error(e) },
   schemaDirectives: {
     auth: AuthDirective
-  }
+  },
+  schemaTransforms: [constraintDirective()]
 });
 
 generate(schema);

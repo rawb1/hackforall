@@ -1,19 +1,15 @@
 <template>
   <div class="card is-full-width">
     <div class="card-content">
-      <b-steps
-        v-model="activeStep"
-        animated
-        class="tile is-child py-4"
-        size="is-medium"
-      >
+      <b-steps v-model="activeStep" animated class="tile is-child py-4">
+        <h1 class="title has-text-centered">Application</h1>
         <b-step-item
           icon="fa fa-address-book"
           label="Profile"
           :clickable="true"
           :type="{ 'is-danger': isProfileInvalid }"
         >
-          <h2 class="title has-text-centered">Profile</h2>
+          <h2 class="subtitle is-hidden-touch has-text-centered">Profile</h2>
           <div class="columns">
             <div class="column">
               <b-field
@@ -22,7 +18,7 @@
                 :message="errors.collect('name')"
               >
                 <b-input
-                  v-model="application.name"
+                  v-model="form.name"
                   v-validate="'required|min:2|max:32'"
                   name="name"
                   type="text"
@@ -36,7 +32,7 @@
                 :message="errors.collect('phone')"
               >
                 <b-input
-                  v-model="application.phone"
+                  v-model="form.phone"
                   v-validate="'required|numeric|min:10|max:15'"
                   name="phone"
                   type="tel"
@@ -52,7 +48,7 @@
                 :message="errors.collect('school')"
               >
                 <b-input
-                  v-model="application.school"
+                  v-model="form.school"
                   v-validate="'required|max:64'"
                   type="text"
                   name="school"
@@ -67,13 +63,12 @@
                 :message="errors.collect('garduationYear')"
               >
                 <b-datepicker
-                  v-model="application.garduationYear"
+                  v-model="form.garduationYear"
                   v-validate="'required'"
                   icon="fas fa-graduation-cap"
                   name="garduationYear"
                   editable
-                >
-                </b-datepicker>
+                ></b-datepicker>
               </b-field>
             </div>
           </div>
@@ -85,25 +80,23 @@
                 :message="errors.collect('studyFields')"
               >
                 <b-taginput
-                  v-model="application.studyFields"
+                  v-model="form.studyFields"
                   v-validate="'required'"
                   ellipsis
                   icon="fas fa-user-graduate"
                   placeholder="Add study"
                   name="studyFields"
-                >
-                </b-taginput>
+                ></b-taginput>
               </b-field>
             </div>
             <div class="column">
               <b-field label="Interests">
                 <b-taginput
-                  v-model="application.interests"
+                  v-model="form.interests"
                   ellipsis
                   icon="fas fa-user-tag"
                   placeholder="Add interest"
-                >
-                </b-taginput>
+                ></b-taginput>
               </b-field>
             </div>
           </div>
@@ -114,7 +107,7 @@
                   <span class="button is-static">https://github.com/</span>
                 </p>
                 <b-input
-                  v-model="application.github"
+                  v-model="form.github"
                   placeholder="username"
                   type="text"
                   expanded
@@ -123,26 +116,25 @@
             </div>
             <div class="column">
               <b-field class="file" expanded>
-                <b-upload v-model="application.resume" accept="application/pdf">
+                <b-upload v-model="form.resume" accept="form/pdf">
                   <a class="button is-primary is-full-width">
                     <b-icon icon="upload"></b-icon>
                     <span>Upload your resume</span>
                   </a>
                 </b-upload>
-                <span v-if="application.resume" class="file-name">
-                  {{ application.resume.name }}
-                </span>
+                <span v-if="form.resume" class="file-name">{{
+                  form.resume.name
+                }}</span>
               </b-field>
             </div>
           </div>
           <b-field label="Dietary restrictions">
             <b-taginput
-              v-model="application.dietaryRestrictions"
+              v-model="form.dietaryRestrictions"
               ellipsis
               icon="fas fa-utensils"
               placeholder="Add restriction"
-            >
-            </b-taginput>
+            ></b-taginput>
           </b-field>
           <b-field
             label="Tee-shirt"
@@ -150,29 +142,26 @@
             :message="errors.collect('teeShirtSize')"
           >
             <b-select
-              v-model="application.teeShirtSize"
+              v-model="form.teeShirtSize"
               v-validate="'required'"
               placeholder="Tee-shirt size"
               name="teeShirtSize"
               expanded
             >
-              <option v-for="size in teeShirtSizes" :key="size" :value="size">{{
-                size
-              }}</option>
+              <option v-for="size in teeShirtSizes" :key="size" :value="size">
+                {{ size }}
+              </option>
             </b-select>
           </b-field>
           <div class="divider">Complementary informations</div>
           <div class="field">
-            <b-checkbox ref="needHardware" v-model="application.needHardware">
+            <b-checkbox ref="needHardware" v-model="form.needHardware">
               I will
               <strong>&nbsp;need hardware&nbsp;</strong>.
             </b-checkbox>
           </div>
           <div class="field">
-            <b-checkbox
-              ref="needAccomodation"
-              v-model="application.needAccomodation"
-            >
+            <b-checkbox ref="needAccomodation" v-model="form.needAccomodation">
               I want to apply for
               <strong>&nbsp;accomodation</strong>.
             </b-checkbox>
@@ -180,38 +169,38 @@
           <div class="field">
             <b-checkbox
               ref="needTravelReimbursement"
-              v-model="application.needTravelReimbursement"
+              v-model="form.needTravelReimbursement"
             >
-              I want to apply for <strong>&nbsp;travel reimbursement</strong>.
+              I want to apply for
+              <strong>&nbsp;travel reimbursement</strong>.
             </b-checkbox>
           </div>
         </b-step-item>
         <b-step-item
-          v-if="application.needHardware"
+          v-if="form.needHardware"
           icon="fas fa-microchip"
           label="Hardware"
           :clickable="true"
           :type="{ 'is-danger': errors.has('hardwareList') }"
         >
-          <h2 class="title has-text-centered">Hardware</h2>
+          <h2 class="subtitle is-hidden-touch has-text-centered">Hardware</h2>
           <b-field
             label="Hardware need"
             :type="{ 'is-danger': errors.has('hardwareList') }"
             :message="errors.collect('hardwareList')"
           >
             <b-taginput
-              v-model="application.hardwareList"
+              v-model="form.hardwareList"
               v-validate="'required_if:needHardware,true'"
               name="hardwareList"
               ellipsis
               icon="fas fa-microchip"
               placeholder="Add hardware"
-            >
-            </b-taginput>
+            ></b-taginput>
           </b-field>
         </b-step-item>
         <b-step-item
-          v-if="application.needTravelReimbursement"
+          v-if="form.needTravelReimbursement"
           icon="fas fa-plane"
           label="Travel"
           :clickable="true"
@@ -220,7 +209,9 @@
               errors.has('paypalAddress') || errors.has('travelReceipt')
           }"
         >
-          <h2 class="title has-text-centered">Travel reimbursement</h2>
+          <h2 class="subtitle is-hidden-touch has-text-centered">
+            Travel reimbursement
+          </h2>
           <div class="columns">
             <div class="column">
               <b-field
@@ -229,7 +220,7 @@
                 :message="errors.collect('paypalAddress')"
               >
                 <b-input
-                  v-model="application.paypalAddress"
+                  v-model="form.paypalAddress"
                   v-validate="'required_if:needTravelReimbursement,true'"
                   name="paypalAddress"
                   type="email"
@@ -239,10 +230,10 @@
             <div class="column">
               <b-field class="file" expanded>
                 <b-upload
-                  v-model="application.travelReceipt"
+                  v-model="form.travelReceipt"
                   v-validate="'required_if:needTravelReimbursement,true'"
                   data-vv-validate-on="input"
-                  accept="application/pdf"
+                  accept="form/pdf"
                   name="travelReceipt"
                 >
                   <a class="button is-primary is-full-width">
@@ -250,9 +241,9 @@
                     <span>Upload your travel receipt*</span>
                   </a>
                 </b-upload>
-                <span v-if="application.travelReceipt" class="file-name">
-                  {{ application.travelReceipt.name }}
-                </span>
+                <span v-if="form.travelReceipt" class="file-name">{{
+                  form.travelReceipt.name
+                }}</span>
               </b-field>
               <b-field
                 :type="{ 'is-danger': errors.has('travelReceipt') }"
@@ -262,7 +253,7 @@
           </div>
         </b-step-item>
         <b-step-item
-          v-if="application.needAccomodation"
+          v-if="form.needAccomodation"
           icon="fas fa-hotel"
           label="Accomodation"
           :clickable="true"
@@ -272,14 +263,16 @@
               errors.has('hostMatchingDetails')
           }"
         >
-          <h2 class="title has-text-centered">Accomodation</h2>
+          <h2 class="subtitle is-hidden-touch has-text-centered">
+            Accomodation
+          </h2>
           <b-field
             label="Accomodation preferences"
             :type="{ 'is-danger': errors.has('AccomodationPreferences') }"
             :message="errors.collect('AccomodationPreferences')"
           >
             <b-select
-              v-model="application.AccomodationPreferences"
+              v-model="form.AccomodationPreferences"
               v-validate="'required_if:needAccomodation,true'"
               name="AccomodationPreferences"
               placeholder="Accomodation preference"
@@ -300,7 +293,7 @@
             :message="errors.collect('hostMatchingDetails')"
           >
             <b-input
-              v-model="application.hostMatchingDetails"
+              v-model="form.hostMatchingDetails"
               v-validate="'required_if:needAccomodation,true|max:200'"
               name="hostMatchingDetails"
               maxlength="200"
@@ -319,28 +312,27 @@
               errors.has('codeOfConduct')
           }"
         >
-          <h2 class="title has-text-centered">Terms</h2>
+          <h2 class="subtitle is-hidden-touch has-text-centered">Terms</h2>
           <b-field
             :type="{ 'is-danger': errors.has('majority') }"
             :message="errors.collect('majority')"
           >
             <b-checkbox
-              v-model="application.majority"
+              v-model="form.majority"
               v-validate="'required:false'"
               name="majority"
               data-vv-validate-on="input"
             >
               <span :class="{ 'has-text-danger': errors.has('majority') }">
-                I will be <strong>&nbsp;18 years or older&nbsp;</strong>by the
-                day of the event.
+                I will be
+                <strong>&nbsp;18 years or older&nbsp;</strong>by the day of the
+                event.
                 <b-tooltip
                   label="We will be checking ID. Minors you will be turned away at the door."
                 >
-                  <b-icon
-                    size="is-small"
-                    icon="fas fa-info-circle"
-                  ></b-icon> </b-tooltip
-              ></span>
+                  <b-icon size="is-small" icon="fas fa-info-circle"></b-icon>
+                </b-tooltip>
+              </span>
             </b-checkbox>
           </b-field>
           <b-field
@@ -348,7 +340,7 @@
             :message="errors.collect('photoRelease')"
           >
             <b-checkbox
-              v-model="application.photoRelease"
+              v-model="form.photoRelease"
               v-validate="'required:false'"
               name="photoRelease"
               data-vv-validate-on="input"
@@ -369,7 +361,7 @@
             :message="errors.collect('codeOfConduct')"
           >
             <b-checkbox
-              v-model="application.codeOfConduct"
+              v-model="form.codeOfConduct"
               v-validate="'required:false'"
               name="codeOfConduct"
               data-vv-validate-on="input"
@@ -387,7 +379,7 @@
                   >MLH Contest Terms</a
                 >.
                 <b-tooltip
-                  label="I further autorize you to share my application/registration information for event administration,
+                  label="I further autorize you to share my form/registration information for event administration,
                   ranking, MLH administration, pre- and post-event informational e-mails, and occasional messages about hackathons
                   in-line with the MLP privacy policy"
                 >
@@ -399,7 +391,7 @@
           <div class="divider">Complementary informations</div>
           <b-field label="Additional notes">
             <b-input
-              v-model="application.additionalNotes"
+              v-model="form.additionalNotes"
               placeholder="If there's anything else you need to let us know, tell us here!"
               maxlength="200"
               type="textarea"
@@ -416,8 +408,7 @@
                 :disabled="previous.disabled"
                 class="mx-1"
                 @click.prevent="previous.action"
-              >
-              </b-button>
+              ></b-button>
               <b-button
                 outlined
                 icon-pack="fas"
@@ -425,15 +416,14 @@
                 :disabled="next.disabled"
                 class="mx-1"
                 @click.prevent="next.action"
-              >
-              </b-button>
+              ></b-button>
             </div>
           </nav>
           <div class="columns is-centered">
             <div class="column is-one-third-desktop">
               <b-button type="is-primary" expanded @click.prevent="submit"
-                >Send
-              </b-button>
+                >Send</b-button
+              >
             </div>
           </div>
         </template>
@@ -442,7 +432,7 @@
   </div>
 </template>
 <script>
-import { SAVE_APPLICATION_MUTATION } from '@/graphql/application';
+import { GET_APPLICATION_QUERY, APPLY_MUTATION } from '@/graphql/application';
 
 export default {
   data: () => ({
@@ -456,7 +446,7 @@ export default {
       'No smoking',
       'Group hosting'
     ],
-    application: {
+    form: {
       // Profile
       name: '',
       school: '',
@@ -503,13 +493,54 @@ export default {
   },
   methods: {
     submit() {
-      this.$log.debug('submited');
-      this.$apollo.mutate({
-        mutation: SAVE_APPLICATION_MUTATION,
-        variables: {
-          name: this.application.name
+      this.$validator.validateAll().then(valid => {
+        if (valid) {
+          this.$apollo.mutate({
+            mutation: APPLY_MUTATION,
+            variables: this.form
+          });
+        } else {
+          this.goToError();
         }
       });
+    },
+    goToError() {
+      if (this.errors.has('hardwareList')) {
+        this.activeStep = 1;
+      } else if (
+        this.errors.has('paypalAddress') ||
+        this.errors.has('travelReceipt')
+      ) {
+        this.activeStep = !!this.form.needHardware + 1;
+      } else if (
+        this.errors.has('AccomodationPreferences') ||
+        this.errors.has('hostMatchingDetails')
+      ) {
+        this.activeStep =
+          !!this.form.needHardware + !!this.form.needTravelReimbursement + 1;
+      } else {
+        this.$log.debug(
+          !!this.form.needHardware +
+            !!this.form.needAccomodation +
+            !!this.form.needTravelReimbursement +
+            1
+        );
+        this.activeStep =
+          !!this.form.needHardware +
+          !!this.form.needAccomodation +
+          !!this.form.needTravelReimbursement +
+          1;
+      }
+    }
+  },
+  apollo: {
+    form: {
+      query: GET_APPLICATION_QUERY,
+      update: data => {
+        const form = data.getApplication.form;
+        form.garduationYear = new Date(form.garduationYear);
+        return form;
+      }
     }
   }
 };

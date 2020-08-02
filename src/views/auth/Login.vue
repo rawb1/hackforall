@@ -102,11 +102,7 @@ export default {
           this.$apollo
             .query({
               query: LOGIN_QUERY,
-              variables: {
-                email: this.form.email,
-                password: this.form.password,
-                remember: this.form.remember
-              }
+              variables: this.form
             })
             .then(() =>
               this.$apollo.mutate({
