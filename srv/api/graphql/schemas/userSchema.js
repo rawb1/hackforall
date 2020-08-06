@@ -6,7 +6,7 @@ const typeDefs = gql`
   type User @auth(requires: USER) {
     _id: ID @auth(requires: ADMIN)
     username: String!
-    email: String!
+    email: String! @constraint(format: "email")
     role: Role! @auth(requires: ADMIN)
   }
 
@@ -24,7 +24,7 @@ const typeDefs = gql`
 
   input UserInput {
     username: String
-    email: String!
+    email: String! @constraint(format: "email")
     password: String!
   }
 `;

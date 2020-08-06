@@ -19,7 +19,7 @@ const typeDefs = gql`
   }
 
   extend type Query @auth(requires: USER) {
-    getApplication(id: ID): Application
+    application(id: ID): Application
   }
 
   extend type Mutation @auth(requires: USER) {
@@ -34,7 +34,7 @@ const typeDefs = gql`
     studyFields: [String]
     interests: [String]
     github: String
-    resume: Upload
+    resume: File
     dietaryRestrictions: [String]
     teeShirtSize: String
     needHardware: Boolean
@@ -42,7 +42,7 @@ const typeDefs = gql`
     needTravelReimbursement: Boolean
     hardwareList: [String]
     paypalAddress: String
-    travelReceipt: Upload
+    travelReceipt: File
     AccomodationPreferences: [String]
     hostMatchingDetails: String
     majority: Boolean
@@ -81,14 +81,12 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    getApplication: (parent, args, ctx, info) => {
+    application: (parent, args, ctx, info) => {
       return applicationController.get(ctx.state.user, args.id);
     }
   },
   Mutation: {
     apply: async (parent, args, ctx) => {
-      // eslint-disable-next-line no-console
-      console.log(args.form.resume);
       return applicationController.apply(ctx.state.user, args.form);
     }
   }

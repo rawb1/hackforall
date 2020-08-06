@@ -1,11 +1,12 @@
 import gql from 'graphql-tag';
 
-export const GET_APPLICATION_QUERY = gql`
+export const APPLICATION_QUERY = gql`
   query($id: ID) {
-    getApplication(id: $id) {
+    application(id: $id) {
       _id
       userId
       hackathonId
+      status
       form {
         name
         school
@@ -14,7 +15,10 @@ export const GET_APPLICATION_QUERY = gql`
         studyFields
         interests
         github
-        resume
+        resume {
+          name
+          type
+        }
         dietaryRestrictions
         teeShirtSize
         needHardware
@@ -22,7 +26,10 @@ export const GET_APPLICATION_QUERY = gql`
         needTravelReimbursement
         hardwareList
         paypalAddress
-        travelReceipt
+        travelReceipt {
+          name
+          type
+        }
         AccomodationPreferences
         hostMatchingDetails
         majority
@@ -92,11 +99,5 @@ export const APPLY_MUTATION = gql`
       userId
       hackathonId
     }
-  }
-`;
-
-export const UPLOAD_RESUME_MUTATION = gql`
-  mutation($resume: Upload) {
-    uploadResume(resume: $resume)
   }
 `;

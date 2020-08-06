@@ -4,6 +4,15 @@ const Application = mongoose.model('Application');
 
 const currentHackathon = { _id: '5f1c10546a4ffd305b0f25b0' };
 
+const _parseFile = async file => {
+  if (!file) {
+    return;
+  }
+  const { filename: name, mimetype: type } = await file;
+  // TODO handle file saving
+  return { name, type };
+};
+
 const get = (user, id) => {
   if (id) {
     return Application.findById(id);
@@ -16,14 +25,16 @@ const get = (user, id) => {
 };
 
 const apply = async (user, form) => {
-  const existingApplication = await Application.findOne({
+  const application = await Application.findOne({
     userId: user._id,
     hackathonId: currentHackathon._id
   });
-  const { filename, mimetype, encoding } = await form.resume;
-  form.resume = { filename, mimetype, encoding };
-  if (existingApplication) {
-    return Application.findByIdAndUpdate(existingApplication._id, {
+
+  form.resume = await _parseFile(form.resume);
+  form.travelReceipt = await _parseFile(form.travelReceipt);
+
+  if (application) {
+    return Application.findByIdAndUpdate(application._id, {
       form
     });
   } else {

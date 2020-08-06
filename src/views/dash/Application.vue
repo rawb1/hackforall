@@ -221,7 +221,7 @@
               >
                 <b-input
                   v-model="form.paypalAddress"
-                  v-validate="'required_if:needTravelReimbursement,true'"
+                  v-validate="'email'"
                   name="paypalAddress"
                   type="email"
                 ></b-input>
@@ -231,7 +231,6 @@
               <b-field class="file" expanded>
                 <b-upload
                   v-model="form.travelReceipt"
-                  v-validate="'required_if:needTravelReimbursement,true'"
                   data-vv-validate-on="input"
                   accept="application/pdf"
                   name="travelReceipt"
@@ -433,7 +432,7 @@
 </template>
 <script>
 import {
-  GET_APPLICATION_QUERY,
+  APPLICATION_QUERY,
   APPLY_MUTATION
 } from '@/graphql/applicationQueries';
 
@@ -508,7 +507,10 @@ export default {
       });
     },
     goToError() {
-      if (this.errors.has('hardwareList')) {
+      // move stepper to the first errored step
+      if (this.isProfileInvalid) {
+        this.activeStep = 0;
+      } else if (this.errors.has('hardwareList')) {
         this.activeStep = 1;
       } else if (
         this.errors.has('paypalAddress') ||
@@ -536,12 +538,15 @@ export default {
   },
   apollo: {
     form: {
-      query: GET_APPLICATION_QUERY,
-      update: function(data) {
-        if (!data.getApplication) {
-          return this.form;
+      query: APPLICATION_QUERY,
+      update: function({ application }) {
+        let form;
+        // no saved application
+        if (!application.form) {
+          form = this.form;
+        } else {
+          form = { ...this.form, ...application.form };
         }
-        const form = data.getApplication.form;
         form.garduationYear = form.garduationYear
           ? new Date(form.garduationYear)
           : null;

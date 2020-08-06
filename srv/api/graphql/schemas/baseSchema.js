@@ -12,9 +12,8 @@ const typeDefs = gql`
   scalar Upload
 
   type File {
-    filename: String!
-    mimetype: String!
-    encoding: String!
+    name: String!
+    type: String!
   }
 
   type Query {

@@ -2,10 +2,7 @@
   <div class="tile is-ancestor">
     <div class="tile is-parent is-vertical is-4">
       <MeCard class="tile is-child" />
-      <article class="tile is-child notification is-warning">
-        <p class="title">...tiles</p>
-        <p class="subtitle">Bottom tile</p>
-      </article>
+      <ApplicationCard class="tile is-child" />
     </div>
     <div class="tile is-vertical">
       <div class="tile">
@@ -40,9 +37,12 @@
 
 <script>
 import MeCard from '@/components/MeCard.vue';
+import ApplicationCard from '@/components/ApplicationCard.vue';
+
 export default {
   components: {
-    MeCard
+    MeCard,
+    ApplicationCard
   }
 };
 </script>

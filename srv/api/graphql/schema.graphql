@@ -35,7 +35,7 @@ type ApplicationForm {
   studyFields: [String]
   interests: [String]
   github: String
-  resume: Upload
+  resume: File
   dietaryRestrictions: [String]
   teeShirtSize: String
   needHardware: Boolean
@@ -43,7 +43,7 @@ type ApplicationForm {
   needTravelReimbursement: Boolean
   hardwareList: [String]
   paypalAddress: String
-  travelReceipt: Upload
+  travelReceipt: File
   AccomodationPreferences: [String]
   hostMatchingDetails: String
   majority: Boolean
@@ -87,9 +87,8 @@ enum ApplicationStatus {
 }
 
 type File {
-  filename: String!
-  mimetype: String!
-  encoding: String!
+  name: String!
+  type: String!
 }
 
 type Mutation {
@@ -105,7 +104,7 @@ type Query {
   logout: Boolean
   forgot(email: String!): String
   me: User
-  getApplication(id: ID): Application
+  application(id: ID): Application
 }
 
 enum Role {
