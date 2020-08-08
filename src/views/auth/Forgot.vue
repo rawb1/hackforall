@@ -62,9 +62,10 @@
   </div>
 </template>
 <script>
-import { FORGOT_QUERY } from '@/graphql/userQueries';
+import { authMixins } from '@/mixins';
 
 export default {
+  mixins: [authMixins],
   data() {
     return {
       form: {
@@ -76,23 +77,15 @@ export default {
     async submit() {
       this.$validator.validateAll().then(valid => {
         if (valid) {
-          this.$apollo
-            .query({
-              query: FORGOT_QUERY,
-              variables: {
-                email: this.form.email
-              }
-            })
-            .then(() => this.$router.replace({ name: 'home' }))
-            .catch(err => {
-              this.errors.remove('graphql');
-              err.graphQLErrors.forEach(err => {
-                this.errors.add({
-                  field: 'graphql',
-                  msg: err.message
-                });
+          this.forgot(this.form).catch(err => {
+            this.errors.remove('graphql');
+            err.graphQLErrors.forEach(err => {
+              this.errors.add({
+                field: 'graphql',
+                msg: err.message
               });
             });
+          });
         } else {
           this.errors.remove('graphql');
         }

@@ -43,7 +43,7 @@
       </b-navbar-item>
 
       <b-navbar-item
-        v-if="connected && !dash"
+        v-if="connected && !isDash"
         tag="router-link"
         :to="{ name: 'dash' }"
       >
@@ -56,30 +56,13 @@
   </b-navbar>
 </template>
 <script>
-import { CONNECTED_QUERY, CONNECTED_MUTATION } from '@/apollo/state';
-import { LOGOUT_QUERY } from '@/graphql/userQueries';
+import { authMixins } from '@/mixins';
 
 export default {
-  props: { dash: Boolean },
-  data: () => ({
-    connected: false
-  }),
-  methods: {
-    async logout() {
-      await this.$apollo.query({
-        query: LOGOUT_QUERY
-      });
-      await this.$apollo.mutate({
-        mutation: CONNECTED_MUTATION,
-        variables: {
-          connected: false
-        }
-      });
-    }
-  },
-  apollo: {
-    connected: {
-      query: CONNECTED_QUERY
+  mixins: [authMixins],
+  computed: {
+    isDash: function() {
+      return this.$route.matched[0].path.includes('dash');
     }
   }
 };

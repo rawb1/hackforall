@@ -1,6 +1,6 @@
 <template>
   <main>
-    <Navbar :dash="true" />
+    <Navbar />
     <DashNavbar />
     <section class="section py-5">
       <div class="container">

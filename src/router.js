@@ -76,6 +76,20 @@ const routes = [
       (await isConnected()) ? next() : next({ name: 'login' });
     }
   },
+  {
+    path: '/admin',
+    component: DashLayout,
+    children: [
+      {
+        path: '/',
+        name: 'dash',
+        component: () => import('@/views/dash/Dash.vue')
+      }
+    ],
+    beforeEnter: async (to, from, next) => {
+      (await isConnected()) ? next() : next({ name: 'login' });
+    }
+  },
   { path: '*', redirect: { name: 'home' } }
 ];
 

@@ -4,9 +4,9 @@
       <div class="media">
         <div class="media-left">
           <b-icon
-            icon="fas fa-graduation-cap"
+            icon="far fa-address-card"
             size="is-large"
-            type="is-primary"
+            :type="statusColor"
           >
           </b-icon>
         </div>
@@ -32,6 +32,30 @@ export default {
   data: () => ({
     application: null
   }),
+  computed: {
+    statusColor: function() {
+      let color;
+      switch (this.application.status) {
+        case 'INCOMPLETE':
+          color = 'is-warning';
+          break;
+        case 'PENDING':
+          color = 'is-info';
+          break;
+        case 'REFUSED':
+          color = 'is-error';
+          break;
+        case 'ACCEPTED':
+          color = 'is-success';
+          break;
+
+        default:
+          color = 'is-primary';
+          break;
+      }
+      return color;
+    }
+  },
   apollo: {
     application: APPLICATION_QUERY
   }

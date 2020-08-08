@@ -3,6 +3,7 @@
     <div class="card-content">
       <b-steps v-model="activeStep" animated class="tile is-child py-4">
         <h1 class="title has-text-centered">Application</h1>
+        <p class="subtitle has-text-centered">@{{ application.status }}</p>
         <b-step-item
           icon="fa fa-address-book"
           label="Profile"
@@ -18,7 +19,7 @@
                 :message="errors.collect('name')"
               >
                 <b-input
-                  v-model="form.name"
+                  v-model="application.form.name"
                   v-validate="'required|min:2|max:32'"
                   name="name"
                   type="text"
@@ -32,7 +33,7 @@
                 :message="errors.collect('phone')"
               >
                 <b-input
-                  v-model="form.phone"
+                  v-model="application.form.phone"
                   v-validate="'required|numeric|min:10|max:15'"
                   name="phone"
                   type="tel"
@@ -48,7 +49,7 @@
                 :message="errors.collect('school')"
               >
                 <b-input
-                  v-model="form.school"
+                  v-model="application.form.school"
                   v-validate="'required|max:64'"
                   type="text"
                   name="school"
@@ -63,7 +64,7 @@
                 :message="errors.collect('garduationYear')"
               >
                 <b-datepicker
-                  v-model="form.garduationYear"
+                  v-model="application.form.garduationYear"
                   v-validate="'required'"
                   icon="fas fa-graduation-cap"
                   name="garduationYear"
@@ -80,7 +81,7 @@
                 :message="errors.collect('studyFields')"
               >
                 <b-taginput
-                  v-model="form.studyFields"
+                  v-model="application.form.studyFields"
                   v-validate="'required'"
                   ellipsis
                   icon="fas fa-user-graduate"
@@ -92,7 +93,7 @@
             <div class="column">
               <b-field label="Interests">
                 <b-taginput
-                  v-model="form.interests"
+                  v-model="application.form.interests"
                   ellipsis
                   icon="fas fa-user-tag"
                   placeholder="Add interest"
@@ -107,7 +108,7 @@
                   <span class="button is-static">https://github.com/</span>
                 </p>
                 <b-input
-                  v-model="form.github"
+                  v-model="application.form.github"
                   placeholder="username"
                   type="text"
                   expanded
@@ -116,21 +117,24 @@
             </div>
             <div class="column">
               <b-field class="file" expanded>
-                <b-upload v-model="form.resume" accept="application/pdf">
+                <b-upload
+                  v-model="application.form.resume"
+                  accept="application/pdf"
+                >
                   <a class="button is-primary is-full-width">
                     <b-icon icon="upload"></b-icon>
                     <span>Upload your resume</span>
                   </a>
                 </b-upload>
-                <span v-if="form.resume" class="file-name">{{
-                  form.resume.name
+                <span v-if="application.form.resume" class="file-name">{{
+                  application.form.resume.name
                 }}</span>
               </b-field>
             </div>
           </div>
           <b-field label="Dietary restrictions">
             <b-taginput
-              v-model="form.dietaryRestrictions"
+              v-model="application.form.dietaryRestrictions"
               ellipsis
               icon="fas fa-utensils"
               placeholder="Add restriction"
@@ -142,7 +146,7 @@
             :message="errors.collect('teeShirtSize')"
           >
             <b-select
-              v-model="form.teeShirtSize"
+              v-model="application.form.teeShirtSize"
               v-validate="'required'"
               placeholder="Tee-shirt size"
               name="teeShirtSize"
@@ -155,13 +159,19 @@
           </b-field>
           <div class="divider">Complementary informations</div>
           <div class="field">
-            <b-checkbox ref="needHardware" v-model="form.needHardware">
+            <b-checkbox
+              ref="needHardware"
+              v-model="application.form.needHardware"
+            >
               I will
               <strong>&nbsp;need hardware&nbsp;</strong>.
             </b-checkbox>
           </div>
           <div class="field">
-            <b-checkbox ref="needAccomodation" v-model="form.needAccomodation">
+            <b-checkbox
+              ref="needAccomodation"
+              v-model="application.form.needAccomodation"
+            >
               I want to apply for
               <strong>&nbsp;accomodation</strong>.
             </b-checkbox>
@@ -169,7 +179,7 @@
           <div class="field">
             <b-checkbox
               ref="needTravelReimbursement"
-              v-model="form.needTravelReimbursement"
+              v-model="application.form.needTravelReimbursement"
             >
               I want to apply for
               <strong>&nbsp;travel reimbursement</strong>.
@@ -177,7 +187,7 @@
           </div>
         </b-step-item>
         <b-step-item
-          v-if="form.needHardware"
+          v-if="application.form.needHardware"
           icon="fas fa-microchip"
           label="Hardware"
           :clickable="true"
@@ -190,7 +200,7 @@
             :message="errors.collect('hardwareList')"
           >
             <b-taginput
-              v-model="form.hardwareList"
+              v-model="application.form.hardwareList"
               v-validate="'required_if:needHardware,true'"
               name="hardwareList"
               ellipsis
@@ -200,7 +210,7 @@
           </b-field>
         </b-step-item>
         <b-step-item
-          v-if="form.needTravelReimbursement"
+          v-if="application.form.needTravelReimbursement"
           icon="fas fa-plane"
           label="Travel"
           :clickable="true"
@@ -220,7 +230,7 @@
                 :message="errors.collect('paypalAddress')"
               >
                 <b-input
-                  v-model="form.paypalAddress"
+                  v-model="application.form.paypalAddress"
                   v-validate="'email'"
                   name="paypalAddress"
                   type="email"
@@ -230,7 +240,7 @@
             <div class="column">
               <b-field class="file" expanded>
                 <b-upload
-                  v-model="form.travelReceipt"
+                  v-model="application.form.travelReceipt"
                   data-vv-validate-on="input"
                   accept="application/pdf"
                   name="travelReceipt"
@@ -240,8 +250,8 @@
                     <span>Upload your travel receipt*</span>
                   </a>
                 </b-upload>
-                <span v-if="form.travelReceipt" class="file-name">{{
-                  form.travelReceipt.name
+                <span v-if="application.form.travelReceipt" class="file-name">{{
+                  application.form.travelReceipt.name
                 }}</span>
               </b-field>
               <b-field
@@ -252,7 +262,7 @@
           </div>
         </b-step-item>
         <b-step-item
-          v-if="form.needAccomodation"
+          v-if="application.form.needAccomodation"
           icon="fas fa-hotel"
           label="Accomodation"
           :clickable="true"
@@ -271,7 +281,7 @@
             :message="errors.collect('AccomodationPreferences')"
           >
             <b-select
-              v-model="form.AccomodationPreferences"
+              v-model="application.form.AccomodationPreferences"
               v-validate="'required_if:needAccomodation,true'"
               name="AccomodationPreferences"
               placeholder="Accomodation preference"
@@ -292,7 +302,7 @@
             :message="errors.collect('hostMatchingDetails')"
           >
             <b-input
-              v-model="form.hostMatchingDetails"
+              v-model="application.form.hostMatchingDetails"
               v-validate="'required_if:needAccomodation,true|max:200'"
               name="hostMatchingDetails"
               maxlength="200"
@@ -317,7 +327,7 @@
             :message="errors.collect('majority')"
           >
             <b-checkbox
-              v-model="form.majority"
+              v-model="application.form.majority"
               v-validate="'required:false'"
               name="majority"
               data-vv-validate-on="input"
@@ -339,7 +349,7 @@
             :message="errors.collect('photoRelease')"
           >
             <b-checkbox
-              v-model="form.photoRelease"
+              v-model="application.form.photoRelease"
               v-validate="'required:false'"
               name="photoRelease"
               data-vv-validate-on="input"
@@ -360,7 +370,7 @@
             :message="errors.collect('codeOfConduct')"
           >
             <b-checkbox
-              v-model="form.codeOfConduct"
+              v-model="application.form.codeOfConduct"
               v-validate="'required:false'"
               name="codeOfConduct"
               data-vv-validate-on="input"
@@ -390,7 +400,7 @@
           <div class="divider">Complementary informations</div>
           <b-field label="Additional notes">
             <b-input
-              v-model="form.additionalNotes"
+              v-model="application.form.additionalNotes"
               placeholder="If there's anything else you need to let us know, tell us here!"
               maxlength="200"
               type="textarea"
@@ -448,38 +458,40 @@ export default {
       'No smoking',
       'Group hosting'
     ],
-    form: {
-      // Profile
-      name: '',
-      school: '',
-      phone: null,
-      // Studies
-      garduationYear: null,
-      studyFields: null,
-      interests: null,
-      github: '',
-      resume: null,
-      // Complementary informations
-      dietaryRestrictions: null,
-      teeShirtSize: 'M',
-      // Needs
-      needHardware: false,
-      needAccomodation: false,
-      needTravelReimbursement: false,
-      // Hardware needs
-      hardwareList: null,
-      // Travel
-      paypalAddress: '',
-      travelReceipt: null,
-      // Accomodation
-      AccomodationPreferences: [],
-      hostMatchingDetails: '',
-      // Terms
-      majority: false,
-      liability: false,
-      photoRelease: false,
-      codeOfConduct: false,
-      additionalNotes: ''
+    application: {
+      form: {
+        // Profile
+        name: '',
+        school: '',
+        phone: null,
+        // Studies
+        garduationYear: null,
+        studyFields: null,
+        interests: null,
+        github: '',
+        resume: null,
+        // Complementary informations
+        dietaryRestrictions: null,
+        teeShirtSize: 'M',
+        // Needs
+        needHardware: false,
+        needAccomodation: false,
+        needTravelReimbursement: false,
+        // Hardware needs
+        hardwareList: null,
+        // Travel
+        paypalAddress: '',
+        travelReceipt: null,
+        // Accomodation
+        AccomodationPreferences: [],
+        hostMatchingDetails: '',
+        // Terms
+        majority: false,
+        liability: false,
+        photoRelease: false,
+        codeOfConduct: false,
+        additionalNotes: ''
+      }
     }
   }),
   computed: {
@@ -499,7 +511,7 @@ export default {
         if (valid) {
           this.$apollo.mutate({
             mutation: APPLY_MUTATION,
-            variables: this.form
+            variables: this.application.form
           });
         } else {
           this.goToError();
@@ -516,41 +528,37 @@ export default {
         this.errors.has('paypalAddress') ||
         this.errors.has('travelReceipt')
       ) {
-        this.activeStep = !!this.form.needHardware + 1;
+        this.activeStep = !!this.application.form.needHardware + 1;
       } else if (
         this.errors.has('AccomodationPreferences') ||
         this.errors.has('hostMatchingDetails')
       ) {
         this.activeStep =
-          !!this.form.needHardware + !!this.form.needTravelReimbursement + 1;
+          !!this.application.form.needHardware +
+          !!this.application.form.needTravelReimbursement +
+          1;
       } else if (
         this.errors.has('majority') ||
         this.errors.has('photoRelease') ||
         this.errors.has('codeOfConduct')
       ) {
         this.activeStep =
-          !!this.form.needHardware +
-          !!this.form.needAccomodation +
-          !!this.form.needTravelReimbursement +
+          !!this.application.form.needHardware +
+          !!this.application.form.needAccomodation +
+          !!this.application.form.needTravelReimbursement +
           1;
       }
     }
   },
   apollo: {
-    form: {
+    application: {
       query: APPLICATION_QUERY,
       update: function({ application }) {
-        let form;
-        // no saved application
-        if (!application.form) {
-          form = this.form;
-        } else {
-          form = { ...this.form, ...application.form };
-        }
-        form.garduationYear = form.garduationYear
-          ? new Date(form.garduationYear)
+        application = application || this.application;
+        application.form.garduationYear = application.form.garduationYear
+          ? new Date(application.form.garduationYear)
           : null;
-        return form;
+        return application;
       }
     }
   }
