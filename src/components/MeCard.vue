@@ -34,8 +34,7 @@ export default {
   }),
   apollo: {
     me: {
-      query: ME_QUERY,
-      errorPolicy: 'ignore'
+      query: ME_QUERY
     }
   }
 };

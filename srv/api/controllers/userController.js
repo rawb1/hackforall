@@ -115,6 +115,10 @@ const me = ctx => {
   return ctx.state.user;
 };
 
+const users = () => {
+  return User.find();
+};
+
 module.exports = {
   authenticate,
   forgot,
@@ -122,5 +126,6 @@ module.exports = {
   logout,
   me,
   register,
-  reset
+  reset,
+  users
 };

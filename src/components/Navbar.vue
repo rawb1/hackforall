@@ -43,11 +43,18 @@
       </b-navbar-item>
 
       <b-navbar-item
-        v-if="connected && !isDash"
+        v-if="connected && !isOnDash"
         tag="router-link"
         :to="{ name: 'dash' }"
       >
         Dashboard
+      </b-navbar-item>
+      <b-navbar-item
+        v-if="connected && me.role === 'ADMIN' && !isOnAdmin"
+        tag="router-link"
+        :to="{ name: 'admin' }"
+      >
+        Admin
       </b-navbar-item>
       <b-navbar-item v-if="connected" @click.prevent="logout">
         Logout
@@ -57,12 +64,24 @@
 </template>
 <script>
 import { authMixins } from '@/mixins';
+import { ME_QUERY } from '@/graphql/userQueries';
 
 export default {
   mixins: [authMixins],
+  data: () => ({
+    me: null
+  }),
   computed: {
-    isDash: function() {
-      return this.$route.matched[0].path.includes('dash');
+    isOnDash: function() {
+      return this.$route.path.includes('dash');
+    },
+    isOnAdmin: function() {
+      return this.$route.path.includes('admin');
+    }
+  },
+  apollo: {
+    me: {
+      query: ME_QUERY
     }
   }
 };

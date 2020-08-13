@@ -104,6 +104,7 @@ type Query {
   logout: Boolean
   forgot(email: String!): String
   me: User
+  users: [User]
   application(id: ID): Application
 }
 

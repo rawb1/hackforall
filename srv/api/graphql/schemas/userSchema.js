@@ -7,7 +7,7 @@ const typeDefs = gql`
     _id: ID @auth(requires: ADMIN)
     username: String!
     email: String! @constraint(format: "email")
-    role: Role! @auth(requires: ADMIN)
+    role: Role!
   }
 
   extend type Query {
@@ -15,6 +15,7 @@ const typeDefs = gql`
     logout: Boolean
     forgot(email: String!): String
     me: User @auth(requires: USER)
+    users: [User] @auth(requires: ADMIN)
   }
 
   extend type Mutation {
@@ -42,6 +43,9 @@ const resolvers = {
     },
     me: (parent, args, ctx, info) => {
       return userController.me(ctx);
+    },
+    users: (parent, args, ctx, info) => {
+      return userController.users();
     }
   },
   Mutation: {

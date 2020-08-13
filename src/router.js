@@ -4,9 +4,10 @@ import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import DashLayout from '@/layouts/DashLayout.vue';
+import AdminLayout from '@/layouts/AdminLayout.vue';
 import LandingLayout from '@/layouts/LandingLayout.vue';
 
-import { isConnected } from '@/guards';
+import { isConnected, isAdmin } from '@/guards';
 
 Vue.use(VueRouter);
 
@@ -67,7 +68,7 @@ const routes = [
         component: () => import('@/views/dash/Dash.vue')
       },
       {
-        path: '/application',
+        path: 'application',
         name: 'application',
         component: () => import('@/views/dash/Application.vue')
       }
@@ -78,16 +79,23 @@ const routes = [
   },
   {
     path: '/admin',
-    component: DashLayout,
+    component: AdminLayout,
     children: [
       {
-        path: '/',
-        name: 'dash',
+        path: '',
+        name: 'admin',
         component: () => import('@/views/dash/Dash.vue')
+      },
+      {
+        path: 'users',
+        name: 'users',
+        component: () => import('@/views/admin/Users.vue')
       }
     ],
     beforeEnter: async (to, from, next) => {
-      (await isConnected()) ? next() : next({ name: 'login' });
+      (await isConnected()) && (await isAdmin())
+        ? next()
+        : next({ name: 'dash' });
     }
   },
   { path: '*', redirect: { name: 'home' } }

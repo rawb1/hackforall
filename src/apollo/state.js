@@ -35,12 +35,8 @@ export const resolvers = {
 export const initializeState = async client => {
   const isConnected = await client
     .query({ query: ME_QUERY })
-    .then(res => {
-      return true;
-    })
-    .catch(() => {
-      return false;
-    });
+    .then(() => true)
+    .catch(() => false);
 
   client.cache.writeData({
     data: {

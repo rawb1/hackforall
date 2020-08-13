@@ -35,7 +35,7 @@ UserSchema.methods.resetPassword = function(newPassword) {
 };
 
 UserSchema.methods.hasRole = function(role) {
-  return this.role === role;
+  return this.role === 'ADMIN' || this.role === role;
 };
 
 mongoose.model('User', UserSchema);

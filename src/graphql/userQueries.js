@@ -5,6 +5,7 @@ export const ME_QUERY = gql`
     me {
       username
       email
+      role
     }
   }
 `;
@@ -29,15 +30,18 @@ export const FORGOT_QUERY = gql`
   }
 `;
 
+export const USERS_QUERY = gql`
+  query {
+    users {
+      _id
+      username
+      email
+    }
+  }
+`;
+
 export const REGISTER_MUTATION = gql`
-  mutation(
-    $username: String
-    $email: String!
-    $password: String!
-    $username: String
-    $email: String!
-    $password: String!
-  ) {
+  mutation($username: String, $email: String!, $password: String!) {
     register(
       user: { username: $username, email: $email, password: $password }
     ) {
