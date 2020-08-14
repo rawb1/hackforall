@@ -1,11 +1,17 @@
 <template>
-  <b-table
-    :data="users"
-    :columns="columns"
-    striped
-    hoverable
-    :loading="$apollo.queries.users.loading"
-  ></b-table>
+  <div class="card is-full-width">
+    <div class="card-content">
+      <b-table
+        :data="users"
+        :columns="columns"
+        striped
+        hoverable
+        paginated
+        detailed
+        :loading="$apollo.queries.users.loading"
+      ></b-table>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -22,10 +28,6 @@ export default {
       {
         field: 'username',
         label: 'Username'
-      },
-      {
-        field: 'email',
-        label: 'Email'
       }
     ]
   }),

@@ -12,6 +12,12 @@ const UserSchema = new Schema({
   role: { type: String, default: 'USER' }
 });
 
+UserSchema.virtual('applications', {
+  ref: 'Application',
+  localField: '_id',
+  foreignField: 'userId'
+});
+
 UserSchema.pre('save', async function(next) {
   const user = this;
   if (!user.isModified('password')) return next();

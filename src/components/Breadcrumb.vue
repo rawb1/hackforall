@@ -13,7 +13,6 @@
 export default {
   computed: {
     routes: function() {
-      this.$log.debug(this.$route);
       return this.$route.matched;
     }
   },

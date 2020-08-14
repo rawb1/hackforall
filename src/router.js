@@ -87,9 +87,9 @@ const routes = [
         component: () => import('@/views/dash/Dash.vue')
       },
       {
-        path: 'users',
-        name: 'users',
-        component: () => import('@/views/admin/Users.vue')
+        path: 'hackers',
+        name: 'hackers',
+        component: () => import('@/views/admin/Hackers.vue')
       }
     ],
     beforeEnter: async (to, from, next) => {

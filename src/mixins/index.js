@@ -1,3 +1,3 @@
-import authMixins from './authMixins';
+import authMixin from './authMixin';
 
-export { authMixins };
+export { authMixin };

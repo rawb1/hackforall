@@ -121,6 +121,7 @@ type User {
   username: String!
   email: String!
   role: Role!
+  applications: [Application]
 }
 
 input UserInput {

@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-content">
+    <div v-if="me" class="card-content">
       <div class="media">
         <div class="media-left">
           <figure class="image is-48x48">

@@ -9,8 +9,8 @@
       <b-navbar-item tag="router-link" :to="{ name: 'admin' }">
         Overview
       </b-navbar-item>
-      <b-navbar-item tag="router-link" :to="{ name: 'users' }">
-        Users
+      <b-navbar-item tag="router-link" :to="{ name: 'hackers' }">
+        Hackers
       </b-navbar-item>
       <b-navbar-item tag="router-link" :to="{ name: 'hackathon' }">
         Hackathon

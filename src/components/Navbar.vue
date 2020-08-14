@@ -50,7 +50,7 @@
         Dashboard
       </b-navbar-item>
       <b-navbar-item
-        v-if="connected && me.role === 'ADMIN' && !isOnAdmin"
+        v-if="connected && me && me.role === 'ADMIN' && !isOnAdmin"
         tag="router-link"
         :to="{ name: 'admin' }"
       >
@@ -63,11 +63,11 @@
   </b-navbar>
 </template>
 <script>
-import { authMixins } from '@/mixins';
+import { authMixin } from '@/mixins';
 import { ME_QUERY } from '@/graphql/userQueries';
 
 export default {
-  mixins: [authMixins],
+  mixins: [authMixin],
   data: () => ({
     me: null
   }),
@@ -81,7 +81,8 @@ export default {
   },
   apollo: {
     me: {
-      query: ME_QUERY
+      query: ME_QUERY,
+      error: () => null
     }
   }
 };

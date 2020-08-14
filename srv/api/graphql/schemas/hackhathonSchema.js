@@ -12,17 +12,23 @@ const typeDefs = gql`
         start: String
         end: String
     }
+    open: Boolean
+    live: Boolean
   }
 
   extend type Query @auth(requires: USER) {
-    getHackathon(id: ID): hackathon
+    hackathon(id: ID): hackathon
+    hackathons: [hackathon]
   }
 `;
 
 const resolvers = {
   Query: {
-    getHackathon: (parent, args, ctx, info) => {
-      return hackathonController.get(ctx, args.id);
+    hackathon: (parent, args, ctx, info) => {
+      return hackathonController.get(args.id);
+    },
+    hackathons: (parent, args, ctx, info) => {
+      return hackathonController.getAll();
     }
   }
 };

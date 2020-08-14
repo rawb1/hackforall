@@ -8,6 +8,7 @@ const typeDefs = gql`
     username: String!
     email: String! @constraint(format: "email")
     role: Role!
+    applications: [Application]
   }
 
   extend type Query {
@@ -45,7 +46,7 @@ const resolvers = {
       return userController.me(ctx);
     },
     users: (parent, args, ctx, info) => {
-      return userController.users();
+      return userController.getAll();
     }
   },
   Mutation: {

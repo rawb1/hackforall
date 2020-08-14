@@ -62,10 +62,10 @@
   </div>
 </template>
 <script>
-import { authMixins } from '@/mixins';
+import { authMixin } from '@/mixins';
 
 export default {
-  mixins: [authMixins],
+  mixins: [authMixin],
   data() {
     return {
       form: {

@@ -27,14 +27,7 @@ export default {
         .query({
           query: LOGOUT_QUERY
         })
-        .then(() =>
-          this.$apollo.mutate({
-            mutation: CONNECTED_MUTATION,
-            variables: {
-              connected: false
-            }
-          })
-        )
+        .then(() => this.$apollo.getClient().clearStore())
         .then(() => this.$router.replace({ name: 'home' }));
     },
     forgot(variables) {

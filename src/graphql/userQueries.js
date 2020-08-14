@@ -36,6 +36,9 @@ export const USERS_QUERY = gql`
       _id
       username
       email
+      applications {
+        hackathonId
+      }
     }
   }
 `;

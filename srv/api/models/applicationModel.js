@@ -4,11 +4,13 @@ const Schema = mongoose.Schema;
 const ApplicationSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
+    ref: 'User',
     required: true,
     immutable: true
   },
   hackathonId: {
     type: Schema.Types.ObjectId,
+    ref: 'Hackathon',
     required: true,
     immutable: true
   },

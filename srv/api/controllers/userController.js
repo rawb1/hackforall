@@ -19,7 +19,9 @@ const authenticate = async ({ ctx }) => {
     if (token) {
       const decoded = jwt.verify(token, secret);
       if (decoded) {
-        ctx.state.user = await User.findById(decoded.sub);
+        ctx.state.user = await User.findById(decoded.sub).populate(
+          'applications'
+        );
         if (decoded.remember) {
           _setCookie(ctx, token, {
             expires: new Date(Date.now() + cookie.expires)
@@ -111,13 +113,9 @@ const logout = ctx => {
   return !!user;
 };
 
-const me = ctx => {
-  return ctx.state.user;
-};
+const me = ctx => ctx.state.user;
 
-const users = () => {
-  return User.find();
-};
+const getAll = () => User.find().populate('applications');
 
 module.exports = {
   authenticate,
@@ -127,5 +125,5 @@ module.exports = {
   me,
   register,
   reset,
-  users
+  getAll
 };
