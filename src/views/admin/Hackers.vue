@@ -2,23 +2,23 @@
   <div class="card is-full-width">
     <div class="card-content">
       <b-table
-        :data="users"
+        :data="hackers"
         :columns="columns"
         striped
         hoverable
         paginated
         detailed
-        :loading="$apollo.queries.users.loading"
+        :loading="$apollo.queries.hackers.loading"
       ></b-table>
     </div>
   </div>
 </template>
 
 <script>
-import { USERS_QUERY } from '@/graphql/userQueries';
+import { HACKERS_QUERY } from '@/graphql/userQueries';
 export default {
   data: () => ({
-    users: [],
+    hackers: [],
     columns: [
       {
         field: '_id',
@@ -32,7 +32,7 @@ export default {
     ]
   }),
   apollo: {
-    users: USERS_QUERY
+    hackers: HACKERS_QUERY
   }
 };
 </script>

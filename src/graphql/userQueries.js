@@ -30,9 +30,9 @@ export const FORGOT_QUERY = gql`
   }
 `;
 
-export const USERS_QUERY = gql`
+export const HACKERS_QUERY = gql`
   query {
-    users {
+    hackers {
       _id
       username
       email

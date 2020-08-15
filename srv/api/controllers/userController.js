@@ -115,7 +115,18 @@ const logout = ctx => {
 
 const me = ctx => ctx.state.user;
 
-const getAll = () => User.find().populate('applications');
+const getAll = () => User.find();
+
+const getHackers = hackathonId =>
+  User.find()
+    .populate('applications', null, null, {
+      hackathonId
+    })
+    .then(docs =>
+      docs.filter(
+        ({ applications }) => Array.isArray(applications) && applications.length
+      )
+    );
 
 module.exports = {
   authenticate,
@@ -125,5 +136,6 @@ module.exports = {
   me,
   register,
   reset,
-  getAll
+  getAll,
+  getHackers
 };

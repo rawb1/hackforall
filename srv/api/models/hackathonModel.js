@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+
+const fixtures = require('./utils/fixtures');
+
 const Schema = mongoose.Schema;
 
 const HackathonSchema = new Schema({
@@ -37,4 +40,6 @@ HackathonSchema.virtual('live').get(function() {
   );
 });
 
-mongoose.model('Hackathon', HackathonSchema);
+const Hackathon = mongoose.model('Hackathon', HackathonSchema);
+
+fixtures.setDefault(Hackathon, { name: 'hackBdx' });

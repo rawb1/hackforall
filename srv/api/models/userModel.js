@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+const fixtures = require('./utils/fixtures');
+
 const SALT_WORK_FACTOR = 10;
 
 const Schema = mongoose.Schema;
@@ -44,4 +46,11 @@ UserSchema.methods.hasRole = function(role) {
   return this.role === 'ADMIN' || this.role === role;
 };
 
-mongoose.model('User', UserSchema);
+const UserModel = mongoose.model('User', UserSchema);
+
+fixtures.setDefault(UserModel, {
+  username: 'admin',
+  email: 'admin@mail.com',
+  password: 'password',
+  role: 'ADMIN'
+});

@@ -13,15 +13,8 @@ const _parseFile = async file => {
   return { name, type };
 };
 
-const get = (user, id) => {
-  if (id) {
-    return Application.findById(id);
-  } else {
-    return Application.findOne({
-      userId: user._id,
-      hackathonId: currentHackathon._id
-    });
-  }
+const get = id => {
+  return Application.findById(id);
 };
 
 const apply = async (user, form) => {

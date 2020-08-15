@@ -105,6 +105,7 @@ type Query {
   forgot(email: String!): String
   me: User
   users: [User]
+  hackers: [User]
   application(id: ID): Application
 }
 

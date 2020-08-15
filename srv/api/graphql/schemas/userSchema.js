@@ -1,6 +1,6 @@
 const { gql } = require('apollo-server-koa');
 
-const { userController } = require('../../controllers');
+const { userController, hackathonController } = require('../../controllers');
 
 const typeDefs = gql`
   type User @auth(requires: USER) {
@@ -17,6 +17,7 @@ const typeDefs = gql`
     forgot(email: String!): String
     me: User @auth(requires: USER)
     users: [User] @auth(requires: ADMIN)
+    hackers: [User] @auth(requires: ADMIN)
   }
 
   extend type Mutation {
@@ -47,6 +48,13 @@ const resolvers = {
     },
     users: (parent, args, ctx, info) => {
       return userController.getAll();
+    },
+    hackers: (parent, args, ctx, info) => {
+      return hackathonController
+        .getCurrent()
+        .then(currentHackathon =>
+          userController.getHackers(currentHackathon.id)
+        );
     }
   },
   Mutation: {

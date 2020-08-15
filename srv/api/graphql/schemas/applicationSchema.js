@@ -82,7 +82,7 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     application: (parent, args, ctx, info) => {
-      return applicationController.get(ctx.state.user, args.id);
+      return applicationController.get(args.id);
     }
   },
   Mutation: {
