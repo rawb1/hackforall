@@ -17,6 +17,8 @@ const get = id => {
   return Application.findById(id);
 };
 
+const getByHackathon = hackathonId => Application.find({ hackathonId });
+
 const apply = async (user, form) => {
   const application = await Application.findOne({
     userId: user._id,
@@ -41,5 +43,6 @@ const apply = async (user, form) => {
 
 module.exports = {
   get,
+  getByHackathon,
   apply
 };

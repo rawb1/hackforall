@@ -3,17 +3,9 @@ const { gql } = require('apollo-server-koa');
 const { userController } = require('../../controllers');
 
 const typeDefs = gql`
-  type User @auth(requires: USER) {
-    _id: ID @auth(requires: ADMIN)
-    username: String!
-    email: String! @constraint(format: "email")
-    role: Role!
-  }
-
-  input UserInput {
-    username: String
-    email: String! @constraint(format: "email")
-    password: String!
+  extend type User {
+    application: Application
+    team: Boolean
   }
 
   extend type Query {
