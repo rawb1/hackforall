@@ -20,7 +20,6 @@ const typeDefs = gql`
     login(user: UserInput!, remember: Boolean = false): User
     logout: Boolean
     forgot(email: String!): String
-    me: User @auth(requires: USER)
   }
 
   extend type Mutation {
@@ -39,9 +38,6 @@ const resolvers = {
     },
     forgot: (parent, args, ctx, info) => {
       return userController.forgot(ctx, args);
-    },
-    me: (parent, args, ctx, info) => {
-      return userController.me(ctx);
     }
   },
   Mutation: {

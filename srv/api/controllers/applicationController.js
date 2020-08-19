@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 
 const Application = mongoose.model('Application');
 
-const currentHackathon = { _id: '5f1c10546a4ffd305b0f25b0' };
-
+// ? TODO move to custom file scalar
 const _parseFile = async file => {
   if (!file) {
     return;
@@ -13,16 +12,10 @@ const _parseFile = async file => {
   return { name, type };
 };
 
-const get = id => {
-  return Application.findById(id);
-};
-
-const getByHackathon = hackathonId => Application.find({ hackathonId });
-
-const apply = async (user, form) => {
+const apply = async (hackathonId, user, form) => {
   const application = await Application.findOne({
     userId: user._id,
-    hackathonId: currentHackathon._id
+    hackathonId: hackathonId
   });
 
   form.resume = await _parseFile(form.resume);
@@ -35,14 +28,21 @@ const apply = async (user, form) => {
   } else {
     return Application.create({
       userId: user._id,
-      hackathonId: currentHackathon._id,
+      hackathonId: hackathonId,
       form
     });
   }
 };
 
+const accept = id => Application.updateById(id, { status: 'ACCEPTED' });
+
+const refuse = id => Application.updateById(id, { status: 'REFUSED' });
+
+const cancel = id => Application.updateById(id, { status: 'CANCELED' });
+
 module.exports = {
-  get,
-  getByHackathon,
-  apply
+  apply,
+  accept,
+  refuse,
+  cancel
 };

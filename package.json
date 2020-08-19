@@ -28,6 +28,7 @@
     "dotenv": "^8.2.0",
     "graphql": "^14.7.0",
     "graphql-constraint-directive": "^2.0.3",
+    "graphql-date": "^1.0.3",
     "graphql-tag": "^2.11.0",
     "graphql-upload": "^8.1.0",
     "jsonwebtoken": "^8.5.1",

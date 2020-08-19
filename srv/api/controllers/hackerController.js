@@ -2,23 +2,26 @@ const mongoose = require('mongoose');
 
 const User = mongoose.model('User');
 
-const getAllByHackathon = async hackathonId =>
-  User.aggregate().lookup({
-    from: 'applications',
-    let: { userId: '$_id' },
-    pipeline: [
-      {
-        $match: {
-          $and: [
-            { $expr: { $eq: ['$$userId', '$userId'] } },
-            { hackathonId: mongoose.Types.ObjectId(hackathonId) }
-          ]
+const getAll = hackathonId =>
+  User.aggregate()
+    .lookup({
+      from: 'applications',
+      let: { userId: '$_id' },
+      pipeline: [
+        {
+          $match: {
+            $expr: { $eq: ['$$userId', '$userId'] },
+            hackathonId: mongoose.Types.ObjectId(hackathonId)
+          }
         }
-      }
-    ],
-    as: 'application'
-  });
+      ],
+      as: 'application'
+    })
+    .unwind('$application');
+
+const get = (userId, hackathonId) => User.findByHackathon(userId, hackathonId);
 
 module.exports = {
-  getAllByHackathon
+  getAll,
+  get
 };

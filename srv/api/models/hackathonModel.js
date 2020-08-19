@@ -12,6 +12,11 @@ const HackathonSchema = new Schema({
     start: { type: Date, required: true, default: new Date() },
     end: { type: Date, required: true, default: new Date() }
   },
+  limits: {
+    hackers: { type: Number, required: true, default: 200 },
+    teamMembers: { type: Number, required: true, default: 5 },
+    refund: { type: Number, required: true, default: 0 }
+  },
   createdAt: { type: Date, required: true, default: new Date() },
   updatedAt: { type: Date, required: true, default: new Date() }
 });
@@ -39,6 +44,10 @@ HackathonSchema.virtual('live').get(function() {
     Date.now < this.planning.end.getTime()
   );
 });
+
+HackathonSchema.query.active = function() {
+  return this.sort({ 'planning.start': -1 });
+};
 
 const Hackathon = mongoose.model('Hackathon', HackathonSchema);
 

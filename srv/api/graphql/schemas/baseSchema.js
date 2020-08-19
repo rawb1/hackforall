@@ -1,5 +1,6 @@
 const { gql } = require('apollo-server-koa');
 const { GraphQLUpload } = require('graphql-upload');
+const GraphQLDate = require('graphql-date');
 
 const typeDefs = gql`
   directive @auth(requires: Role!) on OBJECT | FIELD_DEFINITION
@@ -10,6 +11,7 @@ const typeDefs = gql`
   }
 
   scalar Upload
+  scalar Date
 
   type File {
     name: String!
@@ -26,7 +28,8 @@ const typeDefs = gql`
 `;
 
 const resolvers = {
-  Upload: GraphQLUpload
+  Upload: GraphQLUpload,
+  Date: GraphQLDate
 };
 
 module.exports = {

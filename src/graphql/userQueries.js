@@ -36,8 +36,10 @@ export const HACKERS_QUERY = gql`
       _id
       username
       email
-      applications {
-        hackathonId
+      application {
+        _id
+        status
+        updatedAt
       }
     }
   }

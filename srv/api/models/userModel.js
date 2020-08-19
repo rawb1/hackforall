@@ -14,12 +14,6 @@ const UserSchema = new Schema({
   role: { type: String, default: 'USER' }
 });
 
-UserSchema.virtual('applications', {
-  ref: 'Application',
-  localField: '_id',
-  foreignField: 'userId'
-});
-
 UserSchema.pre('save', async function(next) {
   const user = this;
   if (!user.isModified('password')) return next();
@@ -46,10 +40,25 @@ UserSchema.methods.hasRole = function(role) {
   return this.role === 'ADMIN' || this.role === role;
 };
 
+UserSchema.virtual('application', {
+  ref: 'Application',
+  localField: '_id',
+  foreignField: 'userId',
+  justOne: true
+});
+
+UserSchema.static('findOneByHackathon', function(userId, hackathonId) {
+  return this.findById(userId).populate({
+    path: 'application',
+    match: { hackathonId }
+  });
+});
+
 const UserModel = mongoose.model('User', UserSchema);
 
 fixtures.setDefault(UserModel, {
   username: 'admin',
+
   email: 'admin@mail.com',
   password: 'password',
   role: 'ADMIN'

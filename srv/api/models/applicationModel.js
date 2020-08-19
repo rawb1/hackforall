@@ -21,7 +21,7 @@ const ApplicationSchema = new Schema({
   status: {
     type: String,
     required: true,
-    enum: ['INCOMPLETE', 'PENDING', 'REFUSED', 'ACCEPTED'],
+    enum: ['INCOMPLETE', 'PENDING', 'REFUSED', 'ACCEPTED', 'CANCELED'],
     default: 'PENDING'
   },
   createdAt: { type: Date, required: true, default: Date.now },
@@ -30,7 +30,10 @@ const ApplicationSchema = new Schema({
 
 ApplicationSchema.index({ userId: 1, hackathonId: 1 }, { unique: true });
 
-ApplicationSchema.pre('updateOne', function() {
+ApplicationSchema.pre('save', function() {
+  if (!this.isModified('PENDING')) {
+    this.set({ status: new Date() });
+  }
   this.set({ updatedAt: new Date() });
 });
 

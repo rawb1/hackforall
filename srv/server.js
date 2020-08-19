@@ -13,9 +13,10 @@ require('./config/mailer');
 require('./config/mongo');
 
 require('./api/models');
+const { userController, hackathonController } = require('./api/controllers');
 const schema = require('./api/graphql');
+
 const logger = log4js.getLogger('app');
-const { authenticate } = require('./api/controllers/userController');
 
 const app = new Koa();
 const apollo = new ApolloServer({
@@ -24,7 +25,8 @@ const apollo = new ApolloServer({
   // `graphql-upload` version, see:
   // https://github.com/apollographql/apollo-server/issues/3508#issuecomment-662371289
   uploads: false,
-  context: authenticate
+  context: ({ ctx }) =>
+    hackathonController.getActive(ctx).then(userController.authenticate)
 });
 
 app.keys = cookie.keys;

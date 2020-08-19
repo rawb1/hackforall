@@ -2,9 +2,12 @@ const mongoose = require('mongoose');
 
 const Hackathon = mongoose.model('Hackathon');
 
-const get = id => Hackathon.findOne(id);
+const getActive = async ctx => {
+  ctx.state.hackathon = await Hackathon.findOne().active();
+  return ctx;
+};
 
-const getCurrent = () => Hackathon.findOne().sort({ 'planning.start': -1 });
+const get = id => Hackathon.findOne(id);
 
 const getAll = () => Hackathon.find();
 
@@ -12,7 +15,7 @@ const save = () => {};
 
 module.exports = {
   get,
-  getCurrent,
+  getActive,
   getAll,
   save
 };

@@ -8,6 +8,7 @@ const typeDefs = gql`
     PENDING
     REFUSED
     ACCEPTED
+    CANCELED
   }
 
   type Application @auth(requires: USER) {
@@ -16,6 +17,7 @@ const typeDefs = gql`
     hackathonId: ID
     form: ApplicationForm
     status: ApplicationStatus
+    updatedAt: Date
   }
 
   extend type Query @auth(requires: USER) {
@@ -24,6 +26,9 @@ const typeDefs = gql`
 
   extend type Mutation @auth(requires: USER) {
     apply(form: ApplicationFormInput!): Application
+    cancel(id: ID): Application
+    accept(id: ID): Application @auth(requires: ADMIN)
+    refuse(id: ID): Application @auth(requires: ADMIN)
   }
 
   type ApplicationForm {
@@ -82,12 +87,21 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     application: (parent, args, ctx, info) => {
-      return applicationController.get(args.id);
+      return ctx.state.user.application;
     }
   },
   Mutation: {
     apply: async (parent, args, ctx) => {
       return applicationController.apply(ctx.state.user, args.form);
+    },
+    cancel: async (parent, args, ctx) => {
+      return applicationController.cancel(args.id);
+    },
+    accept: async (parent, args, ctx) => {
+      return applicationController.accept(args.id);
+    },
+    refuse: async (parent, args, ctx) => {
+      return applicationController.refuse(args.id);
     }
   }
 };

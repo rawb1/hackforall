@@ -25,6 +25,7 @@ type Application {
   hackathonId: ID
   form: ApplicationForm
   status: ApplicationStatus
+  updatedAt: Date
 }
 
 type ApplicationForm {
@@ -84,11 +85,40 @@ enum ApplicationStatus {
   PENDING
   REFUSED
   ACCEPTED
+  CANCELED
 }
+
+scalar Date
 
 type File {
   name: String!
   type: String!
+}
+
+type Hackathon {
+  _id: ID
+  name: String
+  planing: hackathonPlaning
+  open: Boolean
+  live: Boolean
+}
+
+type hackathonPlaning {
+  applicationOpen: Date
+  applicationClose: Date
+  start: Date
+  end: Date
+}
+
+type HackathonStats {
+  applications: Int
+  hackers: Int
+  teams: Int
+  hacks: Int
+}
+
+type HackerHistory {
+  applications: [Application]
 }
 
 type Mutation {
@@ -96,6 +126,12 @@ type Mutation {
   register(user: UserInput!): User
   reset(newPassword: String!, resetToken: String!): Boolean
   apply(form: ApplicationFormInput!): Application
+  cancel(id: ID): Application
+  accept(id: ID): Application
+  refuse(id: ID): Application
+  createTeam(name: String!): Team
+  joinTeam(name: String!): Boolean
+  leaveTeam(name: String!): Boolean
 }
 
 type Query {
@@ -104,12 +140,35 @@ type Query {
   logout: Boolean
   forgot(email: String!): String
   me: User
+  hacker(id: ID!): User
+  hackers: [User]
   application(id: ID): Application
+  team(id: ID): Team
+  teams: [Team]
+  hackathon(id: ID): Hackathon
+  hackathons: [Hackathon]
+  stats: Stats
+  hackathonStats: HackathonStats
 }
 
 enum Role {
   ADMIN
   USER
+}
+
+type Stats {
+  users: Int
+  hackathons: Int
+  applications: Int
+  teams: Int
+  hacks: Int
+}
+
+type Team {
+  _id: ID
+  hackathonId: ID
+  name: String
+  members: [User]
 }
 
 """The `Upload` scalar type represents a file upload."""
@@ -120,6 +179,8 @@ type User {
   username: String!
   email: String!
   role: Role!
+  application: Application
+  history: HackerHistory
 }
 
 input UserInput {

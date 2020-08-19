@@ -13,14 +13,21 @@ const _setCookie = (ctx, value, opts) => {
   ctx.cookies.set(cookie.name, value, Object.assign(cookie.attributes, opts));
 };
 
-const authenticate = async ({ ctx }) => {
+/**
+ * Authenticate user from cookie
+ *
+ * @param {*} ctx - context
+ * @return {*} context
+ */
+const authenticate = async ctx => {
   try {
     const token = ctx.cookies.get(cookie.name);
     if (token) {
       const decoded = jwt.verify(token, secret);
       if (decoded) {
-        ctx.state.user = await User.findById(decoded.sub).populate(
-          'applications'
+        ctx.state.user = await User.findOneByHackathon(
+          decoded.sub,
+          ctx.state.hackathon._id
         );
         if (decoded.remember) {
           _setCookie(ctx, token, {
@@ -113,14 +120,11 @@ const logout = ctx => {
   return !!user;
 };
 
-const me = ctx => ctx.state.user;
-
 module.exports = {
   authenticate,
   forgot,
   login,
   logout,
-  me,
   register,
   reset
 };

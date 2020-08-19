@@ -9,7 +9,19 @@
         paginated
         detailed
         :loading="$apollo.queries.hackers.loading"
-      ></b-table>
+      >
+        <template slot="detail" slot-scope="props">
+          <article class="media">
+            <div class="media-content">
+              <div class="content">
+                <p>
+                  {{ props.row.application }}
+                </p>
+              </div>
+            </div>
+          </article>
+        </template>
+      </b-table>
     </div>
   </div>
 </template>
@@ -28,6 +40,14 @@ export default {
       {
         field: 'username',
         label: 'Username'
+      },
+      {
+        field: 'application.status',
+        label: 'Status'
+      },
+      {
+        field: 'application.updatedAt',
+        label: 'Last update'
       }
     ]
   }),
