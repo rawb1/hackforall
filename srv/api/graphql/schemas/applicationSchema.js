@@ -92,7 +92,11 @@ const resolvers = {
   },
   Mutation: {
     apply: async (parent, args, ctx) => {
-      return applicationController.apply(ctx.state.user, args.form);
+      return applicationController.apply(
+        ctx.state.hackathon._id,
+        ctx.state.user,
+        args.form
+      );
     },
     cancel: async (parent, args, ctx) => {
       return applicationController.cancel(args.id);

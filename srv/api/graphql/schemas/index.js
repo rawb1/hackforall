@@ -8,6 +8,7 @@ const teamSchema = require('./teamSchema');
 const hackathonSchema = require('./hackathonSchema');
 const baseSchema = require('./baseSchema');
 const statsSchema = require('./statsSchema');
+const sponsorSchema = require('./sponsorSchema');
 
 module.exports = {
   typeDefs: [
@@ -18,7 +19,8 @@ module.exports = {
     applicationSchema.typeDefs,
     teamSchema.typeDefs,
     hackathonSchema.typeDefs,
-    statsSchema.typeDefs
+    statsSchema.typeDefs,
+    sponsorSchema.typeDefs
   ],
   resolvers: merge(
     baseSchema.resolvers,
@@ -27,6 +29,7 @@ module.exports = {
     applicationSchema.resolvers,
     teamSchema.resolvers,
     hackathonSchema.resolvers,
-    statsSchema.resolvers
+    statsSchema.resolvers,
+    sponsorSchema.resolvers
   )
 };

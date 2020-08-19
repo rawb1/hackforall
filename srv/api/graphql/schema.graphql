@@ -149,11 +149,19 @@ type Query {
   hackathons: [Hackathon]
   stats: Stats
   hackathonStats: HackathonStats
+  sponsor(id: ID): Sponsor
+  sponsors: [Sponsor]
 }
 
 enum Role {
   ADMIN
   USER
+}
+
+type Sponsor {
+  _id: ID
+  hachathonId: ID
+  name: String
 }
 
 type Stats {

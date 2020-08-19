@@ -24,7 +24,7 @@ const HackathonSchema = new Schema({
 HackathonSchema.virtual('applications', {
   ref: 'Application',
   localField: '_id',
-  foreignField: 'userId'
+  foreignField: 'hackathonId'
 });
 
 HackathonSchema.pre('updateOne', function() {

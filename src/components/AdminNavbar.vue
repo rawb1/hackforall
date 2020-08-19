@@ -12,6 +12,9 @@
       <b-navbar-item tag="router-link" :to="{ name: 'hackers' }">
         Hackers
       </b-navbar-item>
+      <b-navbar-item tag="router-link" :to="{ name: 'teams' }">
+        Teams
+      </b-navbar-item>
       <b-navbar-item tag="router-link" :to="{ name: 'hackathon' }">
         Hackathon
       </b-navbar-item>

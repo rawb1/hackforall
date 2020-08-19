@@ -509,10 +509,17 @@ export default {
     submit() {
       this.$validator.validateAll().then(valid => {
         if (valid) {
-          this.$apollo.mutate({
-            mutation: APPLY_MUTATION,
-            variables: this.application.form
-          });
+          this.$apollo
+            .mutate({
+              mutation: APPLY_MUTATION,
+              variables: this.application.form
+            })
+            .then(() => {
+              this.$buefy.toast.open({
+                message: 'Application saved !',
+                type: 'is-success'
+              });
+            });
         } else {
           this.goToError();
         }

@@ -43,7 +43,8 @@ export default {
       },
       {
         field: 'application.status',
-        label: 'Status'
+        label: 'Status',
+        sortable: true
       },
       {
         field: 'application.updatedAt',
