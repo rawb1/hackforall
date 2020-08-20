@@ -37,9 +37,41 @@ export const HACKERS_QUERY = gql`
       username
       email
       application {
+        updatedAt
         _id
         status
         updatedAt
+        form {
+          name
+          school
+          phone
+          garduationYear
+          studyFields
+          interests
+          github
+          resume {
+            name
+            type
+          }
+          dietaryRestrictions
+          teeShirtSize
+          needHardware
+          needAccomodation
+          needTravelReimbursement
+          hardwareList
+          paypalAddress
+          travelReceipt {
+            name
+            type
+          }
+          AccomodationPreferences
+          hostMatchingDetails
+          majority
+          liability
+          photoRelease
+          codeOfConduct
+          additionalNotes
+        }
       }
     }
   }

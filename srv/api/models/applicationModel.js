@@ -30,9 +30,10 @@ const ApplicationSchema = new Schema({
 
 ApplicationSchema.index({ userId: 1, hackathonId: 1 }, { unique: true });
 
-ApplicationSchema.pre('save', function() {
-  if (!this.isModified('PENDING')) {
-    this.set({ status: new Date() });
+// TODO fix me
+ApplicationSchema.pre('updateOne', function() {
+  if (!this.isModified('status')) {
+    this.set({ status: 'PENDING' });
   }
   this.set({ updatedAt: new Date() });
 });

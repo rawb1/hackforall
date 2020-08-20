@@ -4,21 +4,21 @@
     :class="statusColorClass(application.status)"
   >
     <div class="card-content">
-      <b-steps v-model="activeStep" animated class="tile is-child py-4">
-        <h1 class="title has-text-centered">Application</h1>
-        <p
-          class="subtitle has-text-centered"
-          :class="statusTextColorClass(application.status)"
-        >
-          @{{ application.status }}
-        </p>
+      <h1 class="title has-text-centered">Application</h1>
+      <p
+        class="subtitle has-text-centered"
+        :class="statusTextColorClass(application.status)"
+      >
+        @{{ application.status }}
+      </p>
+      <b-steps v-model="activeStep" animated>
+        <p></p>
         <b-step-item
           icon="fa fa-address-book"
           label="Profile"
           :clickable="true"
           :type="{ 'is-danger': isProfileInvalid }"
         >
-          <h2 class="subtitle is-hidden-touch has-text-centered">Profile</h2>
           <div class="columns">
             <div class="column">
               <b-field
@@ -201,7 +201,6 @@
           :clickable="true"
           :type="{ 'is-danger': errors.has('hardwareList') }"
         >
-          <h2 class="subtitle is-hidden-touch has-text-centered">Hardware</h2>
           <b-field
             label="Hardware need"
             :type="{ 'is-danger': errors.has('hardwareList') }"
@@ -227,9 +226,6 @@
               errors.has('paypalAddress') || errors.has('travelReceipt')
           }"
         >
-          <h2 class="subtitle is-hidden-touch has-text-centered">
-            Travel reimbursement
-          </h2>
           <div class="columns">
             <div class="column">
               <b-field
@@ -280,9 +276,6 @@
               errors.has('hostMatchingDetails')
           }"
         >
-          <h2 class="subtitle is-hidden-touch has-text-centered">
-            Accomodation
-          </h2>
           <b-field
             label="Accomodation preferences"
             :type="{ 'is-danger': errors.has('AccomodationPreferences') }"
@@ -329,7 +322,6 @@
               errors.has('codeOfConduct')
           }"
         >
-          <h2 class="subtitle is-hidden-touch has-text-centered">Terms</h2>
           <b-field
             :type="{ 'is-danger': errors.has('majority') }"
             :message="errors.collect('majority')"

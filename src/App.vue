@@ -22,8 +22,8 @@ export default {
   display: flex;
 }
 
-.step-content {
-  margin-bottom: 1rem;
+.b-steps .steps + .step-content {
+  padding: 2rem 0;
 }
 
 @media screen and (min-width: $widescreen) {
