@@ -1,9 +1,17 @@
 <template>
-  <div class="card is-full-width">
+  <div
+    class="card is-full-width has-border"
+    :class="statusColorClass(application.status)"
+  >
     <div class="card-content">
       <b-steps v-model="activeStep" animated class="tile is-child py-4">
         <h1 class="title has-text-centered">Application</h1>
-        <p class="subtitle has-text-centered">@{{ application.status }}</p>
+        <p
+          class="subtitle has-text-centered"
+          :class="statusTextColorClass(application.status)"
+        >
+          @{{ application.status }}
+        </p>
         <b-step-item
           icon="fa fa-address-book"
           label="Profile"
@@ -445,8 +453,10 @@ import {
   APPLICATION_QUERY,
   APPLY_MUTATION
 } from '@/graphql/applicationQueries';
+import { applicationMixin } from '@/mixins';
 
 export default {
+  mixins: [applicationMixin],
   data: () => ({
     activeStep: 0,
     teeShirtSizes: ['XS', 'S', 'M', 'L', 'XL'], // TODO move server side
