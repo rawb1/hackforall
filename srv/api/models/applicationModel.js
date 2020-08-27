@@ -15,6 +15,7 @@ const ApplicationSchema = new Schema({
     immutable: true
   },
   form: {
+    // TODO implement form struct
     type: Schema.Types.Mixed,
     required: true
   },

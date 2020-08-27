@@ -38,14 +38,9 @@
         >
           {{ new Date(props.row.application.updatedAt).toLocaleDateString() }}
         </b-table-column>
-        <template slot="detail" slot-scope="props">
-          <b-tabs v-model="activeTab" style="display:grid">
-            <b-tab-item label="Profile">
-              {{ props.row.application.form.name }}
-            </b-tab-item>
 
-            <b-tab-item label="Music"> </b-tab-item>
-          </b-tabs>
+        <template slot="detail" slot-scope="props">
+          <HackerDetails :hacker="props.row" />
         </template>
       </b-table>
     </div>
@@ -54,9 +49,12 @@
 
 <script>
 import { HACKERS_QUERY } from '@/graphql/userQueries';
+import HackerDetails from '@/components/HackerDetails.vue';
+
 import { applicationMixin } from '@/mixins';
 
 export default {
+  components: { HackerDetails },
   mixins: [applicationMixin],
   data: () => ({
     hackers: []

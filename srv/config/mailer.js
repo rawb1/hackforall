@@ -12,13 +12,13 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-transporter.verify(err => {
-  if (err) {
-    logger.fatal(err.response);
-    process.exit(1);
-  }
-  logger.info('nodemailer transport created successfuly');
-});
+// transporter.verify(err => {
+//   if (err) {
+//     logger.fatal(err.response);
+//     process.exit(1);
+//   }
+//   logger.info('nodemailer transport created successfuly');
+// });
 
 transporter.preview = mail => {
   if (mailer.user.endsWith('@ethereal.email')) {

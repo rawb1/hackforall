@@ -434,6 +434,11 @@
                 >Send</b-button
               >
             </div>
+            <div class="column">
+              <b-button type="is-danger" @click.prevent="cancel"
+                >Cancel</b-button
+              >
+            </div>
           </div>
         </template>
       </b-steps>
@@ -443,7 +448,8 @@
 <script>
 import {
   APPLICATION_QUERY,
-  APPLY_MUTATION
+  APPLY_MUTATION,
+  CANCEL_MUTATION
 } from '@/graphql/applicationQueries';
 import { applicationMixin } from '@/mixins';
 
@@ -526,6 +532,19 @@ export default {
           this.goToError();
         }
       });
+    },
+    cancel() {
+      this.$apollo
+        .mutate({
+          mutation: CANCEL_MUTATION,
+          variables: { id: this.application._id }
+        })
+        .then(() => {
+          this.$buefy.toast.open({
+            message: 'Application canceled !',
+            type: 'is-success'
+          });
+        });
     },
     goToError() {
       // move stepper to the first errored step

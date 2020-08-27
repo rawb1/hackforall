@@ -101,3 +101,27 @@ export const APPLY_MUTATION = gql`
     }
   }
 `;
+
+export const CANCEL_MUTATION = gql`
+  mutation($id: ID!) {
+    cancel(id: $id) {
+      status
+    }
+  }
+`;
+
+export const ACCEPT_MUTATION = gql`
+  mutation($id: ID!) {
+    accept(id: $id) {
+      status
+    }
+  }
+`;
+
+export const REFUSE_MUTATION = gql`
+  mutation($id: ID!) {
+    refuse(id: $id) {
+      status
+    }
+  }
+`;
