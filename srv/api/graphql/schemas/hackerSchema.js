@@ -12,7 +12,7 @@ const typeDefs = gql`
     history: HackerHistory
   }
 
-  extend type Query @auth(requires: USER) {
+  extend type Query {
     me: User
     hacker(id: ID!): User @auth(requires: ADMIN)
     hackers: [User] @auth(requires: ADMIN)

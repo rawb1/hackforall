@@ -13,19 +13,18 @@ const _parseFile = async file => {
 };
 
 const apply = async (hackathonId, user, form) => {
-  const application = await Application.findOne({
-    userId: user._id,
-    hackathonId: hackathonId
-  });
-
   form.resume = await _parseFile(form.resume);
   form.travelReceipt = await _parseFile(form.travelReceipt);
 
-  if (application) {
-    return Application.findByIdAndUpdate(application._id, {
-      form,
-      status: 'PENDING'
-    });
+  if (user.application) {
+    return Application.findByIdAndUpdate(
+      user.application._id,
+      {
+        form,
+        status: 'PENDING'
+      },
+      { new: true }
+    );
   } else {
     return Application.create({
       userId: user._id,
@@ -35,11 +34,14 @@ const apply = async (hackathonId, user, form) => {
   }
 };
 
-const accept = id => Application.findByIdAndUpdate(id, { status: 'ACCEPTED' });
+const accept = id =>
+  Application.findByIdAndUpdate(id, { status: 'ACCEPTED' }, { new: true });
 
-const refuse = id => Application.findByIdAndUpdate(id, { status: 'REFUSED' });
+const refuse = id =>
+  Application.findByIdAndUpdate(id, { status: 'REFUSED' }, { new: true });
 
-const cancel = id => Application.findByIdAndUpdate(id, { status: 'CANCELED' });
+const cancel = id =>
+  Application.findByIdAndUpdate(id, { status: 'CANCELED' }, { new: true });
 
 module.exports = {
   apply,

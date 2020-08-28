@@ -18,7 +18,7 @@ const typeDefs = gql`
     end: Date
   }
 
-  extend type Query @auth(requires: USER) {
+  extend type Query {
     hackathon(id: ID): Hackathon
     hackathons: [Hackathon]
   }

@@ -11,7 +11,7 @@ const typeDefs = gql`
     CANCELED
   }
 
-  type Application @auth(requires: USER) {
+  type Application {
     _id: ID
     userId: ID
     hackathonId: ID
@@ -20,11 +20,11 @@ const typeDefs = gql`
     updatedAt: Date
   }
 
-  extend type Query @auth(requires: USER) {
+  extend type Query {
     application: Application
   }
 
-  extend type Mutation @auth(requires: USER) {
+  extend type Mutation {
     apply(form: ApplicationFormInput!): Application
     cancel(id: ID): Application
     accept(id: ID): Application @auth(requires: ADMIN)

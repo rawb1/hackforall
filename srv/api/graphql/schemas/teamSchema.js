@@ -10,7 +10,7 @@ const typeDefs = gql`
     members: [User]
   }
 
-  extend type Query @auth(requires: USER) {
+  extend type Query {
     team(id: ID): Team
     teams: [Team]
   }

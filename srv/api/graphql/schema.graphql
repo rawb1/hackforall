@@ -20,6 +20,80 @@ directive @constraint(
 
 directive @auth(requires: Role!) on OBJECT | FIELD_DEFINITION
 
+enum Role {
+  ADMIN
+  USER
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+scalar Date
+
+type File {
+  name: String!
+  type: String!
+}
+
+type Query {
+  _empty: String
+  login(user: UserInput!, remember: Boolean = false): User
+  logout: Boolean
+  forgot(email: String!): String
+  me: User
+  hacker(id: ID!): User
+  hackers: [User]
+  application: Application
+  team(id: ID): Team
+  teams: [Team]
+  hackathon(id: ID): Hackathon
+  hackathons: [Hackathon]
+  stats: Stats
+  hackathonStats: HackathonStats
+  sponsor(id: ID): Sponsor
+  sponsors: [Sponsor]
+}
+
+type Mutation {
+  _empty: String
+  register(user: UserInput!): User
+  reset(newPassword: String!, resetToken: String!): Boolean
+  apply(form: ApplicationFormInput!): Application
+  cancel(id: ID): Application
+  accept(id: ID): Application
+  refuse(id: ID): Application
+  createTeam(name: String!): Team
+  joinTeam(name: String!): Boolean
+  leaveTeam(name: String!): Boolean
+}
+
+type User {
+  _id: ID
+  username: String!
+  email: String!
+  role: Role!
+  application: Application
+  history: HackerHistory
+}
+
+input UserInput {
+  username: String
+  email: String!
+  password: String!
+}
+
+type HackerHistory {
+  applications: [Application]
+}
+
+enum ApplicationStatus {
+  INCOMPLETE
+  PENDING
+  REFUSED
+  ACCEPTED
+  CANCELED
+}
+
 type Application {
   _id: ID
   userId: ID
@@ -81,19 +155,11 @@ input ApplicationFormInput {
   additionalNotes: String
 }
 
-enum ApplicationStatus {
-  INCOMPLETE
-  PENDING
-  REFUSED
-  ACCEPTED
-  CANCELED
-}
-
-scalar Date
-
-type File {
-  name: String!
-  type: String!
+type Team {
+  _id: ID
+  hackathonId: ID
+  name: String
+  members: [User]
 }
 
 type Hackathon {
@@ -111,60 +177,6 @@ type hackathonPlaning {
   end: Date
 }
 
-type HackathonStats {
-  applications: Int
-  hackers: Int
-  teams: Int
-  hacks: Int
-}
-
-type HackerHistory {
-  applications: [Application]
-}
-
-type Mutation {
-  _empty: String
-  register(user: UserInput!): User
-  reset(newPassword: String!, resetToken: String!): Boolean
-  apply(form: ApplicationFormInput!): Application
-  cancel(id: ID): Application
-  accept(id: ID): Application
-  refuse(id: ID): Application
-  createTeam(name: String!): Team
-  joinTeam(name: String!): Boolean
-  leaveTeam(name: String!): Boolean
-}
-
-type Query {
-  _empty: String
-  login(user: UserInput!, remember: Boolean = false): User
-  logout: Boolean
-  forgot(email: String!): String
-  me: User
-  hacker(id: ID!): User
-  hackers: [User]
-  application: Application
-  team(id: ID): Team
-  teams: [Team]
-  hackathon(id: ID): Hackathon
-  hackathons: [Hackathon]
-  stats: Stats
-  hackathonStats: HackathonStats
-  sponsor(id: ID): Sponsor
-  sponsors: [Sponsor]
-}
-
-enum Role {
-  ADMIN
-  USER
-}
-
-type Sponsor {
-  _id: ID
-  hachathonId: ID
-  name: String
-}
-
 type Stats {
   users: Int
   hackathons: Int
@@ -173,27 +185,15 @@ type Stats {
   hacks: Int
 }
 
-type Team {
+type HackathonStats {
+  applications: Int
+  hackers: Int
+  teams: Int
+  hacks: Int
+}
+
+type Sponsor {
   _id: ID
-  hackathonId: ID
+  hachathonId: ID
   name: String
-  members: [User]
-}
-
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
-
-type User {
-  _id: ID
-  username: String!
-  email: String!
-  role: Role!
-  application: Application
-  history: HackerHistory
-}
-
-input UserInput {
-  username: String
-  email: String!
-  password: String!
 }

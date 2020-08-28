@@ -9,7 +9,7 @@ const typeDefs = gql`
     name: String
   }
 
-  extend type Query @auth(requires: USER) {
+  extend type Query {
     sponsor(id: ID): Sponsor
     sponsors: [Sponsor]
   }

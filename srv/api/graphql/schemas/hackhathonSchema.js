@@ -16,7 +16,7 @@ const typeDefs = gql`
     live: Boolean
   }
 
-  extend type Query @auth(requires: USER) {
+  extend type Query  {
     hackathon(id: ID): hackathon
     hackathons: [hackathon]
   }
