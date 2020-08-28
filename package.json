@@ -38,6 +38,7 @@
     "koa-router": "^9.4.0",
     "koa-session": "^6.0.0",
     "koa-static": "^5.0.0",
+    "lodash": "^4.17.20",
     "log4js": "^6.3.0",
     "mongoose": "^5.10.1",
     "nodemailer": "^6.4.11",

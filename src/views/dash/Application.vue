@@ -610,7 +610,8 @@ export default {
           ? new Date(application.form.garduationYear)
           : null;
         return application;
-      }
+      },
+      fetchPolicy: 'network-only'
     }
   }
 };

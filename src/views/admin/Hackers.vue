@@ -43,6 +43,7 @@
           <b-field>
             <p class="control">
               <b-button
+                size="is-small"
                 type="is-success"
                 icon-left="far fa-thumbs-up"
                 rounded
@@ -51,6 +52,7 @@
             </p>
             <p class="control">
               <b-button
+                size="is-small"
                 type="is-danger"
                 icon-left="fas fa-ban"
                 @click="refuse(props.row)"
@@ -72,6 +74,7 @@ import { HACKERS_QUERY } from '@/graphql/userQueries';
 import HackerDetails from '@/components/HackerDetails.vue';
 import { ACCEPT_MUTATION, REFUSE_MUTATION } from '@/graphql/applicationQueries';
 import { applicationMixin } from '@/mixins';
+import _ from 'lodash';
 
 export default {
   components: { HackerDetails },
@@ -81,24 +84,40 @@ export default {
   }),
   methods: {
     accept: function(hacker) {
-      this.$apollo
-        .mutate({
-          mutation: ACCEPT_MUTATION,
-          variables: { id: hacker.application._id }
-        })
-        .then(({ data }) => {
-          hacker.application.status = data.accept.status;
-        });
+      this.$apollo.mutate({
+        mutation: ACCEPT_MUTATION,
+        variables: { id: hacker.application._id },
+        update: (store, { data: { accept } }) => {
+          const { hackers } = store.readQuery({
+            query: HACKERS_QUERY
+          });
+          hackers[
+            _.findIndex(hackers, { _id: hacker._id })
+          ].application.status = accept.status;
+          store.writeQuery({
+            query: HACKERS_QUERY,
+            data: { hackers }
+          });
+        }
+      });
     },
     refuse: function(hacker) {
-      this.$apollo
-        .mutate({
-          mutation: REFUSE_MUTATION,
-          variables: { id: hacker.application._id }
-        })
-        .then(({ data }) => {
-          hacker.application.status = data.refuse.status;
-        });
+      this.$apollo.mutate({
+        mutation: REFUSE_MUTATION,
+        variables: { id: hacker.application._id },
+        update: (store, { data: { refuse } }) => {
+          const { hackers } = store.readQuery({
+            query: HACKERS_QUERY
+          });
+          hackers[
+            _.findIndex(hackers, { _id: hacker._id })
+          ].application.status = refuse.status;
+          store.writeQuery({
+            query: HACKERS_QUERY,
+            data: { hackers }
+          });
+        }
+      });
     }
   },
   apollo: {
