@@ -428,7 +428,10 @@
               ></b-button>
             </div>
           </nav>
-          <div class="columns is-centered">
+          <div
+            v-if="application.status !== 'REFUSED'"
+            class="columns is-centered"
+          >
             <div class="column is-one-third-desktop">
               <b-button type="is-primary" expanded @click.prevent="submit">{{
                 application.status !== 'CANCELED' ? 'Send' : 'Activate'

@@ -17,6 +17,9 @@ const apply = async (hackathonId, user, form) => {
   form.travelReceipt = await _parseFile(form.travelReceipt);
 
   if (user.application) {
+    if (user.application.status === 'REFUSED') {
+      return;
+    }
     return Application.findByIdAndUpdate(
       user.application._id,
       {
