@@ -142,7 +142,7 @@ type Query {
   me: User
   hacker(id: ID!): User
   hackers: [User]
-  application(id: ID): Application
+  application: Application
   team(id: ID): Team
   teams: [Team]
   hackathon(id: ID): Hackathon

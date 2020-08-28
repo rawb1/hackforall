@@ -21,7 +21,7 @@ const typeDefs = gql`
   }
 
   extend type Query @auth(requires: USER) {
-    application(id: ID): Application
+    application: Application
   }
 
   extend type Mutation @auth(requires: USER) {
@@ -91,20 +91,20 @@ const resolvers = {
     }
   },
   Mutation: {
-    apply: async (parent, args, ctx) => {
+    apply: (parent, args, ctx) => {
       return applicationController.apply(
         ctx.state.hackathon._id,
         ctx.state.user,
         args.form
       );
     },
-    cancel: async (parent, args, ctx) => {
+    cancel: (parent, args, ctx) => {
       return applicationController.cancel(args.id);
     },
-    accept: async (parent, args, ctx) => {
+    accept: (parent, args, ctx) => {
       return applicationController.accept(args.id);
     },
-    refuse: async (parent, args, ctx) => {
+    refuse: (parent, args, ctx) => {
       return applicationController.refuse(args.id);
     }
   }

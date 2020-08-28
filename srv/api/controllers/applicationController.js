@@ -34,11 +34,11 @@ const apply = async (hackathonId, user, form) => {
   }
 };
 
-const accept = id => Application.updateById(id, { status: 'ACCEPTED' });
+const accept = id => Application.findByIdAndUpdate(id, { status: 'ACCEPTED' });
 
-const refuse = id => Application.updateById(id, { status: 'REFUSED' });
+const refuse = id => Application.findByIdAndUpdate(id, { status: 'REFUSED' });
 
-const cancel = id => Application.updateById(id, { status: 'CANCELED' });
+const cancel = id => Application.findByIdAndUpdate(id, { status: 'CANCELED' });
 
 module.exports = {
   apply,

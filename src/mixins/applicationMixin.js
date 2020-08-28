@@ -8,7 +8,7 @@ export default {
           return 'is-info';
         case 'CANCELED':
         case 'REFUSED':
-          return 'is-error';
+          return 'is-danger';
         case 'ACCEPTED':
           return 'is-success';
         default:
@@ -23,7 +23,7 @@ export default {
           return 'has-text-info';
         case 'CANCELED':
         case 'REFUSED':
-          return 'has-text-error';
+          return 'has-text-danger';
         case 'ACCEPTED':
           return 'has-text-success';
         default:

@@ -1,34 +1,34 @@
 <template>
   <b-tabs v-model="activeTab" style="display:grid">
     <b-tab-item label="Profile">
-      <ul>
-        <li v-for="(value, key) in profile" :key="key">
-          <b>{{ key }} : </b>{{ value }}
-        </li>
-      </ul>
+      <List v-model="profile" />
     </b-tab-item>
     <b-tab-item v-if="hacker.application.form.needHardware" label="Hardware">
+      <List v-model="hardware" />
     </b-tab-item>
     <b-tab-item
       v-if="hacker.application.form.needTravelReimbursement"
       label="Travel"
     >
+      <List v-model="travel" />
     </b-tab-item>
     <b-tab-item
       v-if="hacker.application.form.needAccomodation"
       label="Accomodation"
     >
+      <List v-model="terms" />
     </b-tab-item>
     <b-tab-item label="Terms">
-      <ul>
-        <li>{{ hacker.application.form.majority }}</li>
-      </ul>
+      <List v-model="terms" />
     </b-tab-item>
   </b-tabs>
 </template>
 <script>
 import _ from 'lodash';
+import List from '@/components/List.vue';
+
 export default {
+  components: { List },
   props: {
     hacker: { type: Object, default: null }
   },
@@ -37,7 +37,42 @@ export default {
   }),
   computed: {
     profile: function() {
-      return _.pick(this.hacker.application.form, ['name', 'school']);
+      return _.pick(this.hacker.application.form, [
+        'name',
+        'school',
+        'phone',
+        'garduationYear',
+        'studyFields',
+        'interests',
+        'github',
+        'resume',
+        'dietaryRestrictions',
+        'teeShirtSize',
+        'additionalNotes'
+      ]);
+    },
+    hardware: function() {
+      return _.pick(this.hacker.application.form, ['hardwareList']);
+    },
+    travel: function() {
+      return _.pick(this.hacker.application.form, [
+        'paypalAddress',
+        'travelReceipt'
+      ]);
+    },
+    accomodation: function() {
+      return _.pick(this.hacker.application.form, [
+        'AccomodationPreferences',
+        'hostMatchingDetails'
+      ]);
+    },
+    terms: function() {
+      return _.pick(this.hacker.application.form, [
+        'majority',
+        'liability',
+        'photoRelease',
+        'codeOfConduct'
+      ]);
     }
   }
 };

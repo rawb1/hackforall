@@ -39,6 +39,26 @@
           {{ new Date(props.row.application.updatedAt).toLocaleDateString() }}
         </b-table-column>
 
+        <b-table-column v-slot="props" width="90" centered label="Actions">
+          <b-field>
+            <p class="control">
+              <b-button
+                type="is-success"
+                icon-left="far fa-thumbs-up"
+                rounded
+                @click="accept(props.row)"
+              ></b-button>
+            </p>
+            <p class="control">
+              <b-button
+                type="is-danger"
+                icon-left="fas fa-ban"
+                @click="refuse(props.row)"
+              ></b-button>
+            </p>
+          </b-field>
+        </b-table-column>
+
         <template slot="detail" slot-scope="props">
           <HackerDetails :hacker="props.row" />
         </template>
@@ -50,7 +70,7 @@
 <script>
 import { HACKERS_QUERY } from '@/graphql/userQueries';
 import HackerDetails from '@/components/HackerDetails.vue';
-
+import { ACCEPT_MUTATION, REFUSE_MUTATION } from '@/graphql/applicationQueries';
 import { applicationMixin } from '@/mixins';
 
 export default {
@@ -59,6 +79,28 @@ export default {
   data: () => ({
     hackers: []
   }),
+  methods: {
+    accept: function(hacker) {
+      this.$apollo
+        .mutate({
+          mutation: ACCEPT_MUTATION,
+          variables: { id: hacker.application._id }
+        })
+        .then(({ data }) => {
+          hacker.application.status = data.accept.status;
+        });
+    },
+    refuse: function(hacker) {
+      this.$apollo
+        .mutate({
+          mutation: REFUSE_MUTATION,
+          variables: { id: hacker.application._id }
+        })
+        .then(({ data }) => {
+          hacker.application.status = data.refuse.status;
+        });
+    }
+  },
   apollo: {
     hackers: HACKERS_QUERY
   }

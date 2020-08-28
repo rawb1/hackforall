@@ -430,11 +430,14 @@
           </nav>
           <div class="columns is-centered">
             <div class="column is-one-third-desktop">
-              <b-button type="is-primary" expanded @click.prevent="submit"
-                >Send</b-button
-              >
+              <b-button type="is-primary" expanded @click.prevent="submit">{{
+                application.status !== 'CANCELED' ? 'Send' : 'Activate'
+              }}</b-button>
             </div>
-            <div class="column">
+            <div
+              v-if="application.status !== 'CANCELED'"
+              class="column is-narrow has-text-centered"
+            >
               <b-button type="is-danger" @click.prevent="cancel"
                 >Cancel</b-button
               >
@@ -522,7 +525,8 @@ export default {
               mutation: APPLY_MUTATION,
               variables: this.application.form
             })
-            .then(() => {
+            .then(({ data }) => {
+              this.application = { ...this.application, ...data.apply };
               this.$buefy.toast.open({
                 message: 'Application saved !',
                 type: 'is-success'
@@ -539,7 +543,8 @@ export default {
           mutation: CANCEL_MUTATION,
           variables: { id: this.application._id }
         })
-        .then(() => {
+        .then(({ data }) => {
+          this.application = { ...this.application, ...data.cancel };
           this.$buefy.toast.open({
             message: 'Application canceled !',
             type: 'is-success'

@@ -32,8 +32,8 @@ const ApplicationSchema = new Schema({
 ApplicationSchema.index({ userId: 1, hackathonId: 1 }, { unique: true });
 
 // TODO fix me
-ApplicationSchema.pre('updateOne', function() {
-  if (!this.isModified('status')) {
+ApplicationSchema.pre(['updateOne', 'findOneAndUpdate'], function() {
+  if (!this._update.status) {
     this.set({ status: 'PENDING' });
   }
   this.set({ updatedAt: new Date() });

@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const APPLICATION_QUERY = gql`
-  query($id: ID) {
-    application(id: $id) {
+  query {
+    application {
       _id
       userId
       hackathonId
@@ -95,9 +95,7 @@ export const APPLY_MUTATION = gql`
         additionalNotes: $additionalNotes
       }
     ) {
-      _id
-      userId
-      hackathonId
+      status
     }
   }
 `;
