@@ -27,8 +27,9 @@ HackathonSchema.virtual('applications', {
   foreignField: 'hackathonId'
 });
 
-HackathonSchema.pre('updateOne', function() {
+HackathonSchema.pre(['updateOne', 'findOneAndUpdate'], function(next) {
   this.set({ updatedAt: new Date() });
+  next();
 });
 
 HackathonSchema.virtual('open').get(function() {

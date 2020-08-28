@@ -523,10 +523,19 @@ export default {
           this.$apollo
             .mutate({
               mutation: APPLY_MUTATION,
-              variables: this.application.form
+              variables: this.application.form,
+              update: (store, { data: { apply } }) => {
+                const data = store.readQuery({
+                  query: APPLICATION_QUERY
+                });
+                data.application.status = apply.status;
+                store.writeQuery({
+                  query: APPLICATION_QUERY,
+                  data
+                });
+              }
             })
-            .then(({ data }) => {
-              this.application = { ...this.application, ...data.apply };
+            .then(() => {
               this.$buefy.toast.open({
                 message: 'Application saved !',
                 type: 'is-success'
@@ -541,13 +550,22 @@ export default {
       this.$apollo
         .mutate({
           mutation: CANCEL_MUTATION,
-          variables: { id: this.application._id }
+          variables: { id: this.application._id },
+          update: (store, { data: { cancel } }) => {
+            const data = store.readQuery({
+              query: APPLICATION_QUERY
+            });
+            data.application.status = cancel.status;
+            store.writeQuery({
+              query: APPLICATION_QUERY,
+              data
+            });
+          }
         })
-        .then(({ data }) => {
-          this.application = { ...this.application, ...data.cancel };
+        .then(() => {
           this.$buefy.toast.open({
             message: 'Application canceled !',
-            type: 'is-success'
+            type: 'is-danger'
           });
         });
     },

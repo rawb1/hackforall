@@ -15,6 +15,7 @@ directive @constraint(
   exclusiveMin: Int
   exclusiveMax: Int
   multipleOf: Int
+  uniqueTypeName: String
 ) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
 directive @auth(requires: Role!) on OBJECT | FIELD_DEFINITION

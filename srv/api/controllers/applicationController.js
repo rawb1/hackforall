@@ -23,7 +23,8 @@ const apply = async (hackathonId, user, form) => {
 
   if (application) {
     return Application.findByIdAndUpdate(application._id, {
-      form
+      form,
+      status: 'PENDING'
     });
   } else {
     return Application.create({

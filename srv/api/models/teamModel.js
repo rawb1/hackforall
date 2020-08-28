@@ -21,8 +21,9 @@ TeamSchema.virtual('hack', {
   foreignField: 'teamId'
 });
 
-TeamSchema.pre('save', function() {
+TeamSchema.pre(['updateOne', 'findOneAndUpdate'], function(next) {
   this.set({ updatedAt: new Date() });
+  next();
 });
 
 mongoose.model('Team', TeamSchema);

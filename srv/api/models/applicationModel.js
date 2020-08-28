@@ -31,12 +31,9 @@ const ApplicationSchema = new Schema({
 
 ApplicationSchema.index({ userId: 1, hackathonId: 1 }, { unique: true });
 
-// TODO fix me
-ApplicationSchema.pre(['updateOne', 'findOneAndUpdate'], function() {
-  if (!this._update.status) {
-    this.set({ status: 'PENDING' });
-  }
+ApplicationSchema.pre(['updateOne', 'findOneAndUpdate'], function(next) {
   this.set({ updatedAt: new Date() });
+  next();
 });
 
 mongoose.model('Application', ApplicationSchema);
