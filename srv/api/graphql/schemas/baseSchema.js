@@ -5,6 +5,16 @@ const GraphQLDate = require('graphql-date');
 const typeDefs = gql`
   directive @auth(requires: Role!) on OBJECT | FIELD_DEFINITION
 
+  directive @cacheControl(
+    maxAge: Int
+    scope: CacheControlScope
+  ) on OBJECT | FIELD_DEFINITION
+
+  enum CacheControlScope {
+    PUBLIC
+    PRIVATE
+  }
+
   enum Role {
     ADMIN
     USER
@@ -14,8 +24,9 @@ const typeDefs = gql`
   scalar Date
 
   type File {
-    name: String!
-    type: String!
+    filename: String
+    mimetype: String
+    encoding: String
   }
 
   type Query {

@@ -20,6 +20,13 @@ directive @constraint(
 
 directive @auth(requires: Role!) on OBJECT | FIELD_DEFINITION
 
+directive @cacheControl(maxAge: Int, scope: CacheControlScope) on OBJECT | FIELD_DEFINITION
+
+enum CacheControlScope {
+  PUBLIC
+  PRIVATE
+}
+
 enum Role {
   ADMIN
   USER
@@ -31,8 +38,9 @@ scalar Upload
 scalar Date
 
 type File {
-  name: String!
-  type: String!
+  filename: String
+  mimetype: String
+  encoding: String
 }
 
 type Query {
@@ -99,8 +107,14 @@ type Application {
   userId: ID
   hackathonId: ID
   form: ApplicationForm
+  files: FileUploads
   status: ApplicationStatus
   updatedAt: Date
+}
+
+type FileUploads {
+  resume: File
+  travelReceipt: File
 }
 
 type ApplicationForm {
@@ -111,7 +125,6 @@ type ApplicationForm {
   studyFields: [String]
   interests: [String]
   github: String
-  resume: File
   dietaryRestrictions: [String]
   teeShirtSize: String
   needHardware: Boolean
@@ -119,7 +132,6 @@ type ApplicationForm {
   needTravelReimbursement: Boolean
   hardwareList: [String]
   paypalAddress: String
-  travelReceipt: File
   AccomodationPreferences: [String]
   hostMatchingDetails: String
   majority: Boolean
@@ -190,6 +202,7 @@ type HackathonStats {
   hackers: Int
   teams: Int
   hacks: Int
+  date: Date
 }
 
 type Sponsor {

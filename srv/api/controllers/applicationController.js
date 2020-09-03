@@ -1,20 +1,16 @@
 const mongoose = require('mongoose');
+const _ = require('lodash');
 
 const Application = mongoose.model('Application');
 
-// ? TODO move to custom file scalar
-const _parseFile = async file => {
-  if (!file) {
-    return;
-  }
-  const { filename: name, mimetype: type } = await file;
-  // TODO handle file saving
-  return { name, type };
-};
-
 const apply = async (hackathonId, user, form) => {
-  form.resume = await _parseFile(form.resume);
-  form.travelReceipt = await _parseFile(form.travelReceipt);
+  const files = _.omitBy(
+    {
+      resume: await form.resume,
+      travelReceipt: await form.travelReceipt
+    },
+    _.isNil
+  );
 
   if (user.application) {
     if (user.application.status === 'REFUSED') {
@@ -24,7 +20,8 @@ const apply = async (hackathonId, user, form) => {
       user.application._id,
       {
         form,
-        status: 'PENDING'
+        status: 'PENDING',
+        files
       },
       { new: true }
     );
@@ -32,7 +29,8 @@ const apply = async (hackathonId, user, form) => {
     return Application.create({
       userId: user._id,
       hackathonId: hackathonId,
-      form
+      form,
+      files
     });
   }
 };

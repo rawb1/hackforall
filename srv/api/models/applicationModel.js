@@ -19,6 +19,11 @@ const ApplicationSchema = new Schema({
     type: Schema.Types.Mixed,
     required: true
   },
+  files: {
+    // TODO implement form struct
+    type: Schema.Types.Mixed,
+    required: true
+  },
   status: {
     type: String,
     required: true,

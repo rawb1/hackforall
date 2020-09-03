@@ -16,8 +16,14 @@ const typeDefs = gql`
     userId: ID
     hackathonId: ID
     form: ApplicationForm
+    files: FileUploads
     status: ApplicationStatus
     updatedAt: Date
+  }
+
+  type FileUploads {
+    resume: File
+    travelReceipt: File
   }
 
   extend type Query {
@@ -39,7 +45,6 @@ const typeDefs = gql`
     studyFields: [String]
     interests: [String]
     github: String
-    resume: File
     dietaryRestrictions: [String]
     teeShirtSize: String
     needHardware: Boolean
@@ -47,7 +52,6 @@ const typeDefs = gql`
     needTravelReimbursement: Boolean
     hardwareList: [String]
     paypalAddress: String
-    travelReceipt: File
     AccomodationPreferences: [String]
     hostMatchingDetails: String
     majority: Boolean

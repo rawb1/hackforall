@@ -3,7 +3,7 @@ const { gql } = require('apollo-server-koa');
 const { statsController } = require('../../controllers');
 
 const typeDefs = gql`
-  type Stats @auth(requires: ADMIN) {
+  type Stats @cacheControl(maxAge: 300) {
     users: Int
     hackathons: Int
     applications: Int
@@ -11,11 +11,12 @@ const typeDefs = gql`
     hacks: Int
   }
 
-  type HackathonStats {
+  type HackathonStats @cacheControl(maxAge: 300) {
     applications: Int
     hackers: Int
     teams: Int
     hacks: Int
+    date: Date
   }
 
   extend type Query {
@@ -30,7 +31,7 @@ const resolvers = {
       return statsController.stats();
     },
     hackathonStats: (parent, args, ctx, info) => {
-      return statsController.hackathonStats();
+      return statsController.hackathonStats(ctx.state.hackathon._id);
     }
   },
   Mutation: {}

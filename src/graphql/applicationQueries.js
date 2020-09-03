@@ -15,10 +15,6 @@ export const APPLICATION_QUERY = gql`
         studyFields
         interests
         github
-        resume {
-          name
-          type
-        }
         dietaryRestrictions
         teeShirtSize
         needHardware
@@ -26,10 +22,6 @@ export const APPLICATION_QUERY = gql`
         needTravelReimbursement
         hardwareList
         paypalAddress
-        travelReceipt {
-          name
-          type
-        }
         AccomodationPreferences
         hostMatchingDetails
         majority
@@ -37,6 +29,14 @@ export const APPLICATION_QUERY = gql`
         photoRelease
         codeOfConduct
         additionalNotes
+      }
+      files {
+        resume {
+          filename
+        }
+        travelReceipt {
+          filename
+        }
       }
     }
   }

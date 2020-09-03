@@ -19,6 +19,8 @@ const schema = require('./api/graphql');
 const logger = log4js.getLogger('app');
 
 const app = new Koa();
+// TODO cache hackathonController.getActive(ctx)
+// https://www.npmjs.com/package/node-cache
 const apollo = new ApolloServer({
   schema,
   // Disable the built in file upload implementation that uses an outdated

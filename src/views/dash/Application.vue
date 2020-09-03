@@ -125,18 +125,23 @@
             </div>
             <div class="column">
               <b-field class="file" expanded>
-                <b-upload
-                  v-model="application.form.resume"
-                  accept="application/pdf"
-                >
+                <b-upload v-model="uploads.resume" accept="application/pdf">
                   <a class="button is-primary is-full-width">
                     <b-icon icon="upload"></b-icon>
                     <span>Upload your resume</span>
                   </a>
                 </b-upload>
-                <span v-if="application.form.resume" class="file-name">{{
-                  application.form.resume.name
-                }}</span>
+                <span
+                  v-if="uploads.resume || application.files.resume"
+                  class="file-name"
+                  >{{
+                    uploads.resume
+                      ? uploads.resume.name
+                      : application.files.resume
+                      ? application.files.resume.filename
+                      : ''
+                  }}</span
+                >
               </b-field>
             </div>
           </div>
@@ -244,7 +249,7 @@
             <div class="column">
               <b-field class="file" expanded>
                 <b-upload
-                  v-model="application.form.travelReceipt"
+                  v-model="uploads.travelReceipt"
                   data-vv-validate-on="input"
                   accept="application/pdf"
                   name="travelReceipt"
@@ -254,9 +259,19 @@
                     <span>Upload your travel receipt*</span>
                   </a>
                 </b-upload>
-                <span v-if="application.form.travelReceipt" class="file-name">{{
-                  application.form.travelReceipt.name
-                }}</span>
+                <span
+                  v-if="
+                    uploads.travelReceipt || application.files.travelReceipt
+                  "
+                  class="file-name"
+                  >{{
+                    uploads.travelReceipt
+                      ? uploads.travelReceipt.name
+                      : application.files.travelReceipt
+                      ? application.files.travelReceipt.filename
+                      : ''
+                  }}</span
+                >
               </b-field>
               <b-field
                 :type="{ 'is-danger': errors.has('travelReceipt') }"
@@ -472,7 +487,15 @@ export default {
       'No smoking',
       'Group hosting'
     ],
+    uploads: {
+      travelReceipt: null,
+      resume: null
+    },
     application: {
+      files: {
+        travelReceipt: null,
+        resume: null
+      },
       form: {
         // Profile
         name: '',
@@ -483,7 +506,6 @@ export default {
         studyFields: null,
         interests: null,
         github: '',
-        resume: null,
         // Complementary informations
         dietaryRestrictions: null,
         teeShirtSize: 'M',
@@ -495,7 +517,6 @@ export default {
         hardwareList: null,
         // Travel
         paypalAddress: '',
-        travelReceipt: null,
         // Accomodation
         AccomodationPreferences: [],
         hostMatchingDetails: '',
@@ -526,7 +547,10 @@ export default {
           this.$apollo
             .mutate({
               mutation: APPLY_MUTATION,
-              variables: this.application.form,
+              variables: {
+                ...this.application.form,
+                ...this.uploads
+              },
               update: (store, { data: { apply } }) => {
                 const data = store.readQuery({
                   query: APPLICATION_QUERY
