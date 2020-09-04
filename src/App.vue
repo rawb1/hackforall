@@ -26,6 +26,10 @@ export default {
   padding: 2rem 0;
 }
 
+.tile {
+  flex-grow: 0;
+}
+
 @media screen and (min-width: $widescreen) {
   .main-navbar {
     height: 75px;

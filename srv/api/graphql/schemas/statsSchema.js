@@ -16,11 +16,10 @@ const typeDefs = gql`
     hackers: Int
     teams: Int
     hacks: Int
-    date: Date
   }
 
   extend type Query {
-    stats: Stats @auth(requires: ADMIN)
+    stats: Stats
     hackathonStats: HackathonStats
   }
 `;

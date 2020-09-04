@@ -4,24 +4,9 @@
       <MeCard class="tile is-child" />
       <ApplicationCard class="tile is-child" />
     </div>
-    <div class="tile is-vertical is-8">
-      <div class="tile">
-        <div class="tile is-parent is-4">
-          <HackathonStatsCard stat="hackers" class="tile is-child" />
-        </div>
-        <div class="tile is-parent is-4">
-          <HackathonStatsCard stat="applications" class="tile is-child" />
-        </div>
-        <div class="tile is-parent is-4">
-          <HackathonStatsCard stat="teams" class="tile is-child" />
-        </div>
-      </div>
-      <div class="tile is-parent">
-        <article class="tile is-child notification is-primary">
-          <p class="title">Vertical...</p>
-          <p class="subtitle">Top tile</p>
-        </article>
-      </div>
+    <div class="tile is-parent is-vertical is-8">
+      <HackathonStatsCard class="tile is-child" />
+      <TimelineCard class="tile is-child" />
     </div>
   </div>
 </template>
@@ -30,12 +15,14 @@
 import MeCard from '@/components/MeCard.vue';
 import ApplicationCard from '@/components/ApplicationCard.vue';
 import HackathonStatsCard from '@/components/HackathonStatsCard.vue';
+import TimelineCard from '@/components/TimelineCard.vue';
 
 export default {
   components: {
     MeCard,
     ApplicationCard,
-    HackathonStatsCard
+    HackathonStatsCard,
+    TimelineCard
   }
 };
 </script>

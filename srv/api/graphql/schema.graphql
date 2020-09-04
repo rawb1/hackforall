@@ -202,7 +202,6 @@ type HackathonStats {
   hackers: Int
   teams: Int
   hacks: Int
-  date: Date
 }
 
 type Sponsor {

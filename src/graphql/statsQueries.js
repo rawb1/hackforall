@@ -6,7 +6,18 @@ export const HACKATHON_STATS_QUERY = gql`
       hackers
       applications
       teams
-      date
+    }
+  }
+`;
+
+export const STATS_QUERY = gql`
+  query {
+    stats {
+      users
+      hackathons
+      applications
+      teams
+      hacks
     }
   }
 `;
