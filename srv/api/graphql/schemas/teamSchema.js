@@ -11,6 +11,10 @@ const typeDefs = gql`
     applicants: [User]
   }
 
+  extend type User {
+    team: Team
+  }
+
   extend type Query {
     team(name: String): Team
     teams: [Team]
@@ -37,22 +41,30 @@ const resolvers = {
     createTeam: (parent, args, ctx) => {
       return teamController.create(
         ctx.state.hackathon._id,
-        args.name,
-        ctx.state.user._id
+        ctx.state.user._id,
+        args.name
       );
     },
     joinTeam: (parent, args, ctx) => {
       return teamController.join(
         ctx.state.hackathon._id,
-        args.name,
-        ctx.state.user._id
+        ctx.state.user,
+        args.name
       );
     },
     leaveTeam: (parent, args, ctx) => {
       return teamController.leave(
         ctx.state.hackathon._id,
+        ctx.state.user._id,
+        args.name
+      );
+    },
+    recruit: (parent, args, ctx) => {
+      return teamController.recruit(
+        ctx.state.hackathon,
+        ctx.state.user,
         args.name,
-        ctx.state.user._id
+        args.userId
       );
     }
   }

@@ -3,13 +3,8 @@ const { gql } = require('apollo-server-koa');
 const { hackerController } = require('../../controllers');
 
 const typeDefs = gql`
-  type HackerHistory {
-    applications: [Application]
-  }
-
   extend type User {
     application: Application
-    history: HackerHistory
   }
 
   extend type Query {

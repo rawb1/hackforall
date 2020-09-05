@@ -19,7 +19,7 @@ const getAll = hackathonId =>
     })
     .unwind('$application');
 
-const get = (userId, hackathonId) => User.findByHackathon(userId, hackathonId);
+const get = (userId, hackathonId) => User.findOneHacker(userId, hackathonId);
 
 module.exports = {
   getAll,

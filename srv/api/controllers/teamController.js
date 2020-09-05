@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
-const { ApolloError } = require('apollo-server-koa');
+const { ValidationError, ForbiddenError } = require('apollo-server-koa');
 
+const User = mongoose.model('User');
 const Team = mongoose.model('Team');
 
 const get = (hackathonId, name) =>
@@ -13,37 +14,55 @@ const getAll = hackathonId =>
     .populate('members')
     .populate('applicants');
 
-const create = (hackathonId, name, userId) =>
+const create = async (hackathonId, userId, name) =>
   Team.create({ name, hackathonId, memberIds: [userId] });
 
-const join = async (hackathonId, name, userId) =>
-  Team.updateOne(
-    { hackathonId, name },
-    { $addToSet: { applicantIds: userId } }
-  ).then(res => res.ok);
-
-const recruit = async (hackathon, name, userId) => {
-  const hackathonId = hackathon._id;
-  const team = await Team.findOne({ name, hackathonId });
-  if (team.memberIds.length >= hackathon.limit.team) {
-    throw new ApolloError('Maximum team capacity reached');
-  } else if (team.memberIds.include(userId)) {
-    throw new ApolloError('Already a member');
-  } else {
-    const { ok } = await Team.updateOne(
-      { hackathonId, name },
-      { addToSet: { memberIds: userId }, $pull: { applicantIds: userId } }
-    );
-    return ok;
+const join = async (hackathonId, user, name) => {
+  const userId = user._id;
+  if (user.team) {
+    throw new ValidationError('You are already in a Team');
   }
+  const { ok } = await Team.updateOne(
+    { hackathonId, name, memberIds: userId },
+    { $addToSet: { applicantIds: userId } }
+  );
+  return ok;
 };
 
-const leave = async (hackathonId, name, userId) => {
+const recruit = async (hackathon, user, name, recruitId) => {
+  if (user.team.name !== name || !user.team.hackathonId.equals(hackathon._id)) {
+    throw new ForbiddenError('You are not in the Team');
+  }
+  if (user.team.memberIds.length >= hackathon.limits.team) {
+    throw new ForbiddenError('Team is full');
+  }
+
+  const recruit = await User.findOneHacker(recruitId, hackathon._id);
+  if (!recruit) {
+    throw new ValidationError('This hacker does not exist');
+  }
+  if (recruit.team) {
+    throw new ValidationError('This hacker is already in a team');
+  }
+
+  const { ok } = await Team.updateOne(
+    {
+      hackathonId: hackathon._id,
+      name,
+      memberIds: user._id,
+      $where: `this.memberIds.length < ${hackathon.limits.team}`
+    },
+    { $addToSet: { memberIds: recruitId }, $pull: { applicantIds: recruitId } }
+  );
+  return ok;
+};
+
+const leave = async (hackathonId, userId, name) => {
   const { ok } = await Team.updateOne(
     { hackathonId, name },
     { $pull: { memberIds: userId, applicantIds: userId } }
   );
-  Team.remove({ memberIds: { $exists: true, $ne: [] } });
+  Team.remove({ hackathonId, memberIds: { $eq: [] } });
   return ok;
 };
 

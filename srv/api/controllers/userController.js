@@ -25,7 +25,7 @@ const authenticate = async ctx => {
     if (token) {
       const decoded = jwt.verify(token, secret);
       if (decoded) {
-        ctx.state.user = await User.findOneByHackathon(
+        ctx.state.user = await User.findOneHacker(
           decoded.sub,
           ctx.state.hackathon._id
         );

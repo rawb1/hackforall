@@ -51,9 +51,4 @@ TeamSchema.pre(['updateOne', 'findOneAndUpdate'], function(next) {
   next();
 });
 
-TeamSchema.post(['updateOne', 'findOneAndUpdate'], function(docs) {
-  // eslint-disable-next-line no-console
-  console.log(this);
-});
-
 mongoose.model('Team', TeamSchema);

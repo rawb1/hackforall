@@ -82,17 +82,13 @@ type User {
   email: String!
   role: Role!
   application: Application
-  history: HackerHistory
+  team: Team
 }
 
 input UserInput {
   username: String
   email: String!
   password: String!
-}
-
-type HackerHistory {
-  applications: [Application]
 }
 
 enum ApplicationStatus {

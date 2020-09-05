@@ -47,18 +47,29 @@ UserSchema.virtual('application', {
   justOne: true
 });
 
-UserSchema.static('findOneByHackathon', function(userId, hackathonId) {
-  return this.findById(userId).populate({
-    path: 'application',
-    match: { hackathonId }
-  });
+UserSchema.virtual('team', {
+  ref: 'Team',
+  localField: '_id',
+  foreignField: 'memberIds',
+  justOne: true
+});
+
+UserSchema.static('findOneHacker', function(userId, hackathonId) {
+  return this.findById(userId)
+    .populate({
+      path: 'application',
+      match: { hackathonId }
+    })
+    .populate({
+      path: 'team',
+      match: { hackathonId }
+    });
 });
 
 const UserModel = mongoose.model('User', UserSchema);
 
 fixtures.setDefault(UserModel, {
   username: 'admin',
-
   email: 'admin@mail.com',
   password: 'password',
   role: 'ADMIN'
