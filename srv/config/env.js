@@ -37,6 +37,7 @@ module.exports = {
   },
   playground: {
     settings: {
+      'schema.polling.enable': false,
       'request.credentials': 'include' // allow cookies
     }
   },

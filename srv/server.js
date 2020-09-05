@@ -7,7 +7,7 @@ const bodyParser = require('koa-bodyparser');
 const { ApolloServer } = require('apollo-server-koa');
 const { graphqlUploadKoa } = require('graphql-upload');
 
-const { sessionSettings, cookie } = require('./config/env');
+const { sessionSettings, playground, cookie } = require('./config/env');
 require('./config/logger');
 require('./config/mailer');
 require('./config/mongo');
@@ -27,6 +27,7 @@ const apollo = new ApolloServer({
   // `graphql-upload` version, see:
   // https://github.com/apollographql/apollo-server/issues/3508#issuecomment-662371289
   uploads: false,
+  playground,
   context: ({ ctx }) =>
     hackathonController.getActive(ctx).then(userController.authenticate)
 });

@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <div class="card-content">
+    <div v-if="me" class="card-content">
       <div class="media">
         <div class="media-left">
           <figure class="image is-48x48">
@@ -29,12 +29,10 @@
 import { ME_QUERY } from '@/graphql/userQueries';
 
 export default {
-  data: () => ({
-    me: null
-  }),
   apollo: {
     me: {
-      query: ME_QUERY
+      query: ME_QUERY,
+      fetchPolicy: 'network-only'
     }
   }
 };

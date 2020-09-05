@@ -52,7 +52,7 @@ type Query {
   hacker(id: ID!): User
   hackers: [User]
   application: Application
-  team(id: ID): Team
+  team(name: String): Team
   teams: [Team]
   hackathon(id: ID): Hackathon
   hackathons: [Hackathon]
@@ -73,6 +73,7 @@ type Mutation {
   createTeam(name: String!): Team
   joinTeam(name: String!): Boolean
   leaveTeam(name: String!): Boolean
+  recruit(name: String!, userId: ID!): Boolean
 }
 
 type User {
@@ -172,6 +173,7 @@ type Team {
   hackathonId: ID
   name: String
   members: [User]
+  applicants: [User]
 }
 
 type Hackathon {

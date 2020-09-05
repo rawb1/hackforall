@@ -8,10 +8,11 @@ const typeDefs = gql`
     hackathonId: ID
     name: String
     members: [User]
+    applicants: [User]
   }
 
   extend type Query {
-    team(id: ID): Team
+    team(name: String): Team
     teams: [Team]
   }
 
@@ -19,13 +20,14 @@ const typeDefs = gql`
     createTeam(name: String!): Team
     joinTeam(name: String!): Boolean
     leaveTeam(name: String!): Boolean
+    recruit(name: String!, userId: ID!): Boolean
   }
 `;
 
 const resolvers = {
   Query: {
     team: (parent, args, ctx, info) => {
-      return teamController.get(args.id);
+      return teamController.get(ctx.state.hackathon._id, args.name);
     },
     teams: (parent, args, ctx, info) => {
       return teamController.getAll();
@@ -33,13 +35,25 @@ const resolvers = {
   },
   Mutation: {
     createTeam: (parent, args, ctx) => {
-      return teamController.create(ctx, args.user);
+      return teamController.create(
+        ctx.state.hackathon._id,
+        args.name,
+        ctx.state.user._id
+      );
     },
     joinTeam: (parent, args, ctx) => {
-      return teamController.join(ctx, args);
+      return teamController.join(
+        ctx.state.hackathon._id,
+        args.name,
+        ctx.state.user._id
+      );
     },
     leaveTeam: (parent, args, ctx) => {
-      return teamController.leave(ctx, args);
+      return teamController.leave(
+        ctx.state.hackathon._id,
+        args.name,
+        ctx.state.user._id
+      );
     }
   }
 };

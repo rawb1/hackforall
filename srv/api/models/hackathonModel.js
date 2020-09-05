@@ -14,7 +14,7 @@ const HackathonSchema = new Schema({
   },
   limits: {
     hackers: { type: Number, required: true, default: 200 },
-    teamMembers: { type: Number, required: true, default: 5 },
+    team: { type: Number, required: true, default: 5 },
     refund: { type: Number, required: true, default: 0 }
   },
   createdAt: { type: Date, required: true, default: new Date() },
