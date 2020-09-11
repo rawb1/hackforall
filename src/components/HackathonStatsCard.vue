@@ -32,10 +32,7 @@ export default {
     hackathonStats: {}
   }),
   apollo: {
-    hackathonStats: {
-      query: HACKATHON_STATS_QUERY,
-      pollInterval: 5 * 60 * 1000
-    }
+    hackathonStats: { query: HACKATHON_STATS_QUERY }
   }
 };
 </script>

@@ -38,10 +38,7 @@ export default {
     stats: {}
   }),
   apollo: {
-    stats: {
-      query: STATS_QUERY,
-      pollInterval: 5 * 60 * 1000
-    }
+    stats: { query: STATS_QUERY }
   }
 };
 </script>
