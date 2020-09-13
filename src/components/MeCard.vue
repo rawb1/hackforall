@@ -31,8 +31,7 @@ import { ME_QUERY } from '@/graphql/userQueries';
 export default {
   apollo: {
     me: {
-      query: ME_QUERY,
-      fetchPolicy: 'network-only'
+      query: ME_QUERY
     }
   }
 };

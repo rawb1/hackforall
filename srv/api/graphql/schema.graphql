@@ -54,7 +54,7 @@ type Query {
   application: Application
   team(name: String): Team
   teams: [Team]
-  hackathon(id: ID): Hackathon
+  hackathon: Hackathon
   hackathons: [Hackathon]
   stats: Stats
   hackathonStats: HackathonStats
@@ -66,14 +66,16 @@ type Mutation {
   _empty: String
   register(user: UserInput!): User
   reset(newPassword: String!, resetToken: String!): Boolean
-  apply(form: ApplicationFormInput!): Application
-  cancel(id: ID): Application
-  accept(id: ID): Application
-  refuse(id: ID): Application
+  saveApplication(form: ApplicationFormInput!): Application
+  cancelApplication(id: ID): Application
+  acceptApplication(id: ID): Application
+  refuseApplication(id: ID): Application
   createTeam(name: String!): Team
   joinTeam(name: String!): Boolean
   leaveTeam(name: String!): Boolean
   recruit(name: String!, userId: ID!): Boolean
+  updateHackathon(Hackathon: HackathonInput): Hackathon
+  cancelHackathon: Hackathon
 }
 
 type User {
@@ -175,16 +177,50 @@ type Team {
 type Hackathon {
   _id: ID
   name: String
-  planing: hackathonPlaning
+  dates: hackathonDates
+  limits: hackathonLimits
   open: Boolean
   live: Boolean
 }
 
-type hackathonPlaning {
-  applicationOpen: Date
-  applicationClose: Date
+type hackathonDates {
+  applications: applicationsDates
   start: Date
   end: Date
+}
+
+type applicationsDates {
+  open: Date
+  close: Date
+}
+
+type hackathonLimits {
+  hackers: Int
+  team: Int
+  refund: Float
+}
+
+input HackathonInput {
+  name: String
+  dates: hackathonDatesInput
+  limits: hackathonLimitsInput
+}
+
+input hackathonDatesInput {
+  applications: applicationsDatesInput
+  start: Date
+  end: Date
+}
+
+input applicationsDatesInput {
+  open: Date
+  close: Date
+}
+
+input hackathonLimitsInput {
+  hackers: Int
+  team: Int
+  refund: Float
 }
 
 type Stats {

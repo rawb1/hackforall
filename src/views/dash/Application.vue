@@ -443,27 +443,21 @@
               ></b-button>
             </div>
           </nav>
-          <div
-            v-if="application.status !== 'REFUSED'"
-            class="columns is-centered"
-          >
-            <div class="column is-one-third-desktop">
-              <b-button type="is-primary" expanded @click.prevent="submit">{{
-                application.status !== 'CANCELED' ? 'Send' : 'Activate'
-              }}</b-button>
-            </div>
-            <div
-              v-if="application.status !== 'CANCELED'"
-              class="column is-narrow has-text-centered"
-            >
-              <b-button type="is-danger" @click.prevent="cancel"
-                >Cancel</b-button
-              >
-            </div>
-          </div>
         </template>
       </b-steps>
     </div>
+    <footer v-if="application.status !== 'REFUSED'" class="card-footer">
+      <p class="card-footer-item">
+        <a class="has-text-danger" @click.prevent="cancel">
+          cancel
+        </a>
+      </p>
+      <p class="card-footer-item">
+        <a @click.prevent="save">
+          save
+        </a>
+      </p>
+    </footer>
   </div>
 </template>
 <script>
@@ -541,7 +535,7 @@ export default {
     }
   },
   methods: {
-    submit() {
+    save() {
       this.$validator.validateAll().then(valid => {
         if (valid) {
           this.$apollo

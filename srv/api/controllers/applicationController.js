@@ -3,7 +3,7 @@ const _ = require('lodash');
 
 const Application = mongoose.model('Application');
 
-const apply = async (hackathonId, user, form) => {
+const save = async (hackathonId, user, form) => {
   const files = _.omitBy(
     {
       resume: await form.resume,
@@ -45,7 +45,7 @@ const cancel = id =>
   Application.findByIdAndUpdate(id, { status: 'CANCELED' }, { new: true });
 
 module.exports = {
-  apply,
+  save,
   accept,
   refuse,
   cancel

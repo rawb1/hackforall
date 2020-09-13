@@ -31,10 +31,10 @@ const typeDefs = gql`
   }
 
   extend type Mutation {
-    apply(form: ApplicationFormInput!): Application
-    cancel(id: ID): Application
-    accept(id: ID): Application @auth(requires: ADMIN)
-    refuse(id: ID): Application @auth(requires: ADMIN)
+    saveApplication(form: ApplicationFormInput!): Application
+    cancelApplication(id: ID): Application
+    acceptApplication(id: ID): Application @auth(requires: ADMIN)
+    refuseApplication(id: ID): Application @auth(requires: ADMIN)
   }
 
   type ApplicationForm {
@@ -95,20 +95,20 @@ const resolvers = {
     }
   },
   Mutation: {
-    apply: (parent, args, ctx) => {
-      return applicationController.apply(
+    saveApplication: (parent, args, ctx) => {
+      return applicationController.save(
         ctx.state.hackathon._id,
         ctx.state.user,
         args.form
       );
     },
-    cancel: (parent, args, ctx) => {
+    cancelApplication: (parent, args, ctx) => {
       return applicationController.cancel(args.id);
     },
-    accept: (parent, args, ctx) => {
+    acceptApplication: (parent, args, ctx) => {
       return applicationController.accept(args.id);
     },
-    refuse: (parent, args, ctx) => {
+    refuseApplication: (parent, args, ctx) => {
       return applicationController.refuse(args.id);
     }
   }

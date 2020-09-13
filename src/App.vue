@@ -30,6 +30,10 @@ export default {
   flex-grow: 0;
 }
 
+.b-tabs.formTabs > .tab-content {
+  padding-top: 1.5rem;
+}
+
 @media screen and (min-width: $widescreen) {
   .main-navbar {
     height: 75px;

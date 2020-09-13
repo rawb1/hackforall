@@ -6,9 +6,11 @@ const Schema = mongoose.Schema;
 
 const HackathonSchema = new Schema({
   name: { type: String, required: true },
-  planning: {
-    applicationOpen: { type: Date, required: true, default: new Date() },
-    applicationClose: { type: Date, required: true, default: new Date() },
+  dates: {
+    applications: {
+      open: { type: Date, required: true, default: new Date() },
+      close: { type: Date, required: true, default: new Date() }
+    },
     start: { type: Date, required: true, default: new Date() },
     end: { type: Date, required: true, default: new Date() }
   },
@@ -17,6 +19,7 @@ const HackathonSchema = new Schema({
     team: { type: Number, required: true, default: 5 },
     refund: { type: Number, required: true, default: 0 }
   },
+  canceled: { type: Boolean, default: false },
   createdAt: { type: Date, required: true, default: new Date() },
   updatedAt: { type: Date, required: true, default: new Date() }
 });
@@ -34,20 +37,19 @@ HackathonSchema.pre(['updateOne', 'findOneAndUpdate'], function(next) {
 
 HackathonSchema.virtual('open').get(function() {
   return (
-    Date.now > this.planning.applicationOpen.getTime() &&
-    Date.now < this.planning.applicationClose.getTime()
+    Date.now > this.dates.applicationOpen.getTime() &&
+    Date.now < this.dates.applicationClose.getTime()
   );
 });
 
 HackathonSchema.virtual('live').get(function() {
   return (
-    Date.now > this.planning.start.getTime() &&
-    Date.now < this.planning.end.getTime()
+    Date.now > this.dates.start.getTime() && Date.now < this.dates.end.getTime()
   );
 });
 
 HackathonSchema.query.active = function() {
-  return this.sort({ 'planning.start': -1 });
+  return this.sort({ 'dates.start': -1 });
 };
 
 const Hackathon = mongoose.model('Hackathon', HackathonSchema);

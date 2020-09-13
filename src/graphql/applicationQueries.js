@@ -68,7 +68,7 @@ export const APPLY_MUTATION = gql`
     $codeOfConduct: Boolean!
     $additionalNotes: String
   ) {
-    apply(
+    saveApplication(
       form: {
         name: $name
         school: $school
@@ -102,7 +102,7 @@ export const APPLY_MUTATION = gql`
 
 export const CANCEL_MUTATION = gql`
   mutation($id: ID!) {
-    cancel(id: $id) {
+    cancelApplication(id: $id) {
       status
     }
   }
@@ -110,7 +110,7 @@ export const CANCEL_MUTATION = gql`
 
 export const ACCEPT_MUTATION = gql`
   mutation($id: ID!) {
-    accept(id: $id) {
+    acceptApplication(id: $id) {
       status
     }
   }
@@ -118,7 +118,7 @@ export const ACCEPT_MUTATION = gql`
 
 export const REFUSE_MUTATION = gql`
   mutation($id: ID!) {
-    refuse(id: $id) {
+    refuseApplication(id: $id) {
       status
     }
   }

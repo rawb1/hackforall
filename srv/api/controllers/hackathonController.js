@@ -7,7 +7,7 @@ const getActive = async ctx => {
   return ctx;
 };
 
-const get = id => Hackathon.findOne(id);
+const get = () => Hackathon.findOne().active();
 
 const getAll = () => Hackathon.find();
 
