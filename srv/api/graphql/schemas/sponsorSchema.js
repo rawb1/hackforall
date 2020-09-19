@@ -4,7 +4,7 @@ const { sponsorController } = require('../../controllers');
 
 const typeDefs = gql`
   type Sponsor {
-    _id: ID
+    id: ID
     hachathonId: ID
     name: String
   }

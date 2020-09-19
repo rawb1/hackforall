@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 export const APPLICATION_QUERY = gql`
   query {
     application {
-      _id
+      id
       userId
       hackathonId
       status

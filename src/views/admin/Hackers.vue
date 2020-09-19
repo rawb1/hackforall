@@ -86,14 +86,13 @@ export default {
     accept: function(hacker) {
       this.$apollo.mutate({
         mutation: ACCEPT_MUTATION,
-        variables: { id: hacker.application._id },
+        variables: { id: hacker.application.id },
         update: (store, { data: { accept } }) => {
           const { hackers } = store.readQuery({
             query: HACKERS_QUERY
           });
-          hackers[
-            _.findIndex(hackers, { _id: hacker._id })
-          ].application.status = accept.status;
+          hackers[_.findIndex(hackers, { id: hacker.id })].application.status =
+            accept.status;
           store.writeQuery({
             query: HACKERS_QUERY,
             data: { hackers }
@@ -104,14 +103,13 @@ export default {
     refuse: function(hacker) {
       this.$apollo.mutate({
         mutation: REFUSE_MUTATION,
-        variables: { id: hacker.application._id },
+        variables: { id: hacker.application.id },
         update: (store, { data: { refuse } }) => {
           const { hackers } = store.readQuery({
             query: HACKERS_QUERY
           });
-          hackers[
-            _.findIndex(hackers, { _id: hacker._id })
-          ].application.status = refuse.status;
+          hackers[_.findIndex(hackers, { id: hacker.id })].application.status =
+            refuse.status;
           store.writeQuery({
             query: HACKERS_QUERY,
             data: { hackers }

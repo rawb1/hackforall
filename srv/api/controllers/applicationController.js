@@ -3,6 +3,9 @@ const _ = require('lodash');
 
 const Application = mongoose.model('Application');
 
+const findOne = (hackathonId, userId) =>
+  Application.findOne({ hackathonId, userId });
+
 const save = async (hackathonId, user, form) => {
   const files = _.omitBy(
     {
@@ -17,7 +20,7 @@ const save = async (hackathonId, user, form) => {
       return;
     }
     return Application.findByIdAndUpdate(
-      user.application._id,
+      user.application.id,
       {
         form,
         status: 'PENDING',
@@ -27,7 +30,7 @@ const save = async (hackathonId, user, form) => {
     );
   } else {
     return Application.create({
-      userId: user._id,
+      userId: user.id,
       hackathonId: hackathonId,
       form,
       files
@@ -45,6 +48,7 @@ const cancel = id =>
   Application.findByIdAndUpdate(id, { status: 'CANCELED' }, { new: true });
 
 module.exports = {
+  findOne,
   save,
   accept,
   refuse,

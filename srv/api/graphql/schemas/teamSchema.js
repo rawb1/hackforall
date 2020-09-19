@@ -4,7 +4,7 @@ const { teamController } = require('../../controllers');
 
 const typeDefs = gql`
   type Team {
-    _id: ID
+    id: ID
     hackathonId: ID
     name: String
     members: [User]
@@ -31,7 +31,7 @@ const typeDefs = gql`
 const resolvers = {
   Query: {
     team: (parent, args, ctx, info) => {
-      return teamController.get(ctx.state.hackathon._id, args.name);
+      return teamController.get(ctx.state.hackathon.id, args.name);
     },
     teams: (parent, args, ctx, info) => {
       return teamController.getAll();
@@ -40,22 +40,22 @@ const resolvers = {
   Mutation: {
     createTeam: (parent, args, ctx) => {
       return teamController.create(
-        ctx.state.hackathon._id,
-        ctx.state.user._id,
+        ctx.state.hackathon.id,
+        ctx.state.user.id,
         args.name
       );
     },
     joinTeam: (parent, args, ctx) => {
       return teamController.join(
-        ctx.state.hackathon._id,
+        ctx.state.hackathon.id,
         ctx.state.user,
         args.name
       );
     },
     leaveTeam: (parent, args, ctx) => {
       return teamController.leave(
-        ctx.state.hackathon._id,
-        ctx.state.user._id,
+        ctx.state.hackathon.id,
+        ctx.state.user.id,
         args.name
       );
     },

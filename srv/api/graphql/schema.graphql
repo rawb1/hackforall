@@ -74,12 +74,14 @@ type Mutation {
   joinTeam(name: String!): Boolean
   leaveTeam(name: String!): Boolean
   recruit(name: String!, userId: ID!): Boolean
-  updateHackathon(Hackathon: HackathonInput): Hackathon
+  createHackathon(hackathon: HackathonInput!): Hackathon
+  updateHackathon(hackathon: HackathonInput!): Hackathon
   cancelHackathon: Hackathon
+  activateHackathon(id: ID): Hackathon
 }
 
 type User {
-  _id: ID
+  id: ID
   username: String!
   email: String!
   role: Role!
@@ -102,7 +104,7 @@ enum ApplicationStatus {
 }
 
 type Application {
-  _id: ID
+  id: ID
   userId: ID
   hackathonId: ID
   form: ApplicationForm
@@ -167,7 +169,7 @@ input ApplicationFormInput {
 }
 
 type Team {
-  _id: ID
+  id: ID
   hackathonId: ID
   name: String
   members: [User]
@@ -175,7 +177,8 @@ type Team {
 }
 
 type Hackathon {
-  _id: ID
+  id: ID
+  active: Boolean
   name: String
   dates: hackathonDates
   limits: hackathonLimits
@@ -201,6 +204,8 @@ type hackathonLimits {
 }
 
 input HackathonInput {
+  id: ID
+  active: Boolean
   name: String
   dates: hackathonDatesInput
   limits: hackathonLimitsInput
@@ -239,7 +244,7 @@ type HackathonStats {
 }
 
 type Sponsor {
-  _id: ID
+  id: ID
   hachathonId: ID
   name: String
 }

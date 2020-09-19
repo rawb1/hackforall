@@ -33,12 +33,12 @@ export const FORGOT_QUERY = gql`
 export const HACKERS_QUERY = gql`
   query {
     hackers {
-      _id
+      id
       username
       email
       application {
         updatedAt
-        _id
+        id
         status
         updatedAt
         form {

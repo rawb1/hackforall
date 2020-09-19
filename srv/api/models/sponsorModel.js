@@ -17,7 +17,7 @@ const TeamSchema = new Schema({
 
 TeamSchema.virtual('hack', {
   ref: 'Hack',
-  localField: '_id',
+  localField: 'id',
   foreignField: 'teamId'
 });
 

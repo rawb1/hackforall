@@ -4,7 +4,8 @@ const { hackathonController } = require('../../controllers');
 
 const typeDefs = gql`
   type Hackathon {
-    _id: ID
+    id: ID
+    active: Boolean
     name: String
     dates: hackathonDates
     limits: hackathonLimits
@@ -35,11 +36,15 @@ const typeDefs = gql`
   }
 
   extend type Mutation {
-    updateHackathon(Hackathon: HackathonInput): Hackathon
+    createHackathon(hackathon: HackathonInput!): Hackathon
+    updateHackathon(hackathon: HackathonInput!): Hackathon
     cancelHackathon: Hackathon
+    activateHackathon(id: ID): Hackathon
   }
 
   input HackathonInput {
+    id: ID
+    active: Boolean
     name: String
     dates: hackathonDatesInput
     limits: hackathonLimitsInput
@@ -68,13 +73,22 @@ const resolvers = {
     hackathon: (parent, args, ctx, info) => {
       return ctx.state.hackathon;
     },
-    hackathons: (parent, args, ctx, info) => {
-      return hackathonController.getAll();
+    hackathons: () => {
+      return hackathonController.find();
     }
   },
   Mutation: {
-    updateHackathon: (parent, args, ctx) => {
-      return hackathonController.update(ctx.state.hackathon, args.hackathon);
+    createHackathon: (_, args) => {
+      return hackathonController.create(args.hackathon);
+    },
+    updateHackathon: (_, args, ctx) => {
+      return hackathonController.update(ctx.state.hackathon.id, args.hackathon);
+    },
+    cancelHackathon: (_, __, ctx) => {
+      return hackathonController.cancel(ctx.state.hackathon.id);
+    },
+    activateHackathon: (_, args) => {
+      return hackathonController.activate(args.id);
     }
   }
 };

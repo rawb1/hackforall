@@ -5,9 +5,15 @@
         <img src="@/assets/logo.png" alt="Placeholder image" />
       </b-navbar-item>
       <b-navbar-item tag="router-link" :to="{ name: 'home' }">
-        <span class="has-text-weight-bold is-capitalized is-size-4"
-          >HACKFORALL</span
+        <span
+          v-if="hackathon"
+          class="has-text-weight-bold is-capitalized is-size-4"
         >
+          {{ hackathon.name }}
+        </span>
+        <span v-else class="has-text-weight-bold is-capitalized is-size-4">
+          HACKFORALL
+        </span>
       </b-navbar-item>
     </template>
     <template slot="start">
@@ -65,7 +71,7 @@
 <script>
 import { authMixin } from '@/mixins';
 import { ME_QUERY } from '@/graphql/userQueries';
-
+import { HACKATHON_QUERY } from '@/graphql/hackathonQueries';
 export default {
   mixins: [authMixin],
   data: () => ({
@@ -83,7 +89,8 @@ export default {
     me: {
       query: ME_QUERY,
       error: () => null
-    }
+    },
+    hackathon: HACKATHON_QUERY
   }
 };
 </script>

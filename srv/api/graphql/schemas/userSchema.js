@@ -4,7 +4,7 @@ const { userController } = require('../../controllers');
 
 const typeDefs = gql`
   type User {
-    _id: ID @auth(requires: ADMIN)
+    id: ID @auth(requires: ADMIN)
     username: String!
     email: String! @constraint(format: "email")
     role: Role!

@@ -9,6 +9,7 @@ const { cookie, secret } = require('../../config/env');
 const User = mongoose.model('User');
 const logger = log4js.getLogger('user');
 
+// find a better solution ...
 const _setCookie = (ctx, value, opts) => {
   ctx.cookies.set(cookie.name, value, Object.assign(cookie.attributes, opts));
 };
@@ -20,15 +21,13 @@ const _setCookie = (ctx, value, opts) => {
  * @return {*} context
  */
 const authenticate = async ctx => {
+  let user;
   try {
     const token = ctx.cookies.get(cookie.name);
     if (token) {
       const decoded = jwt.verify(token, secret);
       if (decoded) {
-        ctx.state.user = await User.findOneHacker(
-          decoded.sub,
-          ctx.state.hackathon._id
-        );
+        user = await User.findById(decoded.sub);
         if (decoded.remember) {
           _setCookie(ctx, token, {
             expires: new Date(Date.now() + cookie.expires)
@@ -39,7 +38,7 @@ const authenticate = async ctx => {
   } catch (err) {
     logger.debug(err);
   }
-  return ctx;
+  return user;
 };
 
 const register = async (ctx, args) => {
@@ -54,7 +53,7 @@ const register = async (ctx, args) => {
     }
   }
   ctx.state.user = user = await User.create(args);
-  const token = jwt.sign({ sub: user._id }, secret);
+  const token = jwt.sign({ sub: user.id }, secret);
   _setCookie(ctx, token);
   logger.info(`New user ${user.email}`);
   return user;
@@ -70,7 +69,7 @@ const login = async (ctx, args) => {
     throw new UserInputError('Incorrect email or password');
   }
   ctx.state.user = user;
-  const token = jwt.sign({ sub: user._id, remember: !!args.remember }, secret);
+  const token = jwt.sign({ sub: user.id, remember: !!args.remember }, secret);
   const expires = args.remember ? new Date(Date.now() + cookie.expires) : false;
   _setCookie(ctx, token, { expires });
   return user;
@@ -81,7 +80,7 @@ const forgot = async (ctx, args) => {
   if (!user) {
     throw new UserInputError('User not found');
   }
-  const resetToken = jwt.sign({ sub: user._id }, secret, {
+  const resetToken = jwt.sign({ sub: user.id }, secret, {
     expiresIn: '1h'
   });
   const resetLink = `${ctx.origin}/reset/${resetToken}`;

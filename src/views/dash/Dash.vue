@@ -2,7 +2,7 @@
   <div class="tile is-ancestor">
     <div class="tile is-parent is-vertical is-4">
       <MeCard class="tile is-child" />
-      <ApplicationCard class="tile is-child" />
+      <ApplicationStatusCard class="tile is-child" />
     </div>
     <div class="tile is-parent is-vertical is-8">
       <HackathonStatsCard class="tile is-child" />
@@ -13,14 +13,14 @@
 
 <script>
 import MeCard from '@/components/MeCard.vue';
-import ApplicationCard from '@/components/ApplicationCard.vue';
+import ApplicationStatusCard from '@/components/ApplicationStatusCard.vue';
 import HackathonStatsCard from '@/components/HackathonStatsCard.vue';
 import TimelineCard from '@/components/TimelineCard.vue';
 
 export default {
   components: {
     MeCard,
-    ApplicationCard,
+    ApplicationStatusCard,
     HackathonStatsCard,
     TimelineCard
   }

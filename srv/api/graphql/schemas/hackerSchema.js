@@ -3,10 +3,6 @@ const { gql } = require('apollo-server-koa');
 const { hackerController } = require('../../controllers');
 
 const typeDefs = gql`
-  extend type User {
-    application: Application
-  }
-
   extend type Query {
     me: User
     hacker(id: ID!): User @auth(requires: ADMIN)
@@ -16,15 +12,10 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    me: (parent, args, ctx, info) => {
-      return ctx.state.user;
-    },
-    hacker: (parent, args, ctx, info) => {
-      return hackerController.get(args.id, ctx.state.hackathon._id);
-    },
-    hackers: (parent, args, ctx, info) => {
-      return hackerController.getAll(ctx.state.hackathon._id);
-    }
+    me: (_, __, ctx) => ctx.state.user,
+    hacker: (_, args, ctx) =>
+      hackerController.findOne(args.id, ctx.state.hackathon.id),
+    hackers: async (_, __, ctx) => hackerController.find(ctx.state.hackathon.id)
   },
   Mutation: {}
 };

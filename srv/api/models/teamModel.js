@@ -30,20 +30,20 @@ TeamSchema.index({ name: 1, hackathonId: 1 }, { unique: true });
 
 TeamSchema.virtual('hack', {
   ref: 'Hack',
-  localField: '_id',
+  localField: 'id',
   foreignField: 'teamId'
 });
 
 TeamSchema.virtual('members', {
   ref: 'User',
   localField: 'memberIds',
-  foreignField: '_id'
+  foreignField: 'id'
 });
 
 TeamSchema.virtual('applicants', {
   ref: 'User',
   localField: 'applicantIds',
-  foreignField: '_id'
+  foreignField: 'id'
 });
 
 TeamSchema.pre(['updateOne', 'findOneAndUpdate'], function(next) {

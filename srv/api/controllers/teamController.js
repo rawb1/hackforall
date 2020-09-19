@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const { ValidationError, ForbiddenError } = require('apollo-server-koa');
+const Application = require('koa');
 
-const User = mongoose.model('User');
 const Team = mongoose.model('Team');
 
 const get = (hackathonId, name) =>
@@ -18,7 +18,7 @@ const create = async (hackathonId, userId, name) =>
   Team.create({ name, hackathonId, memberIds: [userId] });
 
 const join = async (hackathonId, user, name) => {
-  const userId = user._id;
+  const userId = user.id;
   if (user.team) {
     throw new ValidationError('You are already in a Team');
   }
@@ -30,14 +30,18 @@ const join = async (hackathonId, user, name) => {
 };
 
 const recruit = async (hackathon, user, name, recruitId) => {
-  if (user.team.name !== name || !user.team.hackathonId.equals(hackathon._id)) {
+  if (user.team.name !== name || !user.team.hackathonId.equals(hackathon.id)) {
     throw new ForbiddenError('You are not in the Team');
   }
   if (user.team.memberIds.length >= hackathon.limits.team) {
     throw new ForbiddenError('Team is full');
   }
 
-  const recruit = await User.findOneHacker(recruitId, hackathon._id);
+  const recruit = await Application.findOne({
+    userId: recruitId,
+    hackathonId: hackathon.id
+  });
+
   if (!recruit) {
     throw new ValidationError('This hacker does not exist');
   }
@@ -47,9 +51,9 @@ const recruit = async (hackathon, user, name, recruitId) => {
 
   const { ok } = await Team.updateOne(
     {
-      hackathonId: hackathon._id,
+      hackathonId: hackathon.id,
       name,
-      memberIds: user._id,
+      memberIds: user.id,
       $where: `this.memberIds.length < ${hackathon.limits.team}`
     },
     { $addToSet: { memberIds: recruitId }, $pull: { applicantIds: recruitId } }

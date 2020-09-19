@@ -1,5 +1,9 @@
 <template>
-  <div v-if="hackathon" class="card">
+  <div
+    v-if="hackathon"
+    class="card"
+    :class="{ 'is-danger': !hackathon.active, 'has-border': !hackathon.active }"
+  >
     <div class="card-content">
       <div class="media">
         <div class="media-left">
@@ -99,7 +103,11 @@
             </b-numberinput>
           </b-field>
         </b-tab-item>
-        <b-tab-item label="Sponsors"> </b-tab-item>
+        <b-tab-item label="Sponsors">
+          <b-notification :closable="false">
+            WIP
+          </b-notification>
+        </b-tab-item>
       </b-tabs>
     </div>
     <footer class="card-footer">
@@ -109,37 +117,82 @@
         </a>
       </p>
       <p class="card-footer-item">
-        <a @click.prevent="submit">
+        <a
+          v-if="hackathon.active"
+          class="has-text-success"
+          @click.prevent="update"
+        >
           update
+        </a>
+        <a v-else class="has-text-success" @click.prevent="activate">
+          activate
         </a>
       </p>
     </footer>
   </div>
 </template>
 <script>
-import { HACKATHON_QUERY } from '@/graphql/hackathonQueries';
+import {
+  HACKATHON_QUERY,
+  HACKATHON_UPDATE_MUTATION,
+  HACKATHON_CANCEL_MUTATION,
+  HACKATHON_ACTIVATE_MUTATION
+} from '@/graphql/hackathonQueries';
 
 export default {
   data: () => ({
-    tab: 0,
-    hackathonDatesRange: [],
-    applicationsDatesRange: []
+    tab: 0
   }),
-  apollo: {
-    hackathon: {
-      query: HACKATHON_QUERY,
-      update: function({ hackathon }) {
-        this.hackathonDatesRange = [
-          new Date(hackathon.dates.start),
-          new Date(hackathon.dates.end)
+  computed: {
+    hackathonDatesRange: {
+      get: function() {
+        return [
+          new Date(this.hackathon.dates.start),
+          new Date(this.hackathon.dates.end)
         ];
-        this.applicationsDatesRange = [
-          new Date(hackathon.dates.applications.open),
-          new Date(hackathon.dates.applications.close)
+      },
+      set: function(val) {
+        if (this.hackathon) {
+          [this.hackathon.dates.start, this.hackathon.dates.end] = val;
+        }
+      }
+    },
+    applicationsDatesRange: {
+      get: function() {
+        return [
+          new Date(this.hackathon.dates.applications.open),
+          new Date(this.hackathon.dates.applications.close)
         ];
-        return hackathon;
+      },
+      set: function(val) {
+        if (this.hackathon) {
+          [
+            this.hackathon.dates.applications.open,
+            this.hackathon.dates.applications.close
+          ] = val;
+        }
       }
     }
+  },
+  methods: {
+    update() {
+      return this.$apollo.mutate({
+        mutation: HACKATHON_UPDATE_MUTATION,
+        variables: { hackathon: this.hackathon }
+      });
+    },
+    cancel() {
+      return this.$apollo.mutate({ mutation: HACKATHON_CANCEL_MUTATION });
+    },
+    activate() {
+      return this.$apollo.mutate({
+        mutation: HACKATHON_ACTIVATE_MUTATION,
+        variables: { id: this.hackathon.id }
+      });
+    }
+  },
+  apollo: {
+    hackathon: HACKATHON_QUERY
   }
 };
 </script>

@@ -453,7 +453,7 @@
         </a>
       </p>
       <p class="card-footer-item">
-        <a @click.prevent="save">
+        <a class="has-text-success" @click.prevent="save">
           save
         </a>
       </p>
@@ -571,7 +571,7 @@ export default {
       this.$apollo
         .mutate({
           mutation: CANCEL_MUTATION,
-          variables: { id: this.application._id },
+          variables: { id: this.application.id },
           update: (store, { data: { cancel } }) => {
             const data = store.readQuery({
               query: APPLICATION_QUERY

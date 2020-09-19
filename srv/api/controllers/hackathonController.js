@@ -2,20 +2,26 @@ const mongoose = require('mongoose');
 
 const Hackathon = mongoose.model('Hackathon');
 
-const getActive = async ctx => {
-  ctx.state.hackathon = await Hackathon.findOne().active();
-  return ctx;
+const findActive = () =>
+  Hackathon.findOne().sort({ active: -1, updatedAt: -1 });
+
+const create = Hackathon.create;
+
+const update = (id, hackathon) =>
+  Hackathon.findByIdAndUpdate(id, hackathon, { new: true });
+
+const cancel = id =>
+  Hackathon.findByIdAndUpdate(id, { active: false }, { new: true });
+
+const activate = async id => {
+  await Hackathon.updateMany({ _id: { $ne: id } }, { active: false });
+  return Hackathon.findByIdAndUpdate(id, { active: true }, { new: true });
 };
 
-const get = () => Hackathon.findOne().active();
-
-const getAll = () => Hackathon.find();
-
-const save = () => {};
-
 module.exports = {
-  get,
-  getActive,
-  getAll,
-  save
+  findActive,
+  create,
+  update,
+  cancel,
+  activate
 };

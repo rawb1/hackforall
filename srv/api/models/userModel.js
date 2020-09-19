@@ -42,28 +42,16 @@ UserSchema.methods.hasRole = function(role) {
 
 UserSchema.virtual('application', {
   ref: 'Application',
-  localField: '_id',
+  localField: 'id',
   foreignField: 'userId',
   justOne: true
 });
 
 UserSchema.virtual('team', {
   ref: 'Team',
-  localField: '_id',
+  localField: 'id',
   foreignField: 'memberIds',
   justOne: true
-});
-
-UserSchema.static('findOneHacker', function(userId, hackathonId) {
-  return this.findById(userId)
-    .populate({
-      path: 'application',
-      match: { hackathonId }
-    })
-    .populate({
-      path: 'team',
-      match: { hackathonId }
-    });
 });
 
 const UserModel = mongoose.model('User', UserSchema);

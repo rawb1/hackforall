@@ -12,7 +12,7 @@ const typeDefs = gql`
   }
 
   type Application {
-    _id: ID
+    id: ID
     userId: ID
     hackathonId: ID
     form: ApplicationForm
@@ -24,6 +24,10 @@ const typeDefs = gql`
   type FileUploads {
     resume: File
     travelReceipt: File
+  }
+
+  extend type User {
+    application: Application
   }
 
   extend type Query {
@@ -89,15 +93,19 @@ const typeDefs = gql`
 `;
 
 const resolvers = {
+  User: {
+    application: (parent, _, ctx) =>
+      parent.application || // prevent db refetch
+      applicationController.findOne(ctx.state.hackathon.id, parent._id)
+  },
   Query: {
-    application: (parent, args, ctx, info) => {
-      return ctx.state.user.application;
-    }
+    application: (_, __, ctx) =>
+      applicationController.findOne(ctx.state.hackathon.id, ctx.state.user.id)
   },
   Mutation: {
     saveApplication: (parent, args, ctx) => {
       return applicationController.save(
-        ctx.state.hackathon._id,
+        ctx.state.hackathon.id,
         ctx.state.user,
         args.form
       );

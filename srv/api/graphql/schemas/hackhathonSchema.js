@@ -4,7 +4,7 @@ const { hackathonController } = require('../../controllers');
 
 const typeDefs = gql`
   type hackathon {
-    _id: ID
+    id: ID
     name: ID
     planing: {
         applicationOpen: String

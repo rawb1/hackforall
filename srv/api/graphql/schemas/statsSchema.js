@@ -30,7 +30,7 @@ const resolvers = {
       return statsController.stats();
     },
     hackathonStats: (parent, args, ctx, info) => {
-      return statsController.hackathonStats(ctx.state.hackathon._id);
+      return statsController.hackathonStats(ctx.state.hackathon.id);
     }
   },
   Mutation: {}

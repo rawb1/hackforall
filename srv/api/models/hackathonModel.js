@@ -19,14 +19,19 @@ const HackathonSchema = new Schema({
     team: { type: Number, required: true, default: 5 },
     refund: { type: Number, required: true, default: 0 }
   },
-  canceled: { type: Boolean, default: false },
+  active: { type: Boolean, required: true, default: false },
   createdAt: { type: Date, required: true, default: new Date() },
   updatedAt: { type: Date, required: true, default: new Date() }
 });
 
+HackathonSchema.index(
+  { active: 1 },
+  { unique: true, partialFilterExpression: { active: true } }
+);
+
 HackathonSchema.virtual('applications', {
   ref: 'Application',
-  localField: '_id',
+  localField: 'id',
   foreignField: 'hackathonId'
 });
 
@@ -47,10 +52,6 @@ HackathonSchema.virtual('live').get(function() {
     Date.now > this.dates.start.getTime() && Date.now < this.dates.end.getTime()
   );
 });
-
-HackathonSchema.query.active = function() {
-  return this.sort({ 'dates.start': -1 });
-};
 
 const Hackathon = mongoose.model('Hackathon', HackathonSchema);
 
