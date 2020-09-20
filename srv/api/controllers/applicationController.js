@@ -44,8 +44,12 @@ const accept = id =>
 const refuse = id =>
   Application.findByIdAndUpdate(id, { status: 'REFUSED' }, { new: true });
 
-const cancel = id =>
-  Application.findByIdAndUpdate(id, { status: 'CANCELED' }, { new: true });
+const cancel = (hackathonId, userId) =>
+  Application.findAndUpdate(
+    { hackathonId, userId },
+    { status: 'CANCELED' },
+    { new: true }
+  );
 
 module.exports = {
   findOne,

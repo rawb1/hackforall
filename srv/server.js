@@ -6,10 +6,11 @@ const bodyParser = require('koa-bodyparser');
 const { ApolloServer } = require('apollo-server-koa');
 const { graphqlUploadKoa } = require('graphql-upload');
 
-const { playground, cookie, dev } = require('./config/env');
+const { playground, dev } = require('./config/env');
 require('./config/logger');
 require('./config/mailer');
 require('./config/mongo');
+require('./config/keystore');
 
 require('./api/models');
 const { userController, hackathonController } = require('./api/controllers');
@@ -35,7 +36,6 @@ const apollo = new ApolloServer({
   }
 });
 
-app.keys = cookie.keys;
 app.use(bodyParser());
 app.use(graphqlUploadKoa({ maxFileSize: 10000000, maxFiles: 10 }));
 app.use(log4js.koaLogger(log4js.getLogger('http'), { level: 'auto' }));

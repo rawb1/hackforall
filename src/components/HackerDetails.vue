@@ -12,10 +12,7 @@
     >
       <List v-model="travel" />
     </b-tab-item>
-    <b-tab-item
-      v-if="hacker.application.form.needAccomodation"
-      label="Accomodation"
-    >
+    <b-tab-item v-if="hacker.application.form.needHosting" label="Hosting">
       <List v-model="terms" />
     </b-tab-item>
     <b-tab-item label="Terms">
@@ -60,9 +57,9 @@ export default {
         'travelReceipt'
       ]);
     },
-    accomodation: function() {
+    hosting: function() {
       return _.pick(this.hacker.application.form, [
-        'AccomodationPreferences',
+        'HostingPreferences',
         'hostMatchingDetails'
       ]);
     },

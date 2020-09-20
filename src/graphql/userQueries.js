@@ -52,11 +52,11 @@ export const HACKERS_QUERY = gql`
           dietaryRestrictions
           teeShirtSize
           needHardware
-          needAccomodation
+          needHosting
           needTravelReimbursement
           hardwareList
           paypalAddress
-          AccomodationPreferences
+          HostingPreferences
           hostMatchingDetails
           majority
           liability

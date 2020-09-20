@@ -6,8 +6,7 @@
     "serve": "vue-cli-service serve",
     "watch": "nodemon --inspect --ignore src/ ./srv/server.js",
     "build": "vue-cli-service build",
-    "client:lint": "vue-cli-service lint",
-    "server:lint": "eslint ./srv",
+    "lint": "vue-cli-service lint --fix && eslint ./srv --fix",
     "mongo": "docker run -d -p 27017:27017 --name mongo mongo:latest",
     "configure": "cp .env.example .env"
   },
@@ -32,7 +31,7 @@
     "graphql-date": "^1.0.3",
     "graphql-tag": "^2.11.0",
     "graphql-upload": "^11.0.0",
-    "jsonwebtoken": "^8.5.1",
+    "jose": "^2.0.2",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
     "koa-log4": "^2.3.2",

@@ -3,14 +3,6 @@ const { gql } = require('apollo-server-koa');
 const { applicationController } = require('../../controllers');
 
 const typeDefs = gql`
-  enum ApplicationStatus {
-    INCOMPLETE
-    PENDING
-    REFUSED
-    ACCEPTED
-    CANCELED
-  }
-
   type Application {
     id: ID
     userId: ID
@@ -26,6 +18,63 @@ const typeDefs = gql`
     travelReceipt: File
   }
 
+  enum ApplicationStatus {
+    INCOMPLETE
+    PENDING
+    REFUSED
+    ACCEPTED
+    CANCELED
+  }
+
+  type ApplicationForm {
+    profile: ApplicationProfileForm
+    hosting: ApplicationHostingForm
+    hardware: ApplicationHardwareForm
+    diet: ApplicationDietForm
+    travel: ApplicationTravelForm
+    terms: ApplicationTermsForm
+    additionalNotes: String
+  }
+
+  type ApplicationProfileForm {
+    name: String
+    school: String
+    phone: String
+    garduationYear: String
+    studyFields: [String]
+    interests: [String]
+    github: String
+    teeShirtSize: String
+    # additional informations
+    needHardware: Boolean
+    needHosting: Boolean
+    needTravelReimbursement: Boolean
+  }
+
+  type ApplicationTermsForm {
+    majority: Boolean
+    liability: Boolean
+    photoRelease: Boolean
+    codeOfConduct: Boolean
+  }
+
+  type ApplicationHostingForm {
+    HostingPreferences: [String]
+    hostMatchingDetails: String
+  }
+
+  type ApplicationHardwareForm {
+    hardwareList: [String]
+  }
+
+  type ApplicationTravelForm {
+    paypalAddress: String
+  }
+
+  type ApplicationDietForm {
+    dietaryRestrictions: [String]
+  }
+
   extend type User {
     application: Application
   }
@@ -36,59 +85,60 @@ const typeDefs = gql`
 
   extend type Mutation {
     saveApplication(form: ApplicationFormInput!): Application
-    cancelApplication(id: ID): Application
+    cancelApplication: Application
     acceptApplication(id: ID): Application @auth(requires: ADMIN)
     refuseApplication(id: ID): Application @auth(requires: ADMIN)
   }
 
-  type ApplicationForm {
+  input ApplicationFormInput {
+    profile: ApplicationProfileFormInput
+    hosting: ApplicationHostingFormInput
+    hardware: ApplicationHardwareFormInput
+    diet: ApplicationDietFormInput
+    travel: ApplicationTravelFormInput
+    terms: ApplicationTermsFormInput
+    additionalNotes: String
+  }
+
+  input ApplicationProfileFormInput {
     name: String
     school: String
     phone: String
     garduationYear: String
+    resume: Upload
     studyFields: [String]
     interests: [String]
     github: String
-    dietaryRestrictions: [String]
     teeShirtSize: String
+    # additional informations
     needHardware: Boolean
-    needAccomodation: Boolean
+    needHosting: Boolean
     needTravelReimbursement: Boolean
-    hardwareList: [String]
-    paypalAddress: String
-    AccomodationPreferences: [String]
-    hostMatchingDetails: String
+  }
+
+  input ApplicationTermsFormInput {
     majority: Boolean
     liability: Boolean
     photoRelease: Boolean
     codeOfConduct: Boolean
-    additionalNotes: String
   }
 
-  input ApplicationFormInput {
-    name: String!
-    school: String!
-    phone: String!
-    garduationYear: String!
-    studyFields: [String]!
-    interests: [String]
-    github: String
-    resume: Upload
-    dietaryRestrictions: [String]
-    teeShirtSize: String!
-    needHardware: Boolean
-    needAccomodation: Boolean
-    needTravelReimbursement: Boolean
+  input ApplicationHostingFormInput {
+    HostingPreferences: [String]
+    hostMatchingDetails: String
+  }
+
+  input ApplicationHardwareFormInput {
     hardwareList: [String]
+  }
+
+  input ApplicationTravelFormInput {
     paypalAddress: String
     travelReceipt: Upload
-    AccomodationPreferences: [String]
-    hostMatchingDetails: String
-    majority: Boolean!
-    liability: Boolean!
-    photoRelease: Boolean!
-    codeOfConduct: Boolean!
-    additionalNotes: String
+  }
+
+  input ApplicationDietFormInput {
+    dietaryRestrictions: [String]
   }
 `;
 
@@ -110,9 +160,8 @@ const resolvers = {
         args.form
       );
     },
-    cancelApplication: (parent, args, ctx) => {
-      return applicationController.cancel(args.id);
-    },
+    cancelApplication: (_, __, { state }) =>
+      applicationController.cancel(state.hackathon.id, state.user.id),
     acceptApplication: (parent, args, ctx) => {
       return applicationController.accept(args.id);
     },

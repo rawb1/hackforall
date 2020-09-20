@@ -65,9 +65,9 @@ type Query {
 type Mutation {
   _empty: String
   register(user: UserInput!): User
-  reset(newPassword: String!, resetToken: String!): Boolean
+  reset(resetToken: String!, newPassword: String!): Boolean
   saveApplication(form: ApplicationFormInput!): Application
-  cancelApplication(id: ID): Application
+  cancelApplication: Application
   acceptApplication(id: ID): Application
   refuseApplication(id: ID): Application
   createTeam(name: String!): Team
@@ -95,14 +95,6 @@ input UserInput {
   password: String!
 }
 
-enum ApplicationStatus {
-  INCOMPLETE
-  PENDING
-  REFUSED
-  ACCEPTED
-  CANCELED
-}
-
 type Application {
   id: ID
   userId: ID
@@ -118,7 +110,25 @@ type FileUploads {
   travelReceipt: File
 }
 
+enum ApplicationStatus {
+  INCOMPLETE
+  PENDING
+  REFUSED
+  ACCEPTED
+  CANCELED
+}
+
 type ApplicationForm {
+  profile: ApplicationProfileForm
+  hosting: ApplicationHostingForm
+  hardware: ApplicationHardwareForm
+  diet: ApplicationDietForm
+  travel: ApplicationTravelForm
+  terms: ApplicationTermsForm
+  additionalNotes: String
+}
+
+type ApplicationProfileForm {
   name: String
   school: String
   phone: String
@@ -126,46 +136,84 @@ type ApplicationForm {
   studyFields: [String]
   interests: [String]
   github: String
-  dietaryRestrictions: [String]
   teeShirtSize: String
   needHardware: Boolean
-  needAccomodation: Boolean
+  needHosting: Boolean
   needTravelReimbursement: Boolean
-  hardwareList: [String]
-  paypalAddress: String
-  AccomodationPreferences: [String]
-  hostMatchingDetails: String
+}
+
+type ApplicationTermsForm {
   majority: Boolean
   liability: Boolean
   photoRelease: Boolean
   codeOfConduct: Boolean
-  additionalNotes: String
+}
+
+type ApplicationHostingForm {
+  HostingPreferences: [String]
+  hostMatchingDetails: String
+}
+
+type ApplicationHardwareForm {
+  hardwareList: [String]
+}
+
+type ApplicationTravelForm {
+  paypalAddress: String
+}
+
+type ApplicationDietForm {
+  dietaryRestrictions: [String]
 }
 
 input ApplicationFormInput {
-  name: String!
-  school: String!
-  phone: String!
-  garduationYear: String!
-  studyFields: [String]!
+  profile: ApplicationProfileFormInput
+  hosting: ApplicationHostingFormInput
+  hardware: ApplicationHardwareFormInput
+  diet: ApplicationDietFormInput
+  travel: ApplicationTravelFormInput
+  terms: ApplicationTermsFormInput
+  additionalNotes: String
+}
+
+input ApplicationProfileFormInput {
+  name: String
+  school: String
+  phone: String
+  garduationYear: String
+  resume: Upload
+  studyFields: [String]
   interests: [String]
   github: String
-  resume: Upload
-  dietaryRestrictions: [String]
-  teeShirtSize: String!
+  teeShirtSize: String
   needHardware: Boolean
-  needAccomodation: Boolean
+  needHosting: Boolean
   needTravelReimbursement: Boolean
+}
+
+input ApplicationTermsFormInput {
+  majority: Boolean
+  liability: Boolean
+  photoRelease: Boolean
+  codeOfConduct: Boolean
+}
+
+input ApplicationHostingFormInput {
+  HostingPreferences: [String]
+  hostMatchingDetails: String
+}
+
+input ApplicationHardwareFormInput {
   hardwareList: [String]
+}
+
+input ApplicationTravelFormInput {
   paypalAddress: String
   travelReceipt: Upload
-  AccomodationPreferences: [String]
-  hostMatchingDetails: String
-  majority: Boolean!
-  liability: Boolean!
-  photoRelease: Boolean!
-  codeOfConduct: Boolean!
-  additionalNotes: String
+}
+
+input ApplicationDietFormInput {
+  dietaryRestrictions: [String]
 }
 
 type Team {

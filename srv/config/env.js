@@ -23,16 +23,14 @@ module.exports = {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   },
-  secret: process.env.secret || 'shhhhh',
+  secrets: process.env.SECRETS || ['shhhhh'],
   cookie: {
-    name: process.env.COOKIE_NAME || 'cookie',
-    keys: process.env.COOKIE_KEYS.split(',') || 'shhhhh',
-    expires: 1000 * 60 * 60 * 24 * 7,
-    attributes: {
-      path: '',
-      domain: '',
-      sameSite: 'lax',
-      secure: false
+    name: process.env.COOKIE_NAME || project,
+    expires: process.env.COOKIE_EXPIRES || Number(1000 * 60 * 60 * 24 * 7)
+  },
+  files: {
+    local: {
+      path: process.env.FILE_PATH || '/tmp/'
     }
   },
   playground: {
@@ -40,8 +38,5 @@ module.exports = {
       'schema.polling.enable': false,
       'request.credentials': 'include' // allow cookies
     }
-  },
-  sessionSettings: {
-    renew: true
   }
 };
