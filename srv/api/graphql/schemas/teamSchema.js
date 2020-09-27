@@ -24,7 +24,7 @@ const typeDefs = gql`
     createTeam(name: String!): Team
     joinTeam(name: String!): Boolean
     leaveTeam(name: String!): Boolean
-    recruit(name: String!, userId: ID!): Boolean
+    recruitTeammate(name: String!, userId: ID!): Boolean
   }
 `;
 
@@ -59,7 +59,7 @@ const resolvers = {
         args.name
       );
     },
-    recruit: (parent, args, ctx) => {
+    recruitTeammate: (parent, args, ctx) => {
       return teamController.recruit(
         ctx.state.hackathon,
         ctx.state.user,

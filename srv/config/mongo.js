@@ -12,6 +12,7 @@ const database = () => {
   mongoose.set('useUnifiedTopology', true);
   mongoose.set('useNewUrlParser', true);
   mongoose.set('useCreateIndex', true);
+  mongoose.set('useFindAndModify', false);
   mongoose.connect(env.mongo.uri).catch(err => {
     logger.fatal(`${err.name} :  ${err.message}`);
     process.exit(1);

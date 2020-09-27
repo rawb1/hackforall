@@ -1,41 +1,30 @@
 const mongoose = require('mongoose');
-const _ = require('lodash');
+const { ApolloError } = require('apollo-server-koa');
 
 const Application = mongoose.model('Application');
 
 const findOne = (hackathonId, userId) =>
   Application.findOne({ hackathonId, userId });
 
-const save = async (hackathonId, user, form) => {
-  const files = _.omitBy(
-    {
-      resume: await form.resume,
-      travelReceipt: await form.travelReceipt
-    },
-    _.isNil
-  );
+const create = (hackathonId, userId) =>
+  Application.create({ hackathonId, userId });
 
-  if (user.application) {
-    if (user.application.status === 'REFUSED') {
-      return;
-    }
-    return Application.findByIdAndUpdate(
-      user.application.id,
-      {
-        form,
-        status: 'PENDING',
-        files
-      },
-      { new: true }
-    );
-  } else {
-    return Application.create({
-      userId: user.id,
-      hackathonId: hackathonId,
-      form,
-      files
-    });
+const update = async (hackathonId, userId, form) => {
+  const application = await Application.findOne({ hackathonId, userId });
+
+  if (!application) {
+    throw new ApolloError('no application');
   }
+
+  if (application.status === 'REFUSED') {
+    throw new ApolloError('application refused');
+  }
+
+  return Application.findByIdAndUpdate(
+    application.id,
+    { form, status: 'PENDING' },
+    { new: true }
+  );
 };
 
 const accept = id =>
@@ -53,7 +42,8 @@ const cancel = (hackathonId, userId) =>
 
 module.exports = {
   findOne,
-  save,
+  create,
+  update,
   accept,
   refuse,
   cancel

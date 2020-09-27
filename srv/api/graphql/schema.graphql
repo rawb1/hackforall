@@ -32,16 +32,7 @@ enum Role {
   USER
 }
 
-"""The `Upload` scalar type represents a file upload."""
-scalar Upload
-
 scalar Date
-
-type File {
-  filename: String
-  mimetype: String
-  encoding: String
-}
 
 type Query {
   _empty: String
@@ -66,14 +57,15 @@ type Mutation {
   _empty: String
   register(user: UserInput!): User
   reset(resetToken: String!, newPassword: String!): Boolean
-  saveApplication(form: ApplicationFormInput!): Application
+  createApplication: Application
+  updateApplication(form: ApplicationFormInput!): Application
   cancelApplication: Application
   acceptApplication(id: ID): Application
   refuseApplication(id: ID): Application
   createTeam(name: String!): Team
   joinTeam(name: String!): Boolean
   leaveTeam(name: String!): Boolean
-  recruit(name: String!, userId: ID!): Boolean
+  recruitTeammate(name: String!, userId: ID!): Boolean
   createHackathon(hackathon: HackathonInput!): Hackathon
   updateHackathon(hackathon: HackathonInput!): Hackathon
   cancelHackathon: Hackathon
@@ -100,14 +92,8 @@ type Application {
   userId: ID
   hackathonId: ID
   form: ApplicationForm
-  files: FileUploads
   status: ApplicationStatus
   updatedAt: Date
-}
-
-type FileUploads {
-  resume: File
-  travelReceipt: File
 }
 
 enum ApplicationStatus {
@@ -122,7 +108,6 @@ type ApplicationForm {
   profile: ApplicationProfileForm
   hosting: ApplicationHostingForm
   hardware: ApplicationHardwareForm
-  diet: ApplicationDietForm
   travel: ApplicationTravelForm
   terms: ApplicationTermsForm
   additionalNotes: String
@@ -136,7 +121,9 @@ type ApplicationProfileForm {
   studyFields: [String]
   interests: [String]
   github: String
+  resume: File
   teeShirtSize: String
+  dietaryRestrictions: [String]
   needHardware: Boolean
   needHosting: Boolean
   needTravelReimbursement: Boolean
@@ -160,17 +147,13 @@ type ApplicationHardwareForm {
 
 type ApplicationTravelForm {
   paypalAddress: String
-}
-
-type ApplicationDietForm {
-  dietaryRestrictions: [String]
+  travelReceipt: File
 }
 
 input ApplicationFormInput {
   profile: ApplicationProfileFormInput
   hosting: ApplicationHostingFormInput
   hardware: ApplicationHardwareFormInput
-  diet: ApplicationDietFormInput
   travel: ApplicationTravelFormInput
   terms: ApplicationTermsFormInput
   additionalNotes: String
@@ -181,11 +164,12 @@ input ApplicationProfileFormInput {
   school: String
   phone: String
   garduationYear: String
-  resume: Upload
   studyFields: [String]
   interests: [String]
   github: String
+  resume: Upload
   teeShirtSize: String
+  dietaryRestrictions: [String]
   needHardware: Boolean
   needHosting: Boolean
   needTravelReimbursement: Boolean
@@ -210,10 +194,6 @@ input ApplicationHardwareFormInput {
 input ApplicationTravelFormInput {
   paypalAddress: String
   travelReceipt: Upload
-}
-
-input ApplicationDietFormInput {
-  dietaryRestrictions: [String]
 }
 
 type Team {
@@ -294,5 +274,13 @@ type HackathonStats {
 type Sponsor {
   id: ID
   hachathonId: ID
+  name: String
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+type File {
+  id: ID
   name: String
 }

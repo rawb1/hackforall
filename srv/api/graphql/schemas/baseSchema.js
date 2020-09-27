@@ -1,5 +1,4 @@
 const { gql } = require('apollo-server-koa');
-const { GraphQLUpload } = require('graphql-upload');
 const GraphQLDate = require('graphql-date');
 
 const typeDefs = gql`
@@ -20,14 +19,7 @@ const typeDefs = gql`
     USER
   }
 
-  scalar Upload
   scalar Date
-
-  type File {
-    filename: String
-    mimetype: String
-    encoding: String
-  }
 
   type Query {
     _empty: String
@@ -39,7 +31,6 @@ const typeDefs = gql`
 `;
 
 const resolvers = {
-  Upload: GraphQLUpload,
   Date: GraphQLDate
 };
 

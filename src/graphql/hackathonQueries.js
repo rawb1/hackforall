@@ -45,7 +45,7 @@ export const HACKATHONS_QUERY = gql`
   }
 `;
 
-export const HACKATHON_UPDATE_MUTATION = gql`
+export const UPDATE_HACKATHON_MUTATION = gql`
   mutation($hackathon: HackathonInput!) {
     updateHackathon(hackathon: $hackathon) {
       id
@@ -68,7 +68,7 @@ export const HACKATHON_UPDATE_MUTATION = gql`
   }
 `;
 
-export const HACKATHON_CANCEL_MUTATION = gql`
+export const CANCEL_HACKATHON_MUTATION = gql`
   mutation {
     cancelHackathon {
       id
@@ -77,7 +77,7 @@ export const HACKATHON_CANCEL_MUTATION = gql`
   }
 `;
 
-export const HACKATHON_ACTIVATE_MUTATION = gql`
+export const ACTIVATE_HACKATHON_MUTATION = gql`
   mutation($id: ID!) {
     activateHackathon(id: $id) {
       id

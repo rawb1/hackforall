@@ -1,27 +1,32 @@
 <template>
   <b-tabs v-model="activeTab" style="display:grid">
     <b-tab-item label="Profile">
-      <List v-model="profile" />
-    </b-tab-item>
-    <b-tab-item v-if="hacker.application.form.needHardware" label="Hardware">
-      <List v-model="hardware" />
+      <List v-model="hacker.application.form.profile" />
     </b-tab-item>
     <b-tab-item
-      v-if="hacker.application.form.needTravelReimbursement"
+      v-if="hacker.application.form.profile.needHardware"
+      label="Hardware"
+    >
+      <List v-model="hacker.application.form.hardware" />
+    </b-tab-item>
+    <b-tab-item
+      v-if="hacker.application.form.profile.needTravelReimbursement"
       label="Travel"
     >
-      <List v-model="travel" />
+      <List v-model="hacker.application.form.travel" />
     </b-tab-item>
-    <b-tab-item v-if="hacker.application.form.needHosting" label="Hosting">
-      <List v-model="terms" />
+    <b-tab-item
+      v-if="hacker.application.form.profile.needHosting"
+      label="Hosting"
+    >
+      <List v-model="hacker.application.form.hosting" />
     </b-tab-item>
     <b-tab-item label="Terms">
-      <List v-model="terms" />
+      <List v-model="hacker.application.form.terms" />
     </b-tab-item>
   </b-tabs>
 </template>
 <script>
-import _ from 'lodash';
 import List from '@/components/List.vue';
 
 export default {
@@ -31,46 +36,6 @@ export default {
   },
   data: () => ({
     activeTab: 0
-  }),
-  computed: {
-    profile: function() {
-      return _.pick(this.hacker.application.form, [
-        'name',
-        'school',
-        'phone',
-        'garduationYear',
-        'studyFields',
-        'interests',
-        'github',
-        'resume',
-        'dietaryRestrictions',
-        'teeShirtSize',
-        'additionalNotes'
-      ]);
-    },
-    hardware: function() {
-      return _.pick(this.hacker.application.form, ['hardwareList']);
-    },
-    travel: function() {
-      return _.pick(this.hacker.application.form, [
-        'paypalAddress',
-        'travelReceipt'
-      ]);
-    },
-    hosting: function() {
-      return _.pick(this.hacker.application.form, [
-        'HostingPreferences',
-        'hostMatchingDetails'
-      ]);
-    },
-    terms: function() {
-      return _.pick(this.hacker.application.form, [
-        'majority',
-        'liability',
-        'photoRelease',
-        'codeOfConduct'
-      ]);
-    }
-  }
+  })
 };
 </script>

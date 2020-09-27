@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="application.form"
     class="card is-full-width has-border"
     :class="statusColorClass(application.status)"
   >
@@ -17,7 +18,14 @@
           icon="fa fa-address-book"
           label="Profile"
           :clickable="true"
-          :type="{ 'is-danger': isProfileInvalid }"
+          :type="{
+            'is-danger':
+              errors.has('name') ||
+              errors.has('school') ||
+              errors.has('phone') ||
+              errors.has('garduationYear') ||
+              errors.has('studyFields')
+          }"
         >
           <div class="columns">
             <div class="column">
@@ -27,7 +35,7 @@
                 :message="errors.collect('name')"
               >
                 <b-input
-                  v-model="application.form.name"
+                  v-model="application.form.profile.name"
                   v-validate="'required|min:2|max:32'"
                   name="name"
                   type="text"
@@ -41,7 +49,7 @@
                 :message="errors.collect('phone')"
               >
                 <b-input
-                  v-model="application.form.phone"
+                  v-model="application.form.profile.phone"
                   v-validate="'required|numeric|min:10|max:15'"
                   name="phone"
                   type="tel"
@@ -57,7 +65,7 @@
                 :message="errors.collect('school')"
               >
                 <b-input
-                  v-model="application.form.school"
+                  v-model="application.form.profile.school"
                   v-validate="'required|max:64'"
                   type="text"
                   name="school"
@@ -72,7 +80,7 @@
                 :message="errors.collect('garduationYear')"
               >
                 <b-datepicker
-                  v-model="application.form.garduationYear"
+                  v-model="garduationYear"
                   v-validate="'required'"
                   icon="fas fa-graduation-cap"
                   name="garduationYear"
@@ -89,7 +97,7 @@
                 :message="errors.collect('studyFields')"
               >
                 <b-taginput
-                  v-model="application.form.studyFields"
+                  v-model="application.form.profile.studyFields"
                   v-validate="'required'"
                   ellipsis
                   icon="fas fa-user-graduate"
@@ -101,7 +109,7 @@
             <div class="column">
               <b-field label="Interests">
                 <b-taginput
-                  v-model="application.form.interests"
+                  v-model="application.form.profile.interests"
                   ellipsis
                   icon="fas fa-user-tag"
                   placeholder="Add interest"
@@ -116,7 +124,7 @@
                   <span class="button is-static">https://github.com/</span>
                 </p>
                 <b-input
-                  v-model="application.form.github"
+                  v-model="application.form.profile.github"
                   placeholder="username"
                   type="text"
                   expanded
@@ -124,30 +132,35 @@
               </b-field>
             </div>
             <div class="column">
-              <b-field class="file" expanded>
-                <b-upload v-model="uploads.resume" accept="application/pdf">
-                  <a class="button is-primary is-full-width">
-                    <b-icon icon="upload"></b-icon>
-                    <span>Upload your resume</span>
-                  </a>
-                </b-upload>
-                <span
-                  v-if="uploads.resume || application.files.resume"
-                  class="file-name"
-                  >{{
-                    uploads.resume
-                      ? uploads.resume.name
-                      : application.files.resume
-                      ? application.files.resume.filename
-                      : ''
-                  }}</span
+              <b-field
+                class="file is-primary"
+                :class="{
+                  'has-name': application.form.profile.resume.name
+                }"
+              >
+                <b-upload
+                  v-model="application.form.profile.resume"
+                  class="file-label"
+                  accept="application/pdf"
+                  name="resume"
                 >
+                  <span class="file-cta">
+                    <b-icon class="file-icon" icon="upload"></b-icon>
+                    <span class="file-label">Click to upload</span>
+                  </span>
+                  <span
+                    v-if="application.form.profile.resume.name"
+                    class="file-name"
+                  >
+                    {{ application.form.profile.resume.name }}
+                  </span>
+                </b-upload>
               </b-field>
             </div>
           </div>
           <b-field label="Dietary restrictions">
             <b-taginput
-              v-model="application.form.dietaryRestrictions"
+              v-model="application.form.profile.dietaryRestrictions"
               ellipsis
               icon="fas fa-utensils"
               placeholder="Add restriction"
@@ -159,7 +172,7 @@
             :message="errors.collect('teeShirtSize')"
           >
             <b-select
-              v-model="application.form.teeShirtSize"
+              v-model="application.form.profile.teeShirtSize"
               v-validate="'required'"
               placeholder="Tee-shirt size"
               name="teeShirtSize"
@@ -174,7 +187,7 @@
           <div class="field">
             <b-checkbox
               ref="needHardware"
-              v-model="application.form.needHardware"
+              v-model="application.form.profile.needHardware"
             >
               I will
               <strong>&nbsp;need hardware&nbsp;</strong>.
@@ -183,7 +196,7 @@
           <div class="field">
             <b-checkbox
               ref="needHosting"
-              v-model="application.form.needHosting"
+              v-model="application.form.profile.needHosting"
             >
               I want to apply for
               <strong>&nbsp;hosting</strong>.
@@ -192,7 +205,7 @@
           <div class="field">
             <b-checkbox
               ref="needTravelReimbursement"
-              v-model="application.form.needTravelReimbursement"
+              v-model="application.form.profile.needTravelReimbursement"
             >
               I want to apply for
               <strong>&nbsp;travel reimbursement</strong>.
@@ -200,7 +213,7 @@
           </div>
         </b-step-item>
         <b-step-item
-          v-if="application.form.needHardware"
+          v-if="application.form.profile.needHardware"
           icon="fas fa-microchip"
           label="Hardware"
           :clickable="true"
@@ -212,7 +225,7 @@
             :message="errors.collect('hardwareList')"
           >
             <b-taginput
-              v-model="application.form.hardwareList"
+              v-model="application.form.hardware.hardwareList"
               v-validate="'required_if:needHardware,true'"
               name="hardwareList"
               ellipsis
@@ -222,7 +235,7 @@
           </b-field>
         </b-step-item>
         <b-step-item
-          v-if="application.form.needTravelReimbursement"
+          v-if="application.form.profile.needTravelReimbursement"
           icon="fas fa-plane"
           label="Travel"
           :clickable="true"
@@ -239,7 +252,7 @@
                 :message="errors.collect('paypalAddress')"
               >
                 <b-input
-                  v-model="application.form.paypalAddress"
+                  v-model="application.form.travel.paypalAddress"
                   v-validate="'email'"
                   name="paypalAddress"
                   type="email"
@@ -247,41 +260,35 @@
               </b-field>
             </div>
             <div class="column">
-              <b-field class="file" expanded>
+              <b-field
+                class="file is-primary"
+                :class="{
+                  'has-name': !!application.form.travel.travelReceipt.name
+                }"
+              >
                 <b-upload
-                  v-model="uploads.travelReceipt"
-                  data-vv-validate-on="input"
+                  v-model="application.form.travel.travelReceipt"
+                  class="file-label"
                   accept="application/pdf"
                   name="travelReceipt"
                 >
-                  <a class="button is-primary is-full-width">
-                    <b-icon icon="upload"></b-icon>
-                    <span>Upload your travel receipt*</span>
-                  </a>
+                  <span class="file-cta">
+                    <b-icon class="file-icon" icon="upload"></b-icon>
+                    <span class="file-label">Click to upload</span>
+                  </span>
+                  <span
+                    v-if="application.form.travel.travelReceipt"
+                    class="file-name"
+                  >
+                    {{ application.form.travel.travelReceipt.name }}
+                  </span>
                 </b-upload>
-                <span
-                  v-if="
-                    uploads.travelReceipt || application.files.travelReceipt
-                  "
-                  class="file-name"
-                  >{{
-                    uploads.travelReceipt
-                      ? uploads.travelReceipt.name
-                      : application.files.travelReceipt
-                      ? application.files.travelReceipt.filename
-                      : ''
-                  }}</span
-                >
               </b-field>
-              <b-field
-                :type="{ 'is-danger': errors.has('travelReceipt') }"
-                :message="errors.collect('travelReceipt')"
-              ></b-field>
             </div>
           </div>
         </b-step-item>
         <b-step-item
-          v-if="application.form.needHosting"
+          v-if="application.form.profile.needHosting"
           icon="fas fa-hotel"
           label="Hosting"
           :clickable="true"
@@ -297,7 +304,7 @@
             :message="errors.collect('HostingPreferences')"
           >
             <b-select
-              v-model="application.form.HostingPreferences"
+              v-model="application.form.hosting.HostingPreferences"
               v-validate="'required_if:needHosting,true'"
               name="HostingPreferences"
               placeholder="Hosting preference"
@@ -318,7 +325,7 @@
             :message="errors.collect('hostMatchingDetails')"
           >
             <b-input
-              v-model="application.form.hostMatchingDetails"
+              v-model="application.form.hosting.hostMatchingDetails"
               v-validate="'required_if:needHosting,true|max:200'"
               name="hostMatchingDetails"
               maxlength="200"
@@ -342,7 +349,7 @@
             :message="errors.collect('majority')"
           >
             <b-checkbox
-              v-model="application.form.majority"
+              v-model="application.form.terms.majority"
               v-validate="'required:false'"
               name="majority"
               data-vv-validate-on="input"
@@ -364,7 +371,7 @@
             :message="errors.collect('photoRelease')"
           >
             <b-checkbox
-              v-model="application.form.photoRelease"
+              v-model="application.form.terms.photoRelease"
               v-validate="'required:false'"
               name="photoRelease"
               data-vv-validate-on="input"
@@ -385,7 +392,7 @@
             :message="errors.collect('codeOfConduct')"
           >
             <b-checkbox
-              v-model="application.form.codeOfConduct"
+              v-model="application.form.terms.codeOfConduct"
               v-validate="'required:false'"
               name="codeOfConduct"
               data-vv-validate-on="input"
@@ -463,66 +470,30 @@
 <script>
 import {
   APPLICATION_QUERY,
-  APPLY_MUTATION,
-  CANCEL_MUTATION
+  UPDATE_APPLICATION_MUTATION,
+  CANCEL_APPLICATION_MUTATION
 } from '@/graphql/applicationQueries';
 import { applicationMixin } from '@/mixins';
 
 export default {
   mixins: [applicationMixin],
-  data: () => ({
-    activeStep: 0,
-    teeShirtSizes: ['XS', 'S', 'M', 'L', 'XL'], // TODO move server side
-    hostingPreferencesList: [
+  data: function() {
+    return {
+      activeStep: 0,
       // TODO move server side
-      'None',
-      'No animal(s)',
-      'Small animal(s)',
-      'No smoking',
-      'Group hosting'
-    ],
-    uploads: {
-      travelReceipt: null,
-      resume: null
-    },
-    application: {
-      files: {
-        travelReceipt: null,
+      teeShirtSizes: ['XS', 'S', 'M', 'L', 'XL'],
+      hostingPreferencesList: [
+        'None',
+        'No animal(s)',
+        'Small animal(s)',
+        'No smoking',
+        'Group hosting'
+      ],
+      uploads: {
         resume: null
-      },
-      form: {
-        // Profile
-        name: '',
-        school: '',
-        phone: null,
-        // Studies
-        garduationYear: null,
-        studyFields: null,
-        interests: null,
-        github: '',
-        // Complementary informations
-        dietaryRestrictions: null,
-        teeShirtSize: 'M',
-        // Needs
-        needHardware: false,
-        needHosting: false,
-        needTravelReimbursement: false,
-        // Hardware needs
-        hardwareList: null,
-        // Travel
-        paypalAddress: '',
-        // Hosting
-        HostingPreferences: [],
-        hostMatchingDetails: '',
-        // Terms
-        majority: false,
-        liability: false,
-        photoRelease: false,
-        codeOfConduct: false,
-        additionalNotes: ''
       }
-    }
-  }),
+    };
+  },
   computed: {
     isProfileInvalid: function() {
       return (
@@ -532,28 +503,27 @@ export default {
         this.errors.has('garduationYear') ||
         this.errors.has('studyFields')
       );
+    },
+    garduationYear: {
+      get: function() {
+        return new Date(this.application.form.profile.garduationYear);
+      },
+      set: function(val) {
+        this.application.form.profile.garduationYear = val;
+      }
     }
   },
   methods: {
     save() {
       this.$validator.validateAll().then(valid => {
         if (valid) {
+          // eslint-disable-next-line no-console
+          console.log('sqve', this.application.form);
           this.$apollo
             .mutate({
-              mutation: APPLY_MUTATION,
+              mutation: UPDATE_APPLICATION_MUTATION,
               variables: {
-                ...this.application.form,
-                ...this.uploads
-              },
-              update: (store, { data: { apply } }) => {
-                const data = store.readQuery({
-                  query: APPLICATION_QUERY
-                });
-                data.application.status = apply.status;
-                store.writeQuery({
-                  query: APPLICATION_QUERY,
-                  data
-                });
+                form: this.application.form
               }
             })
             .then(() => {
@@ -570,18 +540,8 @@ export default {
     cancel() {
       this.$apollo
         .mutate({
-          mutation: CANCEL_MUTATION,
-          variables: { id: this.application.id },
-          update: (store, { data: { cancel } }) => {
-            const data = store.readQuery({
-              query: APPLICATION_QUERY
-            });
-            data.application.status = cancel.status;
-            store.writeQuery({
-              query: APPLICATION_QUERY,
-              data
-            });
-          }
+          mutation: CANCEL_APPLICATION_MUTATION,
+          variables: { id: this.application.id }
         })
         .then(() => {
           this.$buefy.toast.open({
@@ -623,17 +583,7 @@ export default {
     }
   },
   apollo: {
-    application: {
-      query: APPLICATION_QUERY,
-      update: function({ application }) {
-        application = application || this.application;
-        application.form.garduationYear = application.form.garduationYear
-          ? new Date(application.form.garduationYear)
-          : null;
-        return application;
-      },
-      fetchPolicy: 'network-only'
-    }
+    application: APPLICATION_QUERY
   }
 };
 </script>

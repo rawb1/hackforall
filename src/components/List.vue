@@ -1,7 +1,9 @@
 <template>
   <ul>
     <li v-for="(val, key) in value" :key="key">
-      <b class="is-capitalized">{{ key }} : </b>{{ String(val) }}
+      <span v-if="!key.startsWith('_')">
+        <b class="is-capitalized">{{ key }} : </b>{{ String(val) }}
+      </span>
     </li>
   </ul>
 </template>

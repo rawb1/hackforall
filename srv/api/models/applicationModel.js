@@ -15,20 +15,52 @@ const ApplicationSchema = new Schema({
     immutable: true
   },
   form: {
-    // TODO implement form struct
-    type: Schema.Types.Mixed,
-    required: true
-  },
-  files: {
-    // TODO implement form struct
-    type: Schema.Types.Mixed,
-    required: true
+    profile: {
+      name: String,
+      school: String,
+      phone: String,
+      garduationYear: String,
+      studyFields: [String],
+      interests: [String],
+      github: String,
+      resume: {
+        id: {
+          type: Schema.Types.ObjectId,
+          ref: 'File'
+        },
+        name: String
+      },
+      teeShirtSize: String,
+      dietaryRestrictions: [String],
+      needHardware: Boolean,
+      needHosting: Boolean,
+      needTravelReimbursement: Boolean
+    },
+    hardware: { hardwareList: [String] },
+    travel: {
+      paypalAddress: String,
+      travelReceipt: {
+        id: {
+          type: Schema.Types.ObjectId,
+          ref: 'File'
+        },
+        name: String
+      }
+    },
+    hosting: { HostingPreferences: [String], hostMatchingDetails: String },
+    terms: {
+      majority: Boolean,
+      liability: Boolean,
+      photoRelease: Boolean,
+      codeOfConduct: Boolean
+    },
+    additionalNotes: String
   },
   status: {
     type: String,
     required: true,
     enum: ['INCOMPLETE', 'PENDING', 'REFUSED', 'ACCEPTED', 'CANCELED'],
-    default: 'PENDING'
+    default: 'INCOMPLETE'
   },
   createdAt: { type: Date, required: true, default: Date.now },
   updatedAt: { type: Date, required: true, default: Date.now }

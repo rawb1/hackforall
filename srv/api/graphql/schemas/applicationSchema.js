@@ -8,14 +8,8 @@ const typeDefs = gql`
     userId: ID
     hackathonId: ID
     form: ApplicationForm
-    files: FileUploads
     status: ApplicationStatus
     updatedAt: Date
-  }
-
-  type FileUploads {
-    resume: File
-    travelReceipt: File
   }
 
   enum ApplicationStatus {
@@ -30,7 +24,6 @@ const typeDefs = gql`
     profile: ApplicationProfileForm
     hosting: ApplicationHostingForm
     hardware: ApplicationHardwareForm
-    diet: ApplicationDietForm
     travel: ApplicationTravelForm
     terms: ApplicationTermsForm
     additionalNotes: String
@@ -44,7 +37,9 @@ const typeDefs = gql`
     studyFields: [String]
     interests: [String]
     github: String
+    resume: File
     teeShirtSize: String
+    dietaryRestrictions: [String]
     # additional informations
     needHardware: Boolean
     needHosting: Boolean
@@ -69,10 +64,7 @@ const typeDefs = gql`
 
   type ApplicationTravelForm {
     paypalAddress: String
-  }
-
-  type ApplicationDietForm {
-    dietaryRestrictions: [String]
+    travelReceipt: File
   }
 
   extend type User {
@@ -84,7 +76,8 @@ const typeDefs = gql`
   }
 
   extend type Mutation {
-    saveApplication(form: ApplicationFormInput!): Application
+    createApplication: Application
+    updateApplication(form: ApplicationFormInput!): Application
     cancelApplication: Application
     acceptApplication(id: ID): Application @auth(requires: ADMIN)
     refuseApplication(id: ID): Application @auth(requires: ADMIN)
@@ -94,7 +87,6 @@ const typeDefs = gql`
     profile: ApplicationProfileFormInput
     hosting: ApplicationHostingFormInput
     hardware: ApplicationHardwareFormInput
-    diet: ApplicationDietFormInput
     travel: ApplicationTravelFormInput
     terms: ApplicationTermsFormInput
     additionalNotes: String
@@ -105,11 +97,12 @@ const typeDefs = gql`
     school: String
     phone: String
     garduationYear: String
-    resume: Upload
     studyFields: [String]
     interests: [String]
     github: String
+    resume: Upload
     teeShirtSize: String
+    dietaryRestrictions: [String]
     # additional informations
     needHardware: Boolean
     needHosting: Boolean
@@ -136,16 +129,13 @@ const typeDefs = gql`
     paypalAddress: String
     travelReceipt: Upload
   }
-
-  input ApplicationDietFormInput {
-    dietaryRestrictions: [String]
-  }
 `;
 
 const resolvers = {
   User: {
     application: (parent, _, ctx) =>
-      parent.application || // prevent db refetch
+      ((parent.application.id = parent.application._id) &&
+        parent.application) || // prevent db refetch + fix missing id field getter
       applicationController.findOne(ctx.state.hackathon.id, parent._id)
   },
   Query: {
@@ -153,10 +143,16 @@ const resolvers = {
       applicationController.findOne(ctx.state.hackathon.id, ctx.state.user.id)
   },
   Mutation: {
-    saveApplication: (parent, args, ctx) => {
-      return applicationController.save(
+    createApplication: (parent, args, ctx) => {
+      return applicationController.create(
         ctx.state.hackathon.id,
-        ctx.state.user,
+        ctx.state.user.id
+      );
+    },
+    updateApplication: (parent, args, ctx) => {
+      return applicationController.update(
+        ctx.state.hackathon.id,
+        ctx.state.user.id,
         args.form
       );
     },

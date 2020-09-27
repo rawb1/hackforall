@@ -30,53 +30,6 @@ export const FORGOT_QUERY = gql`
   }
 `;
 
-export const HACKERS_QUERY = gql`
-  query {
-    hackers {
-      id
-      username
-      email
-      application {
-        updatedAt
-        id
-        status
-        updatedAt
-        form {
-          name
-          school
-          phone
-          garduationYear
-          studyFields
-          interests
-          github
-          dietaryRestrictions
-          teeShirtSize
-          needHardware
-          needHosting
-          needTravelReimbursement
-          hardwareList
-          paypalAddress
-          HostingPreferences
-          hostMatchingDetails
-          majority
-          liability
-          photoRelease
-          codeOfConduct
-          additionalNotes
-        }
-        files {
-          resume {
-            filename
-          }
-          travelReceipt {
-            filename
-          }
-        }
-      }
-    }
-  }
-`;
-
 export const REGISTER_MUTATION = gql`
   mutation($username: String, $email: String!, $password: String!) {
     register(

@@ -15,7 +15,10 @@ const resolvers = {
     me: (_, __, ctx) => ctx.state.user,
     hacker: (_, args, ctx) =>
       hackerController.findOne(args.id, ctx.state.hackathon.id),
-    hackers: async (_, __, ctx) => hackerController.find(ctx.state.hackathon.id)
+    hackers: async (_, __, ctx) => {
+      const t = await hackerController.find(ctx.state.hackathon.id);
+      return t;
+    }
   },
   Mutation: {}
 };

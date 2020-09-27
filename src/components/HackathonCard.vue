@@ -134,9 +134,9 @@
 <script>
 import {
   HACKATHON_QUERY,
-  HACKATHON_UPDATE_MUTATION,
-  HACKATHON_CANCEL_MUTATION,
-  HACKATHON_ACTIVATE_MUTATION
+  UPDATE_HACKATHON_MUTATION,
+  CANCEL_HACKATHON_MUTATION,
+  ACTIVATE_HACKATHON_MUTATION
 } from '@/graphql/hackathonQueries';
 
 export default {
@@ -177,16 +177,16 @@ export default {
   methods: {
     update() {
       return this.$apollo.mutate({
-        mutation: HACKATHON_UPDATE_MUTATION,
+        mutation: UPDATE_HACKATHON_MUTATION,
         variables: { hackathon: this.hackathon }
       });
     },
     cancel() {
-      return this.$apollo.mutate({ mutation: HACKATHON_CANCEL_MUTATION });
+      return this.$apollo.mutate({ mutation: CANCEL_HACKATHON_MUTATION });
     },
     activate() {
       return this.$apollo.mutate({
-        mutation: HACKATHON_ACTIVATE_MUTATION,
+        mutation: ACTIVATE_HACKATHON_MUTATION,
         variables: { id: this.hackathon.id }
       });
     }
