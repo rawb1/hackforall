@@ -1,26 +1,28 @@
-import { CONNECTED_MUTATION, CONNECTED_QUERY } from '@/apollo/state';
-import { LOGIN_QUERY, LOGOUT_QUERY, FORGOT_QUERY } from '@/graphql/userQueries';
+import {
+  LOGIN_QUERY,
+  REGISTER_MUTATION,
+  LOGOUT_QUERY,
+  FORGOT_QUERY,
+  ME_QUERY
+} from '@/graphql/userQueries';
 
 export default {
-  data: () => ({
-    connected: false
-  }),
   methods: {
-    login: function(variables) {
-      return this.$apollo
-        .query({
-          query: LOGIN_QUERY,
-          variables
-        })
-        .then(() =>
-          this.$apollo.mutate({
-            mutation: CONNECTED_MUTATION,
-            variables: {
-              connected: true
-            }
-          })
-        )
-        .then(() => this.$router.replace({ name: 'dash' }));
+    async login(variables) {
+      await this.$apollo.query({
+        query: LOGIN_QUERY,
+        variables
+      });
+      await this.$apollo.queries.me.refetch();
+      this.$router.replace({ name: 'dash' });
+    },
+    async register(variables) {
+      await this.$apollo.mutate({
+        mutation: REGISTER_MUTATION,
+        variables: this.form
+      });
+      await this.$apollo.queries.me.refetch();
+      this.$router.push({ name: 'dash' });
     },
     logout: function() {
       return this.$apollo
@@ -40,8 +42,6 @@ export default {
     }
   },
   apollo: {
-    connected: {
-      query: CONNECTED_QUERY
-    }
+    me: ME_QUERY
   }
 };

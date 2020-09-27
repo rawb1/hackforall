@@ -95,10 +95,10 @@
   </div>
 </template>
 <script>
-import { CONNECTED_MUTATION } from '@/apollo/state';
-import { REGISTER_MUTATION } from '@/graphql/userQueries';
+import { authMixin } from '@/mixins';
 
 export default {
+  mixins: [authMixin],
   data() {
     return {
       form: {
@@ -112,29 +112,15 @@ export default {
     async submit() {
       this.$validator.validateAll().then(valid => {
         if (valid) {
-          this.$apollo
-            .mutate({
-              mutation: REGISTER_MUTATION,
-              variables: this.form
-            })
-            .then(() =>
-              this.$apollo.mutate({
-                mutation: CONNECTED_MUTATION,
-                variables: {
-                  connected: true
-                }
-              })
-            )
-            .then(() => this.$router.push({ name: 'dash' }))
-            .catch(err => {
-              this.errors.remove('graphql');
-              err.graphQLErrors.forEach(err => {
-                this.errors.add({
-                  field: 'graphql',
-                  msg: err.message
-                });
+          this.register(this.form).catch(err => {
+            this.errors.remove('graphql');
+            err.graphQLErrors.forEach(err => {
+              this.errors.add({
+                field: 'graphql',
+                msg: err.message
               });
             });
+          });
         } else {
           this.errors.remove('graphql');
         }

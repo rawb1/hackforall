@@ -33,36 +33,28 @@
       </b-navbar-dropdown>
     </template>
     <template slot="end">
-      <b-navbar-item
-        v-if="!connected"
-        tag="router-link"
-        :to="{ name: 'login' }"
-      >
+      <b-navbar-item v-if="!me" tag="router-link" :to="{ name: 'login' }">
         Login
       </b-navbar-item>
-      <b-navbar-item
-        v-if="!connected"
-        tag="router-link"
-        :to="{ name: 'register' }"
-      >
+      <b-navbar-item v-if="!me" tag="router-link" :to="{ name: 'register' }">
         Register
       </b-navbar-item>
 
       <b-navbar-item
-        v-if="connected && !isOnDash"
+        v-if="me && !isOnDash"
         tag="router-link"
         :to="{ name: 'dash' }"
       >
         Dashboard
       </b-navbar-item>
       <b-navbar-item
-        v-if="connected && me && me.role === 'ADMIN' && !isOnAdmin"
+        v-if="me && me && me.role === 'ADMIN' && !isOnAdmin"
         tag="router-link"
         :to="{ name: 'admin' }"
       >
         Admin
       </b-navbar-item>
-      <b-navbar-item v-if="connected" @click.prevent="logout">
+      <b-navbar-item v-if="me" @click.prevent="logout">
         Logout
       </b-navbar-item>
     </template>
@@ -86,9 +78,7 @@ export default {
     }
   },
   apollo: {
-    me: {
-      query: ME_QUERY
-    },
+    me: ME_QUERY,
     hackathon: HACKATHON_QUERY
   }
 };

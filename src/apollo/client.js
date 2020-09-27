@@ -5,8 +5,6 @@ import { ApolloLink, from } from 'apollo-link';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
 
-import { typeDefs, resolvers, initializeState } from '@/apollo/state';
-
 const cache = new InMemoryCache();
 
 const httpLink = createUploadLink({
@@ -48,11 +46,7 @@ const link = from([middleWareLink, errorLink, httpLink]);
 
 const apolloClient = new ApolloClient({
   link,
-  cache,
-  typeDefs,
-  resolvers
+  cache
 });
-
-initializeState(apolloClient);
 
 export default apolloClient;

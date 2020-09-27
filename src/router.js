@@ -54,7 +54,7 @@ const routes = [
       }
     ],
     beforeEnter: async (to, from, next) =>
-      (await isConnected) ? next({ name: 'dash' }) : next()
+      (await isConnected()) ? next({ name: 'dash' }) : next()
   },
   {
     path: '/dash',
@@ -70,11 +70,11 @@ const routes = [
         name: 'application',
         component: () => import('@/views/dash/Application.vue'),
         beforeEnter: async (to, from, next) =>
-          (await isHackathonOpen) ? next() : next({ name: 'dash' })
+          (await isHackathonOpen()) ? next() : next({ name: 'dash' })
       }
     ],
     beforeEnter: async (to, from, next) =>
-      (await isConnected) ? next() : next({ name: 'login' })
+      (await isConnected()) ? next() : next({ name: 'login' })
   },
   {
     path: '/admin',
@@ -97,7 +97,7 @@ const routes = [
       }
     ],
     beforeEnter: async (to, from, next) =>
-      (await isConnected) && (await isAdmin) ? next() : next({ name: 'dash' })
+      (await isAdmin()) ? next() : next({ name: 'dash' })
   },
   { path: '*', redirect: { name: 'home' } }
 ];
