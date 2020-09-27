@@ -14,8 +14,8 @@ class HackathonDirective extends SchemaDirectiveVisitor {
   }
 
   ensureFieldsWrapped(objectType) {
-    if (objectType._authFieldsWrapped) return;
-    objectType._authFieldsWrapped = true;
+    if (objectType._hackathonFieldsWrapped) return;
+    objectType._hackathonFieldsWrapped = true;
 
     const fields = objectType.getFields();
 
