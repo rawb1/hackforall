@@ -15,26 +15,16 @@
   </div>
 </template>
 <script>
-import {
-  CREATE_APPLICATION_MUTATION,
-  APPLICATION_QUERY
-} from '@/graphql/applicationQueries';
+import { CREATE_APPLICATION_MUTATION } from '@/graphql/applicationQueries';
 
 export default {
   methods: {
-    create() {
-      this.$apollo.mutate({
-        mutation: CREATE_APPLICATION_MUTATION,
-        update: (store, { data }) =>
-          store.writeQuery({
-            query: APPLICATION_QUERY,
-            data: { application: data.createApplication }
-          })
+    async create() {
+      await this.$apollo.mutate({
+        mutation: CREATE_APPLICATION_MUTATION
       });
+      this.$emit('created');
     }
-  },
-  apollo: {
-    application: APPLICATION_QUERY
   }
 };
 </script>

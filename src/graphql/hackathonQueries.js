@@ -19,6 +19,8 @@ export const HACKATHON_QUERY = gql`
         team
         refund
       }
+      live
+      open
     }
   }
 `;
@@ -64,6 +66,8 @@ export const UPDATE_HACKATHON_MUTATION = gql`
         team
         refund
       }
+      live
+      open
     }
   }
 `;
@@ -73,6 +77,8 @@ export const CANCEL_HACKATHON_MUTATION = gql`
     cancelHackathon {
       id
       active
+      live
+      open
     }
   }
 `;
@@ -82,6 +88,8 @@ export const ACTIVATE_HACKATHON_MUTATION = gql`
     activateHackathon(id: $id) {
       id
       active
+      live
+      open
     }
   }
 `;

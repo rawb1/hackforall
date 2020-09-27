@@ -62,8 +62,8 @@ const ApplicationSchema = new Schema({
     enum: ['INCOMPLETE', 'PENDING', 'REFUSED', 'ACCEPTED', 'CANCELED'],
     default: 'INCOMPLETE'
   },
-  createdAt: { type: Date, required: true, default: Date.now },
-  updatedAt: { type: Date, required: true, default: Date.now }
+  createdAt: { type: Date, required: true, default: Date.now() },
+  updatedAt: { type: Date, required: true, default: Date.now() }
 });
 
 ApplicationSchema.index({ userId: 1, hackathonId: 1 }, { unique: true });

@@ -1,6 +1,9 @@
 <template>
   <div v-if="!$apollo.queries.application.loading">
-    <ApplicationCreationCard v-if="!application" />
+    <ApplicationCreationCard
+      v-if="!application"
+      @created="$apollo.queries.application.refetch()"
+    />
     <ApplicationFormCard v-else />
   </div>
 </template>

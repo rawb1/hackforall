@@ -7,7 +7,7 @@ import DashLayout from '@/layouts/DashLayout.vue';
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import LandingLayout from '@/layouts/LandingLayout.vue';
 
-import { isConnected, isAdmin } from '@/guards';
+import { isConnected, isAdmin, isHackathonOpen } from '@/guards';
 
 Vue.use(VueRouter);
 
@@ -53,10 +53,8 @@ const routes = [
         component: () => import('@/views/auth/Reset.vue')
       }
     ],
-    beforeEnter: async (to, from, next) => {
-      (await isConnected()) ? next({ name: 'dash' }) : next();
-    },
-    props: { dash: true }
+    beforeEnter: async (to, from, next) =>
+      (await isConnected) ? next({ name: 'dash' }) : next()
   },
   {
     path: '/dash',
@@ -70,12 +68,13 @@ const routes = [
       {
         path: 'application',
         name: 'application',
-        component: () => import('@/views/dash/Application.vue')
+        component: () => import('@/views/dash/Application.vue'),
+        beforeEnter: async (to, from, next) =>
+          (await isHackathonOpen) ? next() : next({ name: 'dash' })
       }
     ],
-    beforeEnter: async (to, from, next) => {
-      (await isConnected()) ? next() : next({ name: 'login' });
-    }
+    beforeEnter: async (to, from, next) =>
+      (await isConnected) ? next() : next({ name: 'login' })
   },
   {
     path: '/admin',
@@ -97,11 +96,8 @@ const routes = [
         component: () => import('@/views/admin/Hackathon.vue')
       }
     ],
-    beforeEnter: async (to, from, next) => {
-      (await isConnected()) && (await isAdmin())
-        ? next()
-        : next({ name: 'dash' });
-    }
+    beforeEnter: async (to, from, next) =>
+      (await isConnected) && (await isAdmin) ? next() : next({ name: 'dash' })
   },
   { path: '*', redirect: { name: 'home' } }
 ];

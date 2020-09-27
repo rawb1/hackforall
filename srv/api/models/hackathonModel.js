@@ -42,17 +42,20 @@ HackathonSchema.pre(['updateOne', 'findOneAndUpdate'], function(next) {
 
 HackathonSchema.virtual('open').get(function() {
   return (
-    Date.now > this.dates.applicationOpen.getTime() &&
-    Date.now < this.dates.applicationClose.getTime()
+    this.active &&
+    Date.now() > this.dates.applications.open.getTime() &&
+    Date.now() < this.dates.applications.close.getTime()
   );
 });
 
 HackathonSchema.virtual('live').get(function() {
   return (
-    Date.now > this.dates.start.getTime() && Date.now < this.dates.end.getTime()
+    this.active &&
+    Date.now() > this.dates.start.getTime() &&
+    Date.now() < this.dates.end.getTime()
   );
 });
 
 const Hackathon = mongoose.model('Hackathon', HackathonSchema);
 
-fixtures.setDefault(Hackathon, { name: 'hackBdx' });
+fixtures.setDefault(Hackathon, { name: 'hackBdx', active: true });

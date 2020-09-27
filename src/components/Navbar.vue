@@ -87,8 +87,7 @@ export default {
   },
   apollo: {
     me: {
-      query: ME_QUERY,
-      error: () => null
+      query: ME_QUERY
     },
     hackathon: HACKATHON_QUERY
   }
