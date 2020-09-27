@@ -40,6 +40,17 @@ HackathonSchema.pre(['updateOne', 'findOneAndUpdate'], function(next) {
   next();
 });
 
+HackathonSchema.methods.hasStatus = function(status) {
+  switch (status) {
+    case 'OPEN':
+      return this.open;
+    case 'LIVE':
+      return this.live;
+    default:
+      return false;
+  }
+};
+
 HackathonSchema.virtual('open').get(function() {
   return (
     this.active &&

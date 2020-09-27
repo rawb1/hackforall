@@ -18,18 +18,13 @@ directive @constraint(
   uniqueTypeName: String
 ) on INPUT_FIELD_DEFINITION | FIELD_DEFINITION
 
-directive @auth(requires: Role!) on OBJECT | FIELD_DEFINITION
-
 directive @cacheControl(maxAge: Int, scope: CacheControlScope) on OBJECT | FIELD_DEFINITION
+
+directive @auth(requires: Role!) on OBJECT | FIELD_DEFINITION
 
 enum CacheControlScope {
   PUBLIC
   PRIVATE
-}
-
-enum Role {
-  ADMIN
-  USER
 }
 
 scalar Date
@@ -70,6 +65,11 @@ type Mutation {
   updateHackathon(hackathon: HackathonInput!): Hackathon
   cancelHackathon: Hackathon
   activateHackathon(id: ID): Hackathon
+}
+
+enum Role {
+  ADMIN
+  USER
 }
 
 type User {

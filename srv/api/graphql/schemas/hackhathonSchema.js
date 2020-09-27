@@ -3,6 +3,13 @@ const { gql } = require('apollo-server-koa');
 const { hackathonController } = require('../../controllers');
 
 const typeDefs = gql`
+  directive @hackathon(requires: hackathonStatus!) on OBJECT | FIELD_DEFINITION
+
+  enum hackathonStatus {
+    OPEN
+    LIVE
+  }
+
   type hackathon {
     id: ID
     name: ID

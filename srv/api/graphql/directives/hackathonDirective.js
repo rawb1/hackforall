@@ -1,19 +1,16 @@
-const {
-  SchemaDirectiveVisitor,
-  AuthenticationError
-} = require('apollo-server-koa');
+const { SchemaDirectiveVisitor, ForbiddenError } = require('apollo-server-koa');
 
 // https://blog.apollographql.com/reusable-graphql-schema-directives-131fb3a177d1
 
-class AuthDirective extends SchemaDirectiveVisitor {
+class HackathonDirective extends SchemaDirectiveVisitor {
   visitObject(type) {
     this.ensureFieldsWrapped(type);
-    type._requiredAuthRole = this.args.requires;
+    type._requiredHackathonStatus = this.args.requires;
   }
 
   visitFieldDefinition(field, details) {
     this.ensureFieldsWrapped(details.objectType);
-    field._requiredAuthRole = this.args.requires;
+    field._requiredHackathonStatus = this.args.requires;
   }
 
   ensureFieldsWrapped(objectType) {
@@ -27,16 +24,16 @@ class AuthDirective extends SchemaDirectiveVisitor {
       const { resolve } = field;
 
       field.resolve = async function(...args) {
-        const requiredRole =
-          field._requiredAuthRole || objectType._requiredAuthRole;
+        const requiredStatus =
+          field._requiredHackathonStatus || objectType._requiredHackathonStatus;
 
-        if (!requiredRole) {
+        if (!requiredStatus) {
           return resolve.apply(this, args);
         }
 
-        const user = args[2].state.user;
-        if (!user || !user.hasRole(requiredRole)) {
-          throw new AuthenticationError();
+        const hackathon = args[2].state.hackathon;
+        if (!hackathon || !hackathon.hasStatus(requiredStatus)) {
+          throw new ForbiddenError();
         }
 
         return resolve.apply(this, args);
@@ -45,4 +42,4 @@ class AuthDirective extends SchemaDirectiveVisitor {
   }
 }
 
-module.exports = AuthDirective;
+module.exports = HackathonDirective;

@@ -16,10 +16,10 @@ module.exports = {
     constraintDirectiveTypeDefs,
     baseSchema.typeDefs,
     userSchema.typeDefs,
+    hackathonSchema.typeDefs,
     hackerSchema.typeDefs,
     applicationSchema.typeDefs,
     teamSchema.typeDefs,
-    hackathonSchema.typeDefs,
     statsSchema.typeDefs,
     sponsorSchema.typeDefs,
     fileSchema.typeDefs
@@ -27,10 +27,10 @@ module.exports = {
   resolvers: merge(
     baseSchema.resolvers,
     userSchema.resolvers,
+    hackathonSchema.resolvers,
     hackerSchema.resolvers,
     applicationSchema.resolvers,
     teamSchema.resolvers,
-    hackathonSchema.resolvers,
     statsSchema.resolvers,
     sponsorSchema.resolvers,
     fileSchema.resolvers

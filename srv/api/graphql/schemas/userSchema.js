@@ -3,6 +3,13 @@ const { gql } = require('apollo-server-koa');
 const { userController } = require('../../controllers');
 
 const typeDefs = gql`
+  directive @auth(requires: Role!) on OBJECT | FIELD_DEFINITION
+
+  enum Role {
+    ADMIN
+    USER
+  }
+
   type User {
     id: ID @auth(requires: ADMIN)
     username: String!
