@@ -4,6 +4,7 @@ import { createUploadLink } from 'apollo-upload-client';
 import { ApolloLink, from } from 'apollo-link';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { onError } from 'apollo-link-error';
+import omitDeep from 'omit-deep-lodash';
 
 const cache = new InMemoryCache();
 
@@ -11,17 +12,10 @@ const httpLink = createUploadLink({
   uri: '/graphql'
 });
 
-// fix mutations
-// Strip __typename from variables
-// from https://github.com/apollographql/apollo-client/issues/1913#issuecomment-425281027
+// Strip __typename from variables in mutation but keep them in cache
 const middleWareLink = new ApolloLink((operation, forward) => {
   if (operation.variables) {
-    const omitTypename = (key, value) =>
-      key === '__typename' ? undefined : value;
-    operation.variables = JSON.parse(
-      JSON.stringify(operation.variables),
-      omitTypename
-    );
+    operation.variables = omitDeep(operation.variables, ['__typename']);
   }
   return forward(operation);
 });

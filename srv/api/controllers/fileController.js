@@ -9,16 +9,20 @@ const path = files.local.path;
 const adapter = 'local';
 
 const write = async upload => {
-  const { createReadStream, filename, mimetype } = await upload;
+  const { createReadStream, filename } = await upload;
+
   const stream = createReadStream();
 
-  const file = await File.create({ filename, mimetype, adapter });
+  const file = await File.create({ name: filename, adapter });
 
   stream.pipe(cacache.put.stream(path, file.id));
 
   return file;
 };
 
+const read = File.findOne;
+
 module.exports = {
-  write
+  write,
+  read
 };

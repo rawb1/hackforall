@@ -4,9 +4,9 @@ const Hackathon = mongoose.model('Hackathon');
 
 const get = id => Hackathon.findOne(id);
 
-const getAll = () => Hackathon.find();
+const find = () => Hackathon.find();
 
 module.exports = {
   get,
-  getAll
+  find
 };

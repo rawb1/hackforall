@@ -21,7 +21,7 @@ const resolvers = {
       return sponsorController.get();
     },
     sponsors: (parent, args, ctx, info) => {
-      return sponsorController.getAll();
+      return sponsorController.find();
     }
   }
 };

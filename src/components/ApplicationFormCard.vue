@@ -517,8 +517,6 @@ export default {
     save() {
       this.$validator.validateAll().then(valid => {
         if (valid) {
-          // eslint-disable-next-line no-console
-          console.log('sqve', this.application.form);
           this.$apollo
             .mutate({
               mutation: UPDATE_APPLICATION_MUTATION,

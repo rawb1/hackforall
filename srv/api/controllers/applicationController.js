@@ -10,6 +10,8 @@ const create = (hackathonId, userId) =>
   Application.create({ hackathonId, userId });
 
 const update = async (hackathonId, userId, form) => {
+  form.profile.resume = await form.profile.resume.id;
+
   const application = await Application.findOne({ hackathonId, userId });
 
   if (!application) {

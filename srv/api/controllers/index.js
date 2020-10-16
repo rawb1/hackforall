@@ -5,6 +5,7 @@ const hackerController = require('./hackerController');
 const statsController = require('./statsController');
 const teamController = require('./teamController');
 const sponsorController = require('./sponsorController');
+const fileController = require('./fileController');
 
 module.exports = {
   userController,
@@ -13,5 +14,6 @@ module.exports = {
   hackerController,
   statsController,
   teamController,
-  sponsorController
+  sponsorController,
+  fileController
 };

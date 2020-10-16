@@ -19,7 +19,7 @@
       <b-navbar-item
         v-if="hackathon && hackathon.open"
         tag="router-link"
-        :to="{ name: 'application' }"
+        :to="{ name: 'team' }"
       >
         Team
       </b-navbar-item>

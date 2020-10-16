@@ -24,11 +24,8 @@ const ApplicationSchema = new Schema({
       interests: [String],
       github: String,
       resume: {
-        id: {
-          type: Schema.Types.ObjectId,
-          ref: 'File'
-        },
-        name: String
+        type: Schema.Types.ObjectId,
+        ref: 'File'
       },
       teeShirtSize: String,
       dietaryRestrictions: [String],
@@ -40,11 +37,8 @@ const ApplicationSchema = new Schema({
     travel: {
       paypalAddress: String,
       travelReceipt: {
-        id: {
-          type: Schema.Types.ObjectId,
-          ref: 'File'
-        },
-        name: String
+        type: Schema.Types.ObjectId,
+        ref: 'File'
       }
     },
     hosting: { HostingPreferences: [String], hostMatchingDetails: String },

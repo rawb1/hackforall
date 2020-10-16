@@ -71,6 +71,13 @@ const routes = [
         component: () => import('@/views/dash/Application.vue'),
         beforeEnter: async (to, from, next) =>
           (await isHackathonOpen()) ? next() : next({ name: 'dash' })
+      },
+      {
+        path: 'team',
+        name: 'team',
+        component: () => import('@/views/dash/Team.vue'),
+        beforeEnter: async (to, from, next) =>
+          (await isHackathonOpen()) ? next() : next({ name: 'dash' })
       }
     ],
     beforeEnter: async (to, from, next) =>

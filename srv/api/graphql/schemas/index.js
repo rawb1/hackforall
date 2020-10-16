@@ -6,7 +6,7 @@ const hackerSchema = require('./hackerSchema');
 const applicationSchema = require('./applicationSchema');
 const teamSchema = require('./teamSchema');
 const hackathonSchema = require('./hackathonSchema');
-const baseSchema = require('./baseSchema');
+const initSchema = require('./initSchema');
 const statsSchema = require('./statsSchema');
 const sponsorSchema = require('./sponsorSchema');
 const fileSchema = require('./fileSchema');
@@ -14,7 +14,7 @@ const fileSchema = require('./fileSchema');
 module.exports = {
   typeDefs: [
     constraintDirectiveTypeDefs,
-    baseSchema.typeDefs,
+    initSchema.typeDefs,
     userSchema.typeDefs,
     hackathonSchema.typeDefs,
     hackerSchema.typeDefs,
@@ -25,7 +25,7 @@ module.exports = {
     fileSchema.typeDefs
   ],
   resolvers: merge(
-    baseSchema.resolvers,
+    initSchema.resolvers,
     userSchema.resolvers,
     hackathonSchema.resolvers,
     hackerSchema.resolvers,
