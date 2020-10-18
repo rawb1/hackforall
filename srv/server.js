@@ -34,7 +34,9 @@ const apollo = new ApolloServer({
       cache.get('hackathon') ||
       (await hackathonController
         .findActive()
-        .then(hackathon => cache.set('hackathon', hackathon, 60 * 50)));
+        .then(
+          hackathon => cache.set('hackathon', hackathon, 5 * 60) && hackathon
+        ));
 
     ctx.state.user = await userController.authenticate(ctx);
     return ctx;
