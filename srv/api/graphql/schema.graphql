@@ -67,6 +67,8 @@ type Mutation {
   joinTeam(name: String!): Boolean
   leaveTeam(name: String!): Boolean
   recruitTeammate(name: String!, userId: ID!): Boolean
+  getFileLink(bucket: String): String
+  getUserFileLink(userId: ID, bucket: String): String
 }
 
 enum Role {
@@ -290,6 +292,7 @@ type Sponsor {
 scalar Upload
 
 type File {
-  id: ID
   name: String
+  type: String
+  bucket: String
 }

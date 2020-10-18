@@ -10,6 +10,7 @@ const User = mongoose.model('User');
 const logger = require('koa-log4').getLogger('user');
 const cookieName = env.cookie.name;
 const cookieExpires = env.cookie.expires;
+const cookieSameSite = env.cookie.sameSite;
 
 /**
  * Authenticate user from cookie
@@ -27,7 +28,8 @@ const authenticate = async ctx => {
         user = await User.findById(decoded.sub);
         if (decoded.remember) {
           ctx.cookies.set(cookieName, token, {
-            expires: new Date(Date.now() + cookieExpires)
+            expires: new Date(Date.now() + cookieExpires),
+            sameSite: cookieSameSite
           });
         }
       }
@@ -52,7 +54,7 @@ const register = async (ctx, args) => {
   }
   ctx.state.user = user = await User.create(args);
   const token = JWT.sign({ sub: user.id }, keystore.get());
-  ctx.cookies.set(cookieName, token);
+  ctx.cookies.set(cookieName, token, { sameSite: cookieSameSite });
   logger.info(`New user ${user.email}`);
   return user;
 };
@@ -72,7 +74,7 @@ const login = async (ctx, args) => {
     keystore.get()
   );
   const expires = args.remember ? new Date(Date.now() + cookieExpires) : false;
-  ctx.cookies.set(cookieName, token, { expires });
+  ctx.cookies.set(cookieName, token, { expires, sameSite: cookieSameSite });
   return user;
 };
 
@@ -126,5 +128,6 @@ module.exports = {
   login,
   logout,
   register,
-  reset
+  reset,
+  findById: User.findById
 };

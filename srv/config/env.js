@@ -8,15 +8,23 @@ if (config.error) {
 }
 
 const project = process.env.npm_package_name || 'hackforall';
+const dev = (process.env.NODE_ENV || 'development') !== 'production';
 
 module.exports = {
   project,
-  dev: (process.env.NODE_ENV || 'development') !== 'production',
+  dev,
   port: process.env.PORT,
+  logs: 'log',
   mongo: {
     uri: `mongodb://localhost/${project}`
   },
-  logs: 'log',
+  minio: {
+    endPoint: 'localhost',
+    port: 9000,
+    useSSL: !dev,
+    accessKey: 'hackforall',
+    secretKey: 'hackforall'
+  },
   mailer: {
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
@@ -26,12 +34,8 @@ module.exports = {
   secrets: process.env.SECRETS || ['shhhhh'],
   cookie: {
     name: process.env.COOKIE_NAME || project,
-    expires: process.env.COOKIE_EXPIRES || Number(1000 * 60 * 60 * 24 * 7)
-  },
-  files: {
-    local: {
-      path: process.env.FILE_PATH || '/tmp/'
-    }
+    expires: process.env.COOKIE_EXPIRES || Number(1000 * 60 * 60 * 24 * 7),
+    sameSite: true
   },
   playground: {
     settings: {

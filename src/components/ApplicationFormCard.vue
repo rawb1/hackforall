@@ -135,7 +135,7 @@
               <b-field
                 class="file is-primary"
                 :class="{
-                  'has-name': application.form.profile.resume.name
+                  'has-name': application.form.profile.resume
                 }"
               >
                 <b-upload
@@ -149,7 +149,7 @@
                     <span class="file-label">Click to upload</span>
                   </span>
                   <span
-                    v-if="application.form.profile.resume.name"
+                    v-if="application.form.profile.resume"
                     class="file-name"
                   >
                     {{ application.form.profile.resume.name }}
@@ -488,10 +488,7 @@ export default {
         'Small animal(s)',
         'No smoking',
         'Group hosting'
-      ],
-      uploads: {
-        resume: null
-      }
+      ]
     };
   },
   computed: {

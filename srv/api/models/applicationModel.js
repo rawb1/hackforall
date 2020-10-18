@@ -23,10 +23,7 @@ const ApplicationSchema = new Schema({
       studyFields: [String],
       interests: [String],
       github: String,
-      resume: {
-        type: Schema.Types.ObjectId,
-        ref: 'File'
-      },
+      resume: Object,
       teeShirtSize: String,
       dietaryRestrictions: [String],
       needHardware: Boolean,
@@ -36,10 +33,7 @@ const ApplicationSchema = new Schema({
     hardware: { hardwareList: [String] },
     travel: {
       paypalAddress: String,
-      travelReceipt: {
-        type: Schema.Types.ObjectId,
-        ref: 'File'
-      }
+      travelReceipt: Object
     },
     hosting: { HostingPreferences: [String], hostMatchingDetails: String },
     terms: {

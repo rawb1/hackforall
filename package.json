@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "watch": "nodemon --inspect --ignore src/ ./srv/server.js",
+    "watch": "docker start mongo minio && nodemon --inspect --ignore src/ ./srv/server.js",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint --fix && eslint ./srv --fix",
-    "mongo": "docker run -d -p 27017:27017 --name mongo mongo:latest",
-    "configure": "cp .env.example .env"
+    "setup:mongo": "docker run -d -p 27017:27017 --name mongo mongo:latest",
+    "setup:minio": "docker run -d -p 9000:9000 -e 'MINIO_ACCESS_KEY=hackforall' -e 'MINIO_SECRET_KEY=hackforall' --name minio minio/minio:latest server /data",
+    "setup": "cp .env.example .env && npm run setup:mongo && npm run setup:minio"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",
@@ -24,7 +25,6 @@
     "bulma": "^0.9.0",
     "bulma-helpers": "^0.3.12",
     "bulma-timeline": "^3.0.4",
-    "cacache": "^15.0.5",
     "core-js": "^3.6.5",
     "dotenv": "^8.2.0",
     "graphql": "^15.3.0",
@@ -40,7 +40,9 @@
     "koa-static": "^5.0.0",
     "lodash": "^4.17.20",
     "log4js": "^6.3.0",
+    "minio": "^7.0.16",
     "mongoose": "^5.10.3",
+    "node-cache": "^5.1.2",
     "nodemailer": "^6.4.11",
     "normalize.css": "^8.0.1",
     "vee-validate": "^2.2.15",

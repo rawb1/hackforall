@@ -1,26 +1,18 @@
-const cacache = require('cacache');
-const mongoose = require('mongoose');
+const minioClient = require('../../config/minio');
 
-const File = mongoose.model('File');
+const _fileName = user => `${user.username}-${user.email}.pdf`;
 
-const { files } = require('../../config/env');
+const write = async (upload, bucket, user) => {
+  const file = await upload;
+  const stream = file.createReadStream();
 
-const path = files.local.path;
-const adapter = 'local';
+  await minioClient.putObject(bucket, _fileName(user), stream);
 
-const write = async upload => {
-  const { createReadStream, filename } = await upload;
-
-  const stream = createReadStream();
-
-  const file = await File.create({ name: filename, adapter });
-
-  stream.pipe(cacache.put.stream(path, file.id));
-
-  return file;
+  return { name: file.filename, type: file.mimetype, bucket };
 };
 
-const read = File.findOne;
+const read = (bucket, user) =>
+  minioClient.presignedGetObject(bucket, _fileName(user), 60);
 
 module.exports = {
   write,

@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const { ApolloError } = require('apollo-server-koa');
-
 const Application = mongoose.model('Application');
 
 const findOne = (hackathonId, userId) =>
@@ -10,8 +9,6 @@ const create = (hackathonId, userId) =>
   Application.create({ hackathonId, userId });
 
 const update = async (hackathonId, userId, form) => {
-  form.profile.resume = await form.profile.resume.id;
-
   const application = await Application.findOne({ hackathonId, userId });
 
   if (!application) {

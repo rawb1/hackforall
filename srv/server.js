@@ -7,10 +7,12 @@ const { ApolloServer } = require('apollo-server-koa');
 const { graphqlUploadKoa } = require('graphql-upload');
 
 const { playground, dev } = require('./config/env');
+const cache = require('./config/cache');
 require('./config/logger');
 require('./config/mailer');
 require('./config/mongo');
 require('./config/keystore');
+require('./config/minio');
 
 require('./api/models');
 const { userController, hackathonController } = require('./api/controllers');
@@ -19,8 +21,6 @@ const schema = require('./api/graphql');
 const logger = log4js.getLogger('app');
 
 const app = new Koa();
-// TODO cache hackathonController.findActive(ctx)
-// https://www.npmjs.com/package/node-cache
 const apollo = new ApolloServer({
   schema,
   // Disable the built in file upload implementation that uses an outdated
@@ -30,7 +30,12 @@ const apollo = new ApolloServer({
   debug: dev,
   playground,
   context: async ({ ctx }) => {
-    ctx.state.hackathon = await hackathonController.findActive();
+    ctx.state.hackathon =
+      cache.get('hackathon') ||
+      (await hackathonController
+        .findActive()
+        .then(hackathon => cache.set('hackathon', hackathon, 60 * 50)));
+
     ctx.state.user = await userController.authenticate(ctx);
     return ctx;
   }

@@ -1,6 +1,6 @@
 const { gql } = require('apollo-server-koa');
 
-const { applicationController } = require('../../controllers');
+const { applicationController, fileController } = require('../../controllers');
 
 const typeDefs = gql`
   type Application {
@@ -150,12 +150,22 @@ const resolvers = {
         ctx.state.user.id
       );
     },
-    updateApplication: (parent, args, ctx) => {
-      return applicationController.update(
-        ctx.state.hackathon.id,
-        ctx.state.user.id,
-        args.form
-      );
+    updateApplication: async (_, { form }, { state }) => {
+      if (form.profile.resume) {
+        form.profile.resume = await fileController.write(
+          form.profile.resume,
+          'resumes',
+          state.user
+        );
+      }
+      if (form.travel.travelReceipt) {
+        form.travel.travelReceipt = await fileController.write(
+          form.profile.resume,
+          'travereceipts',
+          state.user
+        );
+      }
+      return applicationController.update(state.hackathon.id, state.user, form);
     },
     cancelApplication: (_, __, { state }) =>
       applicationController.cancel(state.hackathon.id, state.user.id),
