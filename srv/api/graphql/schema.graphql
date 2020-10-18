@@ -48,6 +48,9 @@ type Query {
   hackathonStats: HackathonStats
   sponsor(id: ID): Sponsor
   sponsors: [Sponsor]
+  filesLink: String
+  fileLink(bucket: String): String
+  userFileLink(userId: ID, bucket: String): String
 }
 
 type Mutation {
@@ -67,8 +70,6 @@ type Mutation {
   joinTeam(name: String!): Boolean
   leaveTeam(name: String!): Boolean
   recruitTeammate(name: String!, userId: ID!): Boolean
-  getFileLink(bucket: String): String
-  getUserFileLink(userId: ID, bucket: String): String
 }
 
 enum Role {

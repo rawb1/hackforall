@@ -30,14 +30,11 @@ const apollo = new ApolloServer({
   debug: dev,
   playground,
   context: async ({ ctx }) => {
-    ctx.state.hackathon =
-      cache.get('hackathon') ||
-      (await hackathonController
-        .findActive()
-        .then(
-          hackathon => cache.set('hackathon', hackathon, 5 * 60) && hackathon
-        ));
-
+    ctx.state.hackathon = await cache(
+      'hackathon',
+      hackathonController.findActive,
+      5 * 60
+    );
     ctx.state.user = await userController.authenticate(ctx);
     return ctx;
   }

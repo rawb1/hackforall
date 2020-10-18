@@ -12,18 +12,20 @@ const typeDefs = gql`
     bucket: String
   }
 
-  extend type Mutation {
-    getFileLink(bucket: String): String @auth(requires: USER)
-    getUserFileLink(userId: ID, bucket: String): String @auth(requires: ADMIN)
+  extend type Query {
+    filesLink: String @auth(requires: ADMIN)
+    fileLink(bucket: String): String @auth(requires: USER)
+    userFileLink(userId: ID, bucket: String): String @auth(requires: ADMIN)
   }
 `;
 
 const resolvers = {
   Upload: GraphQLUpload,
-  Mutation: {
-    getFileLink: (_, { bucket }, { state }) =>
+  Query: {
+    filesLink: () => fileController.serverLink(),
+    fileLink: (_, { bucket }, { state }) =>
       fileController.read(bucket, state.user),
-    getUserFileLink: async (_, { bucket, userId }) =>
+    userFileLink: async (_, { bucket, userId }) =>
       fileController.read(bucket, await userController.findById(userId))
   }
 };
