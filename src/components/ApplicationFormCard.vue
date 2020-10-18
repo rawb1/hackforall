@@ -263,7 +263,7 @@
               <b-field
                 class="file is-primary"
                 :class="{
-                  'has-name': !!application.form.travel.travelReceipt.name
+                  'has-name': !!application.form.travel.travelReceipt
                 }"
               >
                 <b-upload
@@ -535,8 +535,7 @@ export default {
     cancel() {
       this.$apollo
         .mutate({
-          mutation: CANCEL_APPLICATION_MUTATION,
-          variables: { id: this.application.id }
+          mutation: CANCEL_APPLICATION_MUTATION
         })
         .then(() => {
           this.$buefy.toast.open({

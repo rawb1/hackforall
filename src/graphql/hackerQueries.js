@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { applicationFormFragment } from './applicationQueries';
 
 export const HACKERS_QUERY = gql`
   query {
@@ -11,48 +12,11 @@ export const HACKERS_QUERY = gql`
         id
         status
         updatedAt
-        form {
-          profile {
-            school
-            name
-            phone
-            garduationYear
-            studyFields
-            interests
-            github
-            resume {
-              name
-            }
-            teeShirtSize
-            needHardware
-            needHosting
-            needTravelReimbursement
-            dietaryRestrictions
-          }
-          hosting {
-            HostingPreferences
-            hostMatchingDetails
-          }
-          hardware {
-            hardwareList
-          }
-          travel {
-            paypalAddress
-            travelReceipt {
-              name
-            }
-          }
-          terms {
-            majority
-            liability
-            photoRelease
-            codeOfConduct
-          }
-          additionalNotes
-        }
+        ...ApplicationForm
       }
     }
   }
+  ${applicationFormFragment}
 `;
 
 export const REGISTER_MUTATION = gql`

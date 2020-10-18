@@ -25,22 +25,35 @@
       <List v-model="hacker.application.form.terms" />
     </b-tab-item>
     <b-tab-item label="Files">
-      <b-button
-        v-if="hacker.application.form.profile.resume"
-        outlined
-        icon-left="far fa-file-pdf"
-        @click.prevent="download('resumes')"
-      >
-        Resume
-      </b-button>
-      <b-button
-        v-if="hacker.application.form.travel.travelReceipt"
-        outlined
-        icon-left="far fa-file-pdf"
-        @click.prevent="download('travelreceipts')"
-      >
-        Travel Receipt
-      </b-button>
+      <ul>
+        <li>
+          <b-button
+            v-if="hacker.application.form.profile.resume"
+            outlined
+            icon-left="far fa-file-pdf"
+            @click.prevent="
+              download(hacker.application.form.profile.resume.bucket)
+            "
+          >
+            Resume
+          </b-button>
+        </li>
+        <li>
+          <b-button
+            v-if="
+              hacker.application.form.profile.needTravelReimbursement &&
+                hacker.application.form.travel.travelReceipt
+            "
+            outlined
+            icon-left="far fa-file-pdf"
+            @click.prevent="
+              download(hacker.application.form.travel.travelReceipt.bucket)
+            "
+          >
+            Travel Receipt
+          </b-button>
+        </li>
+      </ul>
     </b-tab-item>
   </b-tabs>
 </template>
@@ -79,13 +92,6 @@ export default {
       const el = document.body.appendChild(link);
       link.click();
       document.body.removeChild(el);
-    }
-  },
-  apollo: {
-    travelReceipt: {
-      query: FILE_LINK_QUERY,
-      variables: { bucket: 'travelreceipts' },
-      update: data => data.fileLink
     }
   }
 };

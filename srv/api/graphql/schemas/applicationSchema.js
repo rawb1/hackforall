@@ -151,17 +151,17 @@ const resolvers = {
       );
     },
     updateApplication: async (_, { form }, { state }) => {
-      if (form.profile.resume) {
+      if ((await form.profile.resume).createReadStream) {
         form.profile.resume = await fileController.write(
           form.profile.resume,
           'resumes',
           state.user
         );
       }
-      if (form.travel.travelReceipt) {
+      if ((await form.travel.travelReceipt).createReadStream) {
         form.travel.travelReceipt = await fileController.write(
-          form.profile.resume,
-          'travereceipts',
+          form.travel.travelReceipt,
+          'travelreceipts',
           state.user
         );
       }

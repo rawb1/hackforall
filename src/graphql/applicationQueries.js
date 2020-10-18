@@ -1,5 +1,51 @@
 import gql from 'graphql-tag';
 
+export const applicationFormFragment = gql`
+  fragment ApplicationForm on Application {
+    form {
+      profile {
+        school
+        name
+        phone
+        garduationYear
+        studyFields
+        interests
+        github
+        resume {
+          name
+          bucket
+        }
+        teeShirtSize
+        needHardware
+        needHosting
+        needTravelReimbursement
+        dietaryRestrictions
+      }
+      hosting {
+        HostingPreferences
+        hostMatchingDetails
+      }
+      hardware {
+        hardwareList
+      }
+      travel {
+        paypalAddress
+        travelReceipt {
+          name
+          bucket
+        }
+      }
+      terms {
+        majority
+        liability
+        photoRelease
+        codeOfConduct
+      }
+      additionalNotes
+    }
+  }
+`;
+
 export const APPLICATION_QUERY = gql`
   query {
     application {
@@ -7,47 +53,10 @@ export const APPLICATION_QUERY = gql`
       userId
       hackathonId
       status
-      form {
-        profile {
-          school
-          name
-          phone
-          garduationYear
-          studyFields
-          interests
-          github
-          resume {
-            name
-          }
-          teeShirtSize
-          needHardware
-          needHosting
-          needTravelReimbursement
-          dietaryRestrictions
-        }
-        hosting {
-          HostingPreferences
-          hostMatchingDetails
-        }
-        hardware {
-          hardwareList
-        }
-        travel {
-          paypalAddress
-          travelReceipt {
-            name
-          }
-        }
-        terms {
-          majority
-          liability
-          photoRelease
-          codeOfConduct
-        }
-        additionalNotes
-      }
+      ...ApplicationForm
     }
   }
+  ${applicationFormFragment}
 `;
 
 export const CREATE_APPLICATION_MUTATION = gql`
@@ -57,47 +66,10 @@ export const CREATE_APPLICATION_MUTATION = gql`
       userId
       hackathonId
       status
-      form {
-        profile {
-          school
-          name
-          phone
-          garduationYear
-          studyFields
-          interests
-          github
-          resume {
-            name
-          }
-          teeShirtSize
-          needHardware
-          needHosting
-          needTravelReimbursement
-          dietaryRestrictions
-        }
-        hosting {
-          HostingPreferences
-          hostMatchingDetails
-        }
-        hardware {
-          hardwareList
-        }
-        travel {
-          paypalAddress
-          travelReceipt {
-            name
-          }
-        }
-        terms {
-          majority
-          liability
-          photoRelease
-          codeOfConduct
-        }
-        additionalNotes
-      }
+      ...ApplicationForm
     }
   }
+  ${applicationFormFragment}
 `;
 
 export const UPDATE_APPLICATION_MUTATION = gql`
@@ -107,97 +79,23 @@ export const UPDATE_APPLICATION_MUTATION = gql`
       userId
       hackathonId
       status
-      form {
-        profile {
-          school
-          name
-          phone
-          garduationYear
-          studyFields
-          interests
-          github
-          resume {
-            name
-          }
-          teeShirtSize
-          needHardware
-          needHosting
-          needTravelReimbursement
-          dietaryRestrictions
-        }
-        hosting {
-          HostingPreferences
-          hostMatchingDetails
-        }
-        hardware {
-          hardwareList
-        }
-        travel {
-          paypalAddress
-          travelReceipt {
-            name
-          }
-        }
-        terms {
-          majority
-          liability
-          photoRelease
-          codeOfConduct
-        }
-        additionalNotes
-      }
+      ...ApplicationForm
     }
   }
+  ${applicationFormFragment}
 `;
 
 export const CANCEL_APPLICATION_MUTATION = gql`
   mutation {
-    cancelApplication(id: $id) {
+    cancelApplication {
       id
       userId
       hackathonId
       status
-      form {
-        profile {
-          school
-          name
-          phone
-          garduationYear
-          studyFields
-          interests
-          github
-          resume {
-            name
-          }
-          teeShirtSize
-          needHardware
-          needHosting
-          needTravelReimbursement
-          dietaryRestrictions
-        }
-        hosting {
-          HostingPreferences
-          hostMatchingDetails
-        }
-        hardware {
-          hardwareList
-        }
-        travel {
-          paypalAddress
-          travelReceipt {
-            name
-          }
-        }
-        terms {
-          majority
-          liability
-          photoRelease
-          codeOfConduct
-        }
-        additionalNotes
-      }
+      ...ApplicationForm
     }
   }
+  ${applicationFormFragment}
 `;
 
 export const ACCEPT_APPLICATION_MUTATION = gql`
@@ -207,47 +105,10 @@ export const ACCEPT_APPLICATION_MUTATION = gql`
       userId
       hackathonId
       status
-      form {
-        profile {
-          school
-          name
-          phone
-          garduationYear
-          studyFields
-          interests
-          github
-          resume {
-            name
-          }
-          teeShirtSize
-          needHardware
-          needHosting
-          needTravelReimbursement
-          dietaryRestrictions
-        }
-        hosting {
-          HostingPreferences
-          hostMatchingDetails
-        }
-        hardware {
-          hardwareList
-        }
-        travel {
-          paypalAddress
-          travelReceipt {
-            name
-          }
-        }
-        terms {
-          majority
-          liability
-          photoRelease
-          codeOfConduct
-        }
-        additionalNotes
-      }
+      ...ApplicationForm
     }
   }
+  ${applicationFormFragment}
 `;
 
 export const REFUSE_APPLICATION_MUTATION = gql`
@@ -257,45 +118,8 @@ export const REFUSE_APPLICATION_MUTATION = gql`
       userId
       hackathonId
       status
-      form {
-        profile {
-          school
-          name
-          phone
-          garduationYear
-          studyFields
-          interests
-          github
-          resume {
-            name
-          }
-          teeShirtSize
-          needHardware
-          needHosting
-          needTravelReimbursement
-          dietaryRestrictions
-        }
-        hosting {
-          HostingPreferences
-          hostMatchingDetails
-        }
-        hardware {
-          hardwareList
-        }
-        travel {
-          paypalAddress
-          travelReceipt {
-            name
-          }
-        }
-        terms {
-          majority
-          liability
-          photoRelease
-          codeOfConduct
-        }
-        additionalNotes
-      }
+      ...ApplicationForm
     }
   }
+  ${applicationFormFragment}
 `;

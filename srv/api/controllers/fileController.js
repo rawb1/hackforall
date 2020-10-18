@@ -6,7 +6,6 @@ const _fileName = user => `${user.username}-${user.email}.pdf`;
 const write = async (upload, bucket, user) => {
   const file = await upload;
 
-  if (!file.createReadStream) return;
   const stream = file.createReadStream();
 
   await minioClient.putObject(bucket, _fileName(user), stream);
