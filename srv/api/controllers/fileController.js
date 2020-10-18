@@ -14,8 +14,16 @@ const write = async (upload, bucket, user) => {
   return { name: file.filename, type: file.mimetype, bucket };
 };
 
-const read = (bucket, user) =>
-  minioClient.presignedGetObject(bucket, _fileName(user), 60);
+const read = async (bucket, user) => {
+  const name = `${bucket}-${_fileName(user)}`;
+  const link = await minioClient.presignedGetObject(
+    bucket,
+    _fileName(user),
+    10
+  );
+  return { name, link };
+};
+
 const serverLink = () =>
   `${minio.ssl ? 'https' : 'http'}://${minio.endPoint}:${minio.port}/minio`;
 

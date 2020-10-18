@@ -7,6 +7,7 @@ import '@/plugins/logger';
 import '@/plugins/buefy';
 import '@/plugins/gravatar';
 import '@/plugins/vee-validate';
+import '@/plugins/http';
 
 Vue.config.productionTip = false;
 

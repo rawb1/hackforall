@@ -6,14 +6,20 @@ export const FILES_LINK_QUERY = gql`
   }
 `;
 
-export const FILE_LINK = gql`
+export const FILE_LINK_QUERY = gql`
   query($bucket: String) {
-    fileLink(bucket: $bucket)
+    fileLink(bucket: $bucket) {
+      name
+      link
+    }
   }
 `;
 
-export const USER_FILE_LINK = gql`
+export const USER_FILE_LINK_QUERY = gql`
   query($userId: ID, $bucket: String) {
-    fileLink(userId: $userId, bucket: $bucket)
+    userFileLink(userId: $userId, bucket: $bucket) {
+      name
+      link
+    }
   }
 `;

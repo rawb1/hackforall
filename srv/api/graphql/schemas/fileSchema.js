@@ -12,10 +12,15 @@ const typeDefs = gql`
     bucket: String
   }
 
+  type FileLink {
+    name: String
+    link: String
+  }
+
   extend type Query {
     filesLink: String @auth(requires: ADMIN)
-    fileLink(bucket: String): String @auth(requires: USER)
-    userFileLink(userId: ID, bucket: String): String @auth(requires: ADMIN)
+    fileLink(bucket: String): FileLink @auth(requires: USER)
+    userFileLink(userId: ID, bucket: String): FileLink @auth(requires: ADMIN)
   }
 `;
 

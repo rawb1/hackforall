@@ -49,8 +49,8 @@ type Query {
   sponsor(id: ID): Sponsor
   sponsors: [Sponsor]
   filesLink: String
-  fileLink(bucket: String): String
-  userFileLink(userId: ID, bucket: String): String
+  fileLink(bucket: String): FileLink
+  userFileLink(userId: ID, bucket: String): FileLink
 }
 
 type Mutation {
@@ -296,4 +296,9 @@ type File {
   name: String
   type: String
   bucket: String
+}
+
+type FileLink {
+  name: String
+  link: String
 }
