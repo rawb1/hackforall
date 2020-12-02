@@ -2,8 +2,10 @@ const mongoose = require('mongoose');
 const { ApolloError } = require('apollo-server-koa');
 const Application = mongoose.model('Application');
 
-const findOne = (hackathonId, userId) =>
-  Application.findOne({ hackathonId, userId });
+const findOne = (hackathon, userId) =>
+  hackathon.open || hackathon.live
+    ? Application.findOne({ hackathonId: hackathon.id, userId })
+    : null;
 
 const create = (hackathonId, userId) =>
   Application.create({ hackathonId, userId });

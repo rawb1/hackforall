@@ -134,27 +134,28 @@ const typeDefs = gql`
 
 const resolvers = {
   User: {
-    application: (parent, _, { state }) =>
-      ((parent.application.id = parent.application._id) &&
-        parent.application) || // prevent db refetch + fix missing id field getter
-      applicationController.findOne(state.hackathon.id, parent._id)
+    application: (user, _, { state }) =>
+      ((user.application.id = user.application._id) && user.application) || // prevent db refetch + fix missing id field getter
+      applicationController.findOne(state.hackathon, user._id)
   },
   Query: {
     application: (_, __, { state }) =>
-      applicationController.findOne(state.hackathon.id, state.user.id)
+      applicationController.findOne(state.hackathon, state.user.id)
   },
   Mutation: {
     createApplication: (_, __, { state }) =>
       applicationController.create(state.hackathon.id, state.user.id),
     updateApplication: async (_, { form }, { state }) => {
-      if ((await form.profile.resume).createReadStream) {
+      const resume = await form.profile.resume;
+      const travelReceipt = await form.travel.travelReceipt;
+      if (resume && resume.createReadStream) {
         form.profile.resume = await fileController.write(
           form.profile.resume,
           'resumes',
           state.user
         );
       }
-      if ((await form.travel.travelReceipt).createReadStream) {
+      if (travelReceipt && travelReceipt.createReadStream) {
         form.travel.travelReceipt = await fileController.write(
           form.travel.travelReceipt,
           'travelreceipts',
