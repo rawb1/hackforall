@@ -7,7 +7,6 @@ const { ApolloServer } = require('apollo-server-koa');
 const { graphqlUploadKoa } = require('graphql-upload');
 
 const { playground, dev } = require('./config/env');
-const cache = require('./config/cache');
 require('./config/logger');
 require('./config/mailer');
 require('./config/mongo');
@@ -30,11 +29,7 @@ const apollo = new ApolloServer({
   debug: dev,
   playground,
   context: async ({ ctx }) => {
-    ctx.state.hackathon = await cache(
-      'hackathon',
-      hackathonController.findActive,
-      5 * 60
-    );
+    ctx.state.hackathon = await hackathonController.findActive();
     ctx.state.user = await userController.authenticate(ctx.cookies);
     return ctx;
   }
