@@ -30,43 +30,20 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    team: (parent, args, ctx, info) => {
-      return teamController.get(ctx.state.hackathon.id, args.name);
-    },
-    teams: (parent, args, ctx, info) => {
-      return teamController.getAll();
-    }
+    team: (_, { name }, { state }) =>
+      teamController.get(state.hackathon.id, name),
+    teams: () => teamController.getAll()
   },
   Mutation: {
-    createTeam: (parent, args, ctx) => {
-      return teamController.create(
-        ctx.state.hackathon.id,
-        ctx.state.user.id,
-        args.name
-      );
+    createTeam: (_, { name }, { state }) =>
+      teamController.create(state.hackathon.id, state.user.id, name),
+    joinTeam: (_, { name }, { state }) =>
+      teamController.join(state.hackathon.id, state.user, name),
+    leaveTeam: (_, { name }, { state }) => {
+      return teamController.leave(state.hackathon.id, state.user.id, name);
     },
-    joinTeam: (parent, args, ctx) => {
-      return teamController.join(
-        ctx.state.hackathon.id,
-        ctx.state.user,
-        args.name
-      );
-    },
-    leaveTeam: (parent, args, ctx) => {
-      return teamController.leave(
-        ctx.state.hackathon.id,
-        ctx.state.user.id,
-        args.name
-      );
-    },
-    recruitTeammate: (parent, args, ctx) => {
-      return teamController.recruit(
-        ctx.state.hackathon,
-        ctx.state.user,
-        args.name,
-        args.userId
-      );
-    }
+    recruitTeammate: (_, { name, userId }, { state }) =>
+      teamController.recruit(state.hackathon, state.user, name, userId)
   }
 };
 

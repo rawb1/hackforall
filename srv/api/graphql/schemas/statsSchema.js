@@ -26,12 +26,9 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    stats: (parent, args, ctx, info) => {
-      return statsController.stats();
-    },
-    hackathonStats: (parent, args, ctx, info) => {
-      return statsController.hackathonStats(ctx.state.hackathon.id);
-    }
+    stats: () => statsController.stats(),
+    hackathonStats: (_, __, { state }) =>
+      statsController.hackathonStats(state.hackathon.id)
   },
   Mutation: {}
 };

@@ -35,7 +35,7 @@ const apollo = new ApolloServer({
       hackathonController.findActive,
       5 * 60
     );
-    ctx.state.user = await userController.authenticate(ctx);
+    ctx.state.user = await userController.authenticate(ctx.cookies);
     return ctx;
   }
 });

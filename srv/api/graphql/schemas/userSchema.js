@@ -37,18 +37,13 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    login: (parent, args, ctx, info) => {
-      return userController.login(ctx, args);
-    },
-    logout: (parent, args, ctx, info) => {
-      return userController.logout(ctx);
-    },
-    forgot: (parent, args, ctx, info) => {
-      return userController.forgot(ctx, args);
-    }
+    login: (_, { user: { username, email, password }, remember }, ctx) =>
+      userController.login(ctx, username, email, password, remember),
+    logout: (_, __, { cookies }) => userController.logout(cookies),
+    forgot: (_, { email }, { origin }) => userController.forgot(origin, email)
   },
   Mutation: {
-    register: (_, { username, email, password }, ctx) =>
+    register: (_, { user: { username, email, password } }, ctx) =>
       userController.register(ctx, username, email, password),
     reset: (_, { resetToken, newPassword }, ctx) =>
       userController.reset(ctx, resetToken, newPassword)

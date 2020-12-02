@@ -18,16 +18,16 @@ const cookieSameSite = env.cookie.sameSite;
  * @param {*} ctx - context
  * @return {*} context
  */
-const authenticate = async ctx => {
+const authenticate = async cookies => {
   let user;
   try {
-    const token = ctx.cookies.get(cookieName);
+    const token = cookies.get(cookieName);
     if (token) {
       const decoded = JWT.verify(token, keystore);
       if (decoded) {
         user = await User.findById(decoded.sub);
         if (decoded.remember) {
-          ctx.cookies.set(cookieName, token, {
+          cookies.set(cookieName, token, {
             expires: new Date(Date.now() + cookieExpires),
             sameSite: cookieSameSite
           });
@@ -36,57 +36,56 @@ const authenticate = async ctx => {
     }
   } catch (err) {
     logger.warning(err);
-    logout(ctx);
+    logout(cookies);
   }
   return user;
 };
 
-const register = async (ctx, args) => {
+const register = async (ctx, username, email, password) => {
   let user = await User.findOne({
-    $or: [{ email: args.email }, { username: args.username }]
+    $or: [{ email }, { username }]
   });
   if (user) {
-    if (user.email === args.email) {
+    if (user.email === email) {
       throw new UserInputError('Email already used');
     } else {
       throw new UserInputError('Username already taken');
     }
   }
-  ctx.state.user = user = await User.create(args);
+  ctx.state.user = user = await User.create({ username, email, password });
   const token = JWT.sign({ sub: user.id }, keystore.get());
   ctx.cookies.set(cookieName, token, { sameSite: cookieSameSite });
   logger.info(`New user ${user.email}`);
   return user;
 };
 
-const login = async (ctx, args) => {
-  const user = await User.findOne({ email: args.user.email });
+const login = async (ctx, username, email, password, remember) => {
+  const user = await await User.findOne({
+    $or: [{ email }, { username }]
+  });
   if (!user) {
     throw new UserInputError('Incorrect email or password');
   }
-  const verified = await user.verifyPassword(args.user.password);
+  const verified = await user.verifyPassword(password);
   if (!verified) {
     throw new UserInputError('Incorrect email or password');
   }
   ctx.state.user = user;
-  const token = JWT.sign(
-    { sub: user.id, remember: !!args.remember },
-    keystore.get()
-  );
-  const expires = args.remember ? new Date(Date.now() + cookieExpires) : false;
+  const token = JWT.sign({ sub: user.id, remember }, keystore.get());
+  const expires = remember && new Date(Date.now() + cookieExpires);
   ctx.cookies.set(cookieName, token, { expires, sameSite: cookieSameSite });
   return user;
 };
 
-const forgot = async (ctx, args) => {
-  const user = await User.findOne({ email: args.email });
+const forgot = async (origin, email) => {
+  const user = await User.findOne({ email });
   if (!user) {
     throw new UserInputError('User not found');
   }
   const resetToken = JWT.sign({ sub: user.id }, keystore.get(), {
     expiresIn: '1h'
   });
-  const resetLink = `${ctx.origin}/reset/${resetToken}`;
+  const resetLink = `${origin}/reset/${resetToken}`;
   const mail = await mailer.sendMail({
     from: '"Fred Foo 👻" <foo@example.com>',
     to: 'bar@example.com, baz@example.com',
@@ -114,13 +113,8 @@ const reset = async (ctx, args) => {
   return true;
 };
 
-const logout = ctx => {
-  const user = ctx.state.user;
-  if (user) {
-    ctx.cookies.set(cookieName, null, { expires: Date.now() });
-  }
-  return !!user;
-};
+const logout = cookies =>
+  cookies.set(cookieName, null, { expires: Date.now() });
 
 module.exports = {
   authenticate,

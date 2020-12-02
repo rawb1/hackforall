@@ -17,12 +17,8 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    sponsor: (parent, args, ctx, info) => {
-      return sponsorController.get();
-    },
-    sponsors: (parent, args, ctx, info) => {
-      return sponsorController.find();
-    }
+    sponsor: (parent, args, ctx, info) => sponsorController.get(),
+    sponsors: (parent, args, ctx, info) => sponsorController.find()
   }
 };
 

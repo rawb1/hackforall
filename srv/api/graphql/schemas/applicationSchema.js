@@ -134,22 +134,18 @@ const typeDefs = gql`
 
 const resolvers = {
   User: {
-    application: (parent, _, ctx) =>
+    application: (parent, _, { state }) =>
       ((parent.application.id = parent.application._id) &&
         parent.application) || // prevent db refetch + fix missing id field getter
-      applicationController.findOne(ctx.state.hackathon.id, parent._id)
+      applicationController.findOne(state.hackathon.id, parent._id)
   },
   Query: {
-    application: (_, __, ctx) =>
-      applicationController.findOne(ctx.state.hackathon.id, ctx.state.user.id)
+    application: (_, __, { state }) =>
+      applicationController.findOne(state.hackathon.id, state.user.id)
   },
   Mutation: {
-    createApplication: (parent, args, ctx) => {
-      return applicationController.create(
-        ctx.state.hackathon.id,
-        ctx.state.user.id
-      );
-    },
+    createApplication: (_, __, { state }) =>
+      applicationController.create(state.hackathon.id, state.user.id),
     updateApplication: async (_, { form }, { state }) => {
       if ((await form.profile.resume).createReadStream) {
         form.profile.resume = await fileController.write(
@@ -169,12 +165,8 @@ const resolvers = {
     },
     cancelApplication: (_, __, { state }) =>
       applicationController.cancel(state.hackathon.id, state.user.id),
-    acceptApplication: (parent, args, ctx) => {
-      return applicationController.accept(args.id);
-    },
-    refuseApplication: (parent, args, ctx) => {
-      return applicationController.refuse(args.id);
-    }
+    acceptApplication: (_, { id }) => applicationController.accept(id),
+    refuseApplication: (_, { id }) => applicationController.refuse(id)
   }
 };
 

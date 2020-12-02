@@ -12,13 +12,11 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    me: (_, __, ctx) => ctx.state.user,
-    hacker: (_, args, ctx) =>
-      hackerController.findOne(args.id, ctx.state.hackathon.id),
-    hackers: async (_, __, ctx) => {
-      const t = await hackerController.find(ctx.state.hackathon.id);
-      return t;
-    }
+    me: (_, __, { state }) => state.user,
+    hacker: (_, { id }, { state }) =>
+      hackerController.findOne(id, state.hackathon.id),
+    hackers: async (_, __, { state }) =>
+      hackerController.find(state.hackathon.id)
   },
   Mutation: {}
 };

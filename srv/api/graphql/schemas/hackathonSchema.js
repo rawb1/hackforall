@@ -79,26 +79,17 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    hackathon: (parent, args, ctx, info) => {
-      return ctx.state.hackathon;
-    },
-    hackathons: () => {
-      return hackathonController.find();
-    }
+    hackathon: (_, __, { state }) => state.hackathon,
+    hackathons: () => hackathonController.find()
   },
   Mutation: {
-    createHackathon: (_, args) => {
-      return hackathonController.create(args.hackathon);
-    },
-    updateHackathon: (_, args, ctx) => {
-      return hackathonController.update(ctx.state.hackathon.id, args.hackathon);
-    },
-    cancelHackathon: (_, __, ctx) => {
-      return hackathonController.cancel(ctx.state.hackathon.id);
-    },
-    activateHackathon: (_, args) => {
-      return hackathonController.activate(args.id);
-    }
+    createHackathon: (_, { hackathon }) =>
+      hackathonController.create(hackathon),
+    updateHackathon: (_, { hackathon }, { state }) =>
+      hackathonController.update(state.hackathon.id, hackathon),
+    cancelHackathon: (_, __, { state }) =>
+      hackathonController.cancel(state.hackathon.id),
+    activateHackathon: (_, { id }) => hackathonController.activate(id)
   }
 };
 
