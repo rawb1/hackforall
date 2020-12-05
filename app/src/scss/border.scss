@@ -1,0 +1,18 @@
+$border-width: 2px !default;
+
+.has-border {
+  border: solid $border-width;
+
+  &.is-success {
+    border-color: $success;
+  }
+  &.is-info {
+    border-color: $info;
+  }
+  &.is-warning {
+    border-color: $warning;
+  }
+  &.is-danger {
+    border-color: $danger;
+  }
+}
