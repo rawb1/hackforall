@@ -5,7 +5,7 @@ const fixtures = require('./utils/fixtures');
 const Schema = mongoose.Schema;
 
 const HackathonSchema = new Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: true },
   dates: {
     applications: {
       open: { type: Date, required: true, default: new Date() },
@@ -40,24 +40,10 @@ HackathonSchema.pre(['updateOne', 'findOneAndUpdate'], function(next) {
   next();
 });
 
-HackathonSchema.virtual('open').get(function() {
-  return (
-    this.active &&
-    Date.now() > this.dates.applications.open.getTime() &&
-    Date.now() < this.dates.applications.close.getTime()
-  );
-});
-
-HackathonSchema.virtual('live').get(function() {
-  return (
-    this.active &&
-    Date.now() > this.dates.start.getTime() &&
-    Date.now() < this.dates.end.getTime()
-  );
-});
-
 HackathonSchema.virtual('status').get(function() {
-  if (Date.now() < this.dates.applications.open.getTime()) {
+  if (!this.active) {
+    return 'CANCELED';
+  } else if (Date.now() < this.dates.applications.open.getTime()) {
     return 'COMING_SOON';
   } else if (Date.now() < this.dates.applications.close.getTime()) {
     return 'APPLICATIONS_OPEN';

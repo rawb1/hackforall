@@ -16,9 +16,9 @@ const typeDefs = gql`
     name: String
     dates: hackathonDates
     limits: hackathonLimits
-    open: Boolean
-    live: Boolean
     status: String
+    createdAt: Date
+    updatedAt:Date
   }
 
   type hackathonDates {
@@ -56,8 +56,6 @@ const typeDefs = gql`
     name: String
     dates: hackathonDatesInput
     limits: hackathonLimitsInput
-    open: Boolean
-    live: Boolean
   }
 
   input hackathonDatesInput {

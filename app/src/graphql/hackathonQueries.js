@@ -1,77 +1,65 @@
 import gql from 'graphql-tag';
 
+export const hackathonFragment = gql`
+  fragment hackathonFragment on Hackathon {
+    id
+    name
+    active
+    dates {
+      start
+      end
+      applications {
+        open
+        close
+      }
+    }
+    limits {
+      hackers
+      team
+      refund
+    }
+    status
+  }
+`;
+
 export const HACKATHON_QUERY = gql`
   query {
     hackathon {
-      id
-      name
-      active
-      dates {
-        start
-        end
-        applications {
-          open
-          close
-        }
-      }
-      limits {
-        hackers
-        team
-        refund
-      }
-      live
-      open
-      status
+      ...hackathonFragment
     }
   }
+  ${hackathonFragment}
 `;
 
 export const HACKATHONS_QUERY = gql`
   query {
     hackathons {
-      id
-      name
-      dates {
-        start
-        end
-        applications {
-          open
-          close
-        }
-      }
-      limits {
-        hackers
-        team
-        refund
-      }
-      status
+      ...hackathonFragment
+      createdAt
+      updatedAt
     }
   }
+  ${hackathonFragment}
 `;
 
 export const UPDATE_HACKATHON_MUTATION = gql`
   mutation($hackathon: HackathonInput!) {
     updateHackathon(hackathon: $hackathon) {
-      id
-      name
-      active
-      dates {
-        start
-        end
-        applications {
-          open
-          close
-        }
-      }
-      limits {
-        hackers
-        team
-        refund
-      }
-      live
-      open
+      ...hackathonFragment
     }
   }
+  ${hackathonFragment}
+`;
+
+export const CREATE_HACKATHON_MUTATION = gql`
+  mutation($hackathon: HackathonInput!) {
+    createHackathon(hackathon: $hackathon) {
+      ...hackathonFragment
+      createdAt
+      updatedAt
+    }
+  }
+  ${hackathonFragment}
 `;
 
 export const CANCEL_HACKATHON_MUTATION = gql`
@@ -79,8 +67,6 @@ export const CANCEL_HACKATHON_MUTATION = gql`
     cancelHackathon {
       id
       active
-      live
-      open
     }
   }
 `;
@@ -88,10 +74,8 @@ export const CANCEL_HACKATHON_MUTATION = gql`
 export const ACTIVATE_HACKATHON_MUTATION = gql`
   mutation($id: ID!) {
     activateHackathon(id: $id) {
-      id
-      active
-      live
-      open
+      ...hackathonFragment
     }
   }
+  ${hackathonFragment}
 `;

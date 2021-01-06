@@ -18,12 +18,8 @@
     </template>
     <template slot="start">
       <b-navbar-dropdown label="Info" :hoverable="true">
-        <b-navbar-item href="#">
-          About
-        </b-navbar-item>
-        <b-navbar-item href="#">
-          Contact
-        </b-navbar-item>
+        <b-navbar-item href="#"> About </b-navbar-item>
+        <b-navbar-item href="#"> Contact </b-navbar-item>
       </b-navbar-dropdown>
     </template>
     <template slot="end">
@@ -33,10 +29,19 @@
       <b-navbar-item v-if="!me" tag="router-link" :to="{ name: 'register' }">
         Register
       </b-navbar-item>
-      <b-navbar-item tag="router-link" :to="{ name: 'dash' }">
+      <b-navbar-item
+        tag="router-link"
+        :to="{ name: 'dash' }"
+        :class="$route.name === 'dash' && 'has-text-secondary'"
+      >
         Dashboard
       </b-navbar-item>
-      <b-navbar-item v-if="isAdmin" tag="router-link" :to="{ name: 'admin' }">
+      <b-navbar-item
+        v-if="isAdmin"
+        tag="router-link"
+        :to="{ name: 'admin' }"
+        :class="$route.name === 'admin' && 'has-text-secondary'"
+      >
         Admin
       </b-navbar-item>
       <b-navbar-item v-if="me" @click.prevent="logout">

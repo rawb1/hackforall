@@ -8,10 +8,7 @@
       <div class="media">
         <div class="media-left">
           <figure class="image is-48x48">
-            <img
-              src="https://bulma.io/images/placeholders/96x96.png"
-              alt="Placeholder image"
-            />
+            <img src="@/assets/logo.png" alt="Placeholder image" />
           </figure>
         </div>
         <div class="media-content">
@@ -19,6 +16,27 @@
           <p class="subtitle is-6">
             {{ new Date(hackathon.dates.start).toLocaleDateString() }}
           </p>
+        </div>
+        <div class="media-right">
+          <b-button
+            class="is-primary"
+            icon-right="fas fa-plus"
+            outlined
+            @click="newHackathon = true"
+            >New</b-button
+          >
+          <b-modal
+            v-model="newHackathon"
+            has-modal-card
+            trap-focus
+            :destroy-on-hide="false"
+            aria-role="dialog"
+            aria-modal
+          >
+            <template #default="props">
+              <HackathonFormCard @close="props.close" />
+            </template>
+          </b-modal>
         </div>
       </div>
       <b-tabs v-model="tab" class="formTabs">
@@ -79,6 +97,7 @@
             <b-numberinput
               v-model="hackathon.limits.hackers"
               step="1"
+              size="is-small"
               exponential
               controls-rounded
             >
@@ -88,6 +107,7 @@
             <b-numberinput
               v-model="hackathon.limits.team"
               step="1"
+              size="is-small"
               exponential
               controls-rounded
             >
@@ -97,6 +117,7 @@
             <b-numberinput
               v-model="hackathon.limits.refund"
               step="1"
+              size="is-small"
               exponential
               controls-rounded
             >
@@ -139,9 +160,13 @@ import {
   ACTIVATE_HACKATHON_MUTATION
 } from '@/graphql/hackathonQueries';
 
+import HackathonFormCard from '@/components/HackathonFormCard.vue';
+
 export default {
+  components: { HackathonFormCard },
   data: () => ({
-    tab: 0
+    tab: 0,
+    newHackathon: false
   }),
   computed: {
     hackathonDatesRange: {

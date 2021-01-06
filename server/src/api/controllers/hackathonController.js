@@ -5,7 +5,9 @@ const Hackathon = mongoose.model('Hackathon');
 const findActive = () =>
   Hackathon.findOne().sort({ active: -1, updatedAt: -1 });
 
-const create = Hackathon.create;
+const find = () => Hackathon.find();
+
+const create = hackathon => Hackathon.create(hackathon);
 
 const update = (id, hackathon) =>
   Hackathon.findByIdAndUpdate(id, hackathon, { new: true });
@@ -20,6 +22,7 @@ const activate = async id => {
 
 module.exports = {
   findActive,
+  find,
   create,
   update,
   cancel,

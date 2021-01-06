@@ -17,7 +17,12 @@
         <div class="level-item has-text-centered">
           <div>
             <p class="heading">Hackers</p>
-            <p class="title has-text-secondary">{{ hackathonStats.hackers }}</p>
+            <p class="title">
+              <span class="has-text-secondary">
+                {{ hackathonStats.hackers }}
+              </span>
+              <span>/ {{ hackathon.limits.hackers }}</span>
+            </p>
           </div>
         </div>
         <div class="level-item has-text-centered">
