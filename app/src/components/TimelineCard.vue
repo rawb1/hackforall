@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card has-border">
     <div class="card-content">
       <div v-if="!$apollo.queries.hackathon.loading" class="timeline">
         <header class="timeline-header">
@@ -13,7 +13,7 @@
           :options="options"
         />
         <div class="timeline-item">
-          <div class="timeline-marker is-success is-icon">
+          <div class="timeline-marker is-secondary is-icon">
             <i class="far fa-address-card"></i>
           </div>
           <div class="timeline-content">
@@ -32,7 +32,7 @@
           :options="options"
         />
         <div class="timeline-item">
-          <div class="timeline-marker is-warning is-icon">
+          <div class="timeline-marker is-primary is-icon">
             <i class="far fa-address-card"></i>
           </div>
           <div class="timeline-content">
@@ -52,7 +52,7 @@
           :options="options"
         />
         <div class="timeline-item">
-          <div class="timeline-marker is-primary is-icon">
+          <div class="timeline-marker is-secondary is-icon">
             <i class="fas fa-code"></i>
           </div>
           <div class="timeline-content">
@@ -71,7 +71,7 @@
           :options="options"
         />
         <div class="timeline-item">
-          <div class="timeline-marker is-danger is-icon">
+          <div class="timeline-marker is-primary is-icon">
             <i class="fas fa-trophy"></i>
           </div>
           <div class="timeline-content">

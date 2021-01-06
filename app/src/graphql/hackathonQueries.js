@@ -21,6 +21,7 @@ export const HACKATHON_QUERY = gql`
       }
       live
       open
+      status
     }
   }
 `;
@@ -43,6 +44,7 @@ export const HACKATHONS_QUERY = gql`
         team
         refund
       }
+      status
     }
   }
 `;

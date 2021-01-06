@@ -10,14 +10,14 @@
         Dashboard
       </b-navbar-item>
       <b-navbar-item
-        v-if="hackathon && hackathon.open"
+        v-if="hackathon && hackathon.status === 'APPLICATIONS_OPEN'"
         tag="router-link"
         :to="{ name: 'application' }"
       >
         Application
       </b-navbar-item>
       <b-navbar-item
-        v-if="hackathon && hackathon.open"
+        v-if="hackathon && hackathon.status === 'APPLICATIONS_OPEN'"
         tag="router-link"
         :to="{ name: 'team' }"
       >

@@ -76,10 +76,10 @@ const typeDefs = gql`
   }
 
   extend type Mutation {
-    createApplication: Application @hackathon(requires: OPEN)
+    createApplication: Application @hackathon(requires: APPLICATIONS_OPEN)
     updateApplication(form: ApplicationFormInput!): Application
-      @hackathon(requires: OPEN)
-    cancelApplication: Application @hackathon(requires: OPEN)
+      @hackathon(requires: APPLICATIONS_OPEN)
+    cancelApplication: Application @hackathon(requires: APPLICATIONS_OPEN)
     acceptApplication(id: ID): Application @auth(requires: ADMIN)
     refuseApplication(id: ID): Application @auth(requires: ADMIN)
   }

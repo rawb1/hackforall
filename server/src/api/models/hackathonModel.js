@@ -40,17 +40,6 @@ HackathonSchema.pre(['updateOne', 'findOneAndUpdate'], function(next) {
   next();
 });
 
-HackathonSchema.methods.hasStatus = function(status) {
-  switch (status) {
-    case 'OPEN':
-      return this.open;
-    case 'LIVE':
-      return this.live;
-    default:
-      return false;
-  }
-};
-
 HackathonSchema.virtual('open').get(function() {
   return (
     this.active &&
@@ -65,6 +54,20 @@ HackathonSchema.virtual('live').get(function() {
     Date.now() > this.dates.start.getTime() &&
     Date.now() < this.dates.end.getTime()
   );
+});
+
+HackathonSchema.virtual('status').get(function() {
+  if (Date.now() < this.dates.applications.open.getTime()) {
+    return 'COMING_SOON';
+  } else if (Date.now() < this.dates.applications.close.getTime()) {
+    return 'APPLICATIONS_OPEN';
+  } else if (Date.now() < this.dates.start.getTime()) {
+    return 'APPLICATIONS_CLOSED';
+  } else if (Date.now() < this.dates.end.getTime()) {
+    return 'LIVE';
+  } else {
+    return 'FINISHED';
+  }
 });
 
 const Hackathon = mongoose.model('Hackathon', HackathonSchema);

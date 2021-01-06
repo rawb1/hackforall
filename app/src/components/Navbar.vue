@@ -7,7 +7,7 @@
       <b-navbar-item tag="router-link" :to="{ name: 'dash' }">
         <span
           v-if="hackathon"
-          class="has-text-weight-bold is-capitalized is-size-4"
+          class="has-text-weight-bold is-capitalized is-size-4 has-text-secondary"
         >
           {{ hackathon.name }}
         </span>
@@ -17,9 +17,6 @@
       </b-navbar-item>
     </template>
     <template slot="start">
-      <b-navbar-item tag="router-link" :to="{ name: 'dash' }">
-        Home
-      </b-navbar-item>
       <b-navbar-dropdown label="Info" :hoverable="true">
         <b-navbar-item href="#">
           About

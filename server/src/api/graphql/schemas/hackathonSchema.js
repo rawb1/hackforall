@@ -6,7 +6,7 @@ const typeDefs = gql`
   directive @hackathon(requires: hackathonStatus!) on OBJECT | FIELD_DEFINITION
 
   enum hackathonStatus {
-    OPEN
+    APPLICATIONS_OPEN
     LIVE
   }
 
@@ -18,6 +18,7 @@ const typeDefs = gql`
     limits: hackathonLimits
     open: Boolean
     live: Boolean
+    status: String
   }
 
   type hackathonDates {

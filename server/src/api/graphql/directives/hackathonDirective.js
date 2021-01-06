@@ -32,7 +32,7 @@ class HackathonDirective extends SchemaDirectiveVisitor {
         }
 
         const hackathon = args[2].state.hackathon;
-        if (!hackathon || !hackathon.hasStatus(requiredStatus)) {
+        if (!hackathon || !hackathon.status !== requiredStatus) {
           throw new ForbiddenError();
         }
 

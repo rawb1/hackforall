@@ -17,11 +17,16 @@ export const isAdmin = () =>
 export const isHackathonOpen = () =>
   client
     .query({ query: HACKATHON_QUERY })
-    .then(({ data }) => data && data.hackathon && data.hackathon.open)
+    .then(
+      ({ data }) =>
+        data && data.hackathon && data.hackathon.status === 'APPLICATIONS_OPEN'
+    )
     .catch(() => false);
 
 export const isHackathonLive = () =>
   client
     .query({ query: HACKATHON_QUERY })
-    .then(({ data }) => data && data.hackathon && data.hackathon.live)
+    .then(
+      ({ data }) => data && data.hackathon && data.hackathon.status === 'LIVE'
+    )
     .catch(() => false);

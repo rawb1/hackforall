@@ -3,7 +3,8 @@ const { ApolloError } = require('apollo-server-koa');
 const Application = mongoose.model('Application');
 
 const findOne = (hackathon, userId) =>
-  hackathon.open || hackathon.live
+  hackathon.status === 'APPLICATIONS_OPEN' ||
+  hackathon.status === 'LIVE'
     ? Application.findOne({ hackathonId: hackathon.id, userId })
     : null;
 
