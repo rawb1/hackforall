@@ -6,7 +6,6 @@ import Login from '@/views/auth/Login.vue';
 
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import DashLayout from '@/layouts/DashLayout.vue';
-import AdminLayout from '@/layouts/AdminLayout.vue';
 
 import { isConnected, isAdmin, isHackathonOpen } from '@/guards';
 
@@ -35,33 +34,24 @@ const routes = [
         component: () => import('@/views/dash/Team.vue'),
         beforeEnter: async (_, __, next) =>
           (await isHackathonOpen()) ? next() : next({ name: 'dash' })
-      }
-    ],
-    beforeEnter: async (_, __, next) =>
-      (await isConnected()) ? next() : next({ name: 'login' })
-  },
-  {
-    path: '/admin',
-    component: AdminLayout,
-    children: [
-      {
-        path: '/',
-        name: 'admin',
-        component: () => import('@/views/admin/Admin.vue')
       },
       {
         path: 'hackers',
         name: 'hackers',
-        component: () => import('@/views/admin/Hackers.vue')
+        component: () => import('@/views/admin/Hackers.vue'),
+        beforeEnter: async (_, __, next) =>
+          (await isAdmin()) ? next() : next({ name: 'dash' })
       },
       {
         path: 'hackathon',
         name: 'hackathon',
-        component: () => import('@/views/admin/Hackathon.vue')
+        component: () => import('@/views/admin/Hackathon.vue'),
+        beforeEnter: async (_, __, next) =>
+          (await isAdmin()) ? next() : next({ name: 'dash' })
       }
     ],
     beforeEnter: async (_, __, next) =>
-      (await isAdmin()) ? next() : next({ name: 'dash' })
+      (await isConnected()) ? next() : next({ name: 'login' })
   },
   {
     path: '/',

@@ -29,21 +29,6 @@
       <b-navbar-item v-if="!me" tag="router-link" :to="{ name: 'register' }">
         Register
       </b-navbar-item>
-      <b-navbar-item
-        tag="router-link"
-        :to="{ name: 'dash' }"
-        :class="$route.name === 'dash' && 'has-text-secondary'"
-      >
-        Dashboard
-      </b-navbar-item>
-      <b-navbar-item
-        v-if="isAdmin"
-        tag="router-link"
-        :to="{ name: 'admin' }"
-        :class="$route.name === 'admin' && 'has-text-secondary'"
-      >
-        Admin
-      </b-navbar-item>
       <b-navbar-item v-if="me" @click.prevent="logout">
         Logout
       </b-navbar-item>
@@ -59,11 +44,6 @@ export default {
   data: () => ({
     me: null
   }),
-  computed: {
-    isAdmin() {
-      return this.me && this.me.role === 'ADMIN';
-    }
-  },
   apollo: {
     me: ME_QUERY,
     hackathon: HACKATHON_QUERY

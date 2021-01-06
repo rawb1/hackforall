@@ -23,15 +23,27 @@
       >
         Team
       </b-navbar-item>
+      <b-navbar-item tag="router-link" :to="{ name: 'hackers' }">
+        Hackers
+      </b-navbar-item>
+      <b-navbar-item tag="router-link" :to="{ name: 'hackathon' }">
+        Hackathon
+      </b-navbar-item>
+      <b-navbar-item :href="filesLink" target="_blank">
+        Files
+      </b-navbar-item>
     </template>
   </b-navbar>
 </template>
 <script>
 import { HACKATHON_QUERY } from '@/graphql/hackathonQueries';
+import { FILES_LINK_QUERY } from '@/graphql/fileQueries';
+
 // TODO create a mobile navbar
 export default {
   apollo: {
-    hackathon: HACKATHON_QUERY
+    hackathon: HACKATHON_QUERY,
+    filesLink: FILES_LINK_QUERY
   }
 };
 </script>

@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { authMixin } from '@/mixins';
 import MeCard from '@/components/MeCard.vue';
 import ApplicationStatusCard from '@/components/ApplicationStatusCard.vue';
 import HackathonStatsCard from '@/components/HackathonStatsCard.vue';
@@ -23,6 +24,7 @@ export default {
     ApplicationStatusCard,
     HackathonStatsCard,
     TimelineCard
-  }
+  },
+  mixins: [authMixin]
 };
 </script>

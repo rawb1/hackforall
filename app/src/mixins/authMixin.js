@@ -7,6 +7,11 @@ import {
 } from '@/graphql/userQueries';
 
 export default {
+  computed: {
+    isAdmin() {
+      return this.me && this.me.role === 'ADMIN';
+    }
+  },
   methods: {
     async login(variables) {
       await this.$apollo.query({
