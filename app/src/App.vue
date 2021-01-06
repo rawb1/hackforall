@@ -13,10 +13,6 @@ export default {
 <style lang="scss">
 @import './style';
 
-.main-navbar {
-  z-index: 31;
-}
-
 .step-navigation {
   justify-content: center;
   display: flex;
@@ -32,11 +28,5 @@ export default {
 
 .b-tabs.formTabs > .tab-content {
   padding-top: 1.5rem;
-}
-
-@media screen and (min-width: $widescreen) {
-  .main-navbar {
-    height: 75px;
-  }
 }
 </style>

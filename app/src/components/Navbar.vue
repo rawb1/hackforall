@@ -1,5 +1,5 @@
 <template>
-  <b-navbar wrapper-class="container" type="is-primary" class="main-navbar">
+  <b-navbar type="is-primary">
     <template slot="brand">
       <b-navbar-item tag="router-link" :to="{ name: 'dash' }">
         <img src="@/assets/logo.png" alt="Placeholder image" />
@@ -17,10 +17,29 @@
       </b-navbar-item>
     </template>
     <template slot="start">
-      <b-navbar-dropdown label="Info" :hoverable="true">
-        <b-navbar-item href="#"> About </b-navbar-item>
-        <b-navbar-item href="#"> Contact </b-navbar-item>
-      </b-navbar-dropdown>
+      <b-navbar-item
+        v-if="hackathon && hackathon.status === 'APPLICATIONS_OPEN'"
+        tag="router-link"
+        :to="{ name: 'application' }"
+      >
+        Application
+      </b-navbar-item>
+      <!-- <b-navbar-item
+        v-if="hackathon && hackathon.status === 'APPLICATIONS_OPEN'"
+        tag="router-link"
+        :to="{ name: 'team' }"
+      >
+        Team
+      </b-navbar-item> -->
+      <b-navbar-item tag="router-link" :to="{ name: 'hackers' }">
+        Hackers
+      </b-navbar-item>
+      <b-navbar-item tag="router-link" :to="{ name: 'hackathon' }">
+        Hackathon
+      </b-navbar-item>
+      <b-navbar-item :href="filesLink" target="_blank">
+        Files
+      </b-navbar-item>
     </template>
     <template slot="end">
       <b-navbar-item v-if="!me" tag="router-link" :to="{ name: 'login' }">
@@ -39,6 +58,8 @@
 import { authMixin } from '@/mixins';
 import { ME_QUERY } from '@/graphql/userQueries';
 import { HACKATHON_QUERY } from '@/graphql/hackathonQueries';
+import { FILES_LINK_QUERY } from '@/graphql/fileQueries';
+
 export default {
   mixins: [authMixin],
   data: () => ({
@@ -46,7 +67,8 @@ export default {
   }),
   apollo: {
     me: ME_QUERY,
-    hackathon: HACKATHON_QUERY
+    hackathon: HACKATHON_QUERY,
+    filesLink: FILES_LINK_QUERY
   }
 };
 </script>
