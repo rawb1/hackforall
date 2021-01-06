@@ -1,12 +1,20 @@
 <template>
   <div class="tile is-ancestor">
     <div class="tile is-parent is-vertical is-4">
-      <MeCard class="tile is-child" />
-      <ApplicationStatusCard class="tile is-child" />
+      <div class="tile is-child">
+        <MeCard />
+      </div>
+      <div class="tile is-child">
+        <ApplicationStatusCard />
+      </div>
     </div>
     <div class="tile is-parent is-vertical is-8">
-      <HackathonStatsCard class="tile is-child" />
-      <TimelineCard class="tile is-child" />
+      <div class="tile is-child">
+        <HackathonStatsCard />
+      </div>
+      <div class="tile is-child">
+        <TimelineCard class="tile is-child" />
+      </div>
     </div>
   </div>
 </template>

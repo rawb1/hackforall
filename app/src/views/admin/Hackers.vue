@@ -1,8 +1,6 @@
 <template>
-  <div class="card is-full-width">
-    <div class="card-content">
-      <HackersTable />
-    </div>
+  <div class="box">
+    <HackersTable />
   </div>
 </template>
 

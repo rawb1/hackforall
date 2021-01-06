@@ -1,5 +1,5 @@
 <template>
-  <b-navbar type="is-primary">
+  <b-navbar type="is-primary" spaced>
     <template slot="brand">
       <b-navbar-item tag="router-link" :to="{ name: 'dash' }">
         <img src="@/assets/logo.png" alt="Placeholder image" />
