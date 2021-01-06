@@ -4,7 +4,9 @@
     <div class="divider">current</div>
     <HackathonCard />
     <div class="divider">others</div>
-    <HackathonsTable />
+    <div class="box">
+      <HackathonsTable />
+    </div>
   </div>
 </template>
 <script>

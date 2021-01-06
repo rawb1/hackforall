@@ -6,7 +6,7 @@
     </div>
     <div class="tile is-parent is-vertical is-8">
       <StatsCard class="tile is-child" />
-      <TimelineCard class="tile is-child" />
+      <Timeline class="tile is-child" />
     </div>
   </div>
 </template>
@@ -15,14 +15,14 @@
 import MeCard from '@/components/MeCard.vue';
 import ApplicationStatusCard from '@/components/ApplicationStatusCard.vue';
 import StatsCard from '@/components/StatsCard.vue';
-import TimelineCard from '@/components/TimelineCard.vue';
+import Timeline from '@/components/Timeline.vue';
 
 export default {
   components: {
     MeCard,
     ApplicationStatusCard,
     StatsCard,
-    TimelineCard
+    Timeline
   }
 };
 </script>

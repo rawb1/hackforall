@@ -354,7 +354,7 @@
               name="majority"
               data-vv-validate-on="input"
             >
-              <span :class="{ 'has-text-danger': errors.has('majority') }">
+              <span hacker>
                 I will be
                 <strong>&nbsp;18 years or older&nbsp;</strong>by the day of the
                 event.

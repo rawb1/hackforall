@@ -27,7 +27,6 @@
           >
           <b-modal
             v-model="newHackathon"
-            has-modal-card
             trap-focus
             :destroy-on-hide="false"
             aria-role="dialog"

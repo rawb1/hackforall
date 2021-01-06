@@ -13,7 +13,7 @@
         <HackathonStatsCard />
       </div>
       <div class="tile is-child">
-        <TimelineCard class="tile is-child" />
+        <Timeline class="tile is-child" />
       </div>
     </div>
   </div>
@@ -24,14 +24,14 @@ import { authMixin } from '@/mixins';
 import MeCard from '@/components/MeCard.vue';
 import ApplicationStatusCard from '@/components/ApplicationStatusCard.vue';
 import HackathonStatsCard from '@/components/HackathonStatsCard.vue';
-import TimelineCard from '@/components/TimelineCard.vue';
+import Timeline from '@/components/Timeline.vue';
 
 export default {
   components: {
     MeCard,
     ApplicationStatusCard,
     HackathonStatsCard,
-    TimelineCard
+    Timeline
   },
   mixins: [authMixin]
 };
