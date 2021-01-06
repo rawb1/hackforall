@@ -61,6 +61,7 @@ type Mutation {
   updateHackathon(hackathon: HackathonInput!): Hackathon
   cancelHackathon: Hackathon
   activateHackathon(id: ID): Hackathon
+  deleteHackathon(id: ID): Boolean
   createApplication: Application
   updateApplication(form: ApplicationFormInput!): Application
   cancelApplication: Application

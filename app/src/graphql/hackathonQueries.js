@@ -79,3 +79,9 @@ export const ACTIVATE_HACKATHON_MUTATION = gql`
   }
   ${hackathonFragment}
 `;
+
+export const DELETE_HACKATHON_MUTATION = gql`
+  mutation($id: ID!) {
+    deleteHackathon(id: $id)
+  }
+`;

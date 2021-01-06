@@ -3,8 +3,7 @@ const { ApolloError } = require('apollo-server-koa');
 const Application = mongoose.model('Application');
 
 const findOne = (hackathon, userId) =>
-  hackathon.status === 'APPLICATIONS_OPEN' ||
-  hackathon.status === 'LIVE'
+  hackathon.status === 'APPLICATIONS_OPEN' || hackathon.status === 'LIVE'
     ? Application.findOne({ hackathonId: hackathon.id, userId })
     : null;
 
@@ -42,11 +41,15 @@ const cancel = (hackathonId, userId) =>
     { new: true }
   );
 
+const deleteByHackathonId = hackathonId =>
+  Application.deleteMany({ hackathonId });
+
 module.exports = {
   findOne,
   create,
   update,
   accept,
   refuse,
-  cancel
+  cancel,
+  deleteByHackathonId
 };

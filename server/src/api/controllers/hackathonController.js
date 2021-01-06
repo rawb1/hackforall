@@ -20,9 +20,12 @@ const activate = async id => {
   return Hackathon.findByIdAndUpdate(id, { active: true }, { new: true });
 };
 
+const deleteOne = id => Hackathon.deleteOne({ _id: id, active: false });
+
 module.exports = {
   findActive,
   find,
+  deleteOne,
   create,
   update,
   cancel,

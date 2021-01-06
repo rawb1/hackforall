@@ -1,6 +1,9 @@
 const { gql } = require('apollo-server-koa');
 
-const { hackathonController } = require('../../controllers');
+const {
+  hackathonController,
+  applicationController
+} = require('../../controllers');
 
 const typeDefs = gql`
   directive @hackathon(requires: hackathonStatus!) on OBJECT | FIELD_DEFINITION
@@ -18,7 +21,7 @@ const typeDefs = gql`
     limits: hackathonLimits
     status: String
     createdAt: Date
-    updatedAt:Date
+    updatedAt: Date
   }
 
   type hackathonDates {
@@ -48,6 +51,7 @@ const typeDefs = gql`
     updateHackathon(hackathon: HackathonInput!): Hackathon
     cancelHackathon: Hackathon
     activateHackathon(id: ID): Hackathon
+    deleteHackathon(id: ID): Boolean
   }
 
   input HackathonInput {
@@ -88,7 +92,11 @@ const resolvers = {
       hackathonController.update(state.hackathon.id, hackathon),
     cancelHackathon: (_, __, { state }) =>
       hackathonController.cancel(state.hackathon.id),
-    activateHackathon: (_, { id }) => hackathonController.activate(id)
+    activateHackathon: (_, { id }) => hackathonController.activate(id),
+    deleteHackathon: async (_, { id }) => {
+      await applicationController.deleteByHackathonId(id);
+      return (await hackathonController.deleteOne(id)).deletedCount;
+    }
   }
 };
 

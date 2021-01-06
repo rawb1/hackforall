@@ -28,24 +28,23 @@
     </b-table-column>
 
     <b-table-column v-slot="props" width="90" centered label="Actions">
-      <b-field>
-        <p class="control">
-          <b-button
-            v-if="!props.row.active"
-            size="is-small"
-            type="is-success"
-            icon-left="far fa-thumbs-up"
-            rounded
-            @click="activate(props.row)"
-          ></b-button>
-        </p>
-        <p class="control">
-          <b-button
-            size="is-small"
-            type="is-danger"
-            icon-left="fas fa-ban"
-          ></b-button>
-        </p>
+      <b-field v-if="!props.row.active">
+        <b-button
+          size="is-small"
+          type="is-success"
+          icon-left="far fa-check-circle"
+          outlined
+          class="mx-1"
+          @click="activate(props.row)"
+        >
+        </b-button>
+        <b-button
+          size="is-small"
+          type="is-danger"
+          icon-left="fas fa-trash-alt"
+          outlined
+          @click="remove(props.row)"
+        ></b-button>
       </b-field>
     </b-table-column>
   </b-table>
@@ -55,7 +54,8 @@
 import {
   HACKATHON_QUERY,
   HACKATHONS_QUERY,
-  ACTIVATE_HACKATHON_MUTATION
+  ACTIVATE_HACKATHON_MUTATION,
+  DELETE_HACKATHON_MUTATION
 } from '@/graphql/hackathonQueries';
 
 export default {
@@ -64,7 +64,7 @@ export default {
   }),
   methods: {
     activate(hackathon) {
-      return this.$apollo.mutate({
+      this.$apollo.mutate({
         mutation: ACTIVATE_HACKATHON_MUTATION,
         variables: { id: hackathon.id },
         update: (store, { data: { activateHackathon } }) => {
@@ -79,6 +79,14 @@ export default {
           store.writeQuery({ query: HACKATHONS_QUERY, data: { hackathons } });
         }
       });
+    },
+    remove(hackathon) {
+      this.$apollo
+        .mutate({
+          mutation: DELETE_HACKATHON_MUTATION,
+          variables: { id: hackathon.id }
+        })
+        .then(() => this.$apollo.queries.hackathons.refetch());
     }
   },
   apollo: {
