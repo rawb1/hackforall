@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="application.form"
+    v-if="application && application.form"
     class="card is-full-width has-border"
     :class="statusColorClass(application.status)"
   >

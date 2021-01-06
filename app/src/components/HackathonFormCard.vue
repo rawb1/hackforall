@@ -111,10 +111,7 @@
   </div>
 </template>
 <script>
-import {
-  HACKATHONS_QUERY,
-  CREATE_HACKATHON_MUTATION
-} from '@/graphql/hackathonQueries';
+import { CREATE_HACKATHON_MUTATION } from '@/graphql/hackathonQueries';
 
 export default {
   data: () => ({
@@ -161,15 +158,13 @@ export default {
   },
   methods: {
     create() {
-      return this.$apollo.mutate({
-        mutation: CREATE_HACKATHON_MUTATION,
-        variables: { hackathon: this.hackathon },
-        update: (store, { data: { createHackathon } }) => {
-          let { hackathons } = store.readQuery({ query: HACKATHONS_QUERY });
-          hackathons.push(createHackathon);
-          store.writeQuery({ query: HACKATHONS_QUERY, data: { hackathons } });
-        }
-      });
+      return this.$apollo
+        .mutate({
+          mutation: CREATE_HACKATHON_MUTATION,
+          variables: { hackathon: this.hackathon }
+        })
+        .then(() => this.$apollo.getClient().resetStore())
+        .then(() => this.$emit('close'));
     }
   }
 };

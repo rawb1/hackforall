@@ -57,6 +57,7 @@ type Mutation {
   _empty: String
   register(user: UserInput!): User
   reset(resetToken: String!, newPassword: String!): Boolean
+  delete: Boolean
   createHackathon(hackathon: HackathonInput!): Hackathon
   updateHackathon(hackathon: HackathonInput!): Hackathon
   cancelHackathon: Hackathon

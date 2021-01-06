@@ -116,6 +116,8 @@ const reset = async (ctx, args) => {
 const logout = cookies =>
   !!cookies.set(cookieName, null, { expires: Date.now() });
 
+const deleteOne = id => User.deleteOne({ _id: id });
+
 module.exports = {
   authenticate,
   forgot,
@@ -123,5 +125,6 @@ module.exports = {
   logout,
   register,
   reset,
-  findById: User.findById
+  findById: User.findById,
+  deleteOne
 };

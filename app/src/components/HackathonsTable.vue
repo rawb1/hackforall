@@ -52,7 +52,6 @@
 
 <script>
 import {
-  HACKATHON_QUERY,
   HACKATHONS_QUERY,
   ACTIVATE_HACKATHON_MUTATION,
   DELETE_HACKATHON_MUTATION
@@ -64,21 +63,12 @@ export default {
   }),
   methods: {
     activate(hackathon) {
-      this.$apollo.mutate({
-        mutation: ACTIVATE_HACKATHON_MUTATION,
-        variables: { id: hackathon.id },
-        update: (store, { data: { activateHackathon } }) => {
-          let { hackathon } = store.readQuery({ query: HACKATHON_QUERY });
-          hackathon = { ...hackathon, ...activateHackathon };
-          store.writeQuery({ query: HACKATHON_QUERY, data: { hackathon } });
-
-          let { hackathons } = store.readQuery({ query: HACKATHONS_QUERY });
-          hackathons.forEach(hackathon => {
-            hackathon.active = hackathon.id === activateHackathon.id;
-          });
-          store.writeQuery({ query: HACKATHONS_QUERY, data: { hackathons } });
-        }
-      });
+      this.$apollo
+        .mutate({
+          mutation: ACTIVATE_HACKATHON_MUTATION,
+          variables: { id: hackathon.id }
+        })
+        .then(() => this.$apollo.getClient().resetStore());
     },
     remove(hackathon) {
       this.$apollo

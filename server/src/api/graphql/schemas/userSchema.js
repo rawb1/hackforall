@@ -32,6 +32,7 @@ const typeDefs = gql`
   extend type Mutation {
     register(user: UserInput!): User
     reset(resetToken: String!, newPassword: String!): Boolean
+    delete: Boolean
   }
 `;
 
@@ -46,7 +47,11 @@ const resolvers = {
     register: (_, { user: { username, email, password } }, ctx) =>
       userController.register(ctx, username, email, password),
     reset: (_, { resetToken, newPassword }, ctx) =>
-      userController.reset(ctx, resetToken, newPassword)
+      userController.reset(ctx, resetToken, newPassword),
+    delete: async (_, __, { cookies, state }) => {
+      await userController.delete(state.user.id);
+      return userController.logout(cookies);
+    }
   }
 };
 
