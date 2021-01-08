@@ -8,22 +8,24 @@ const User = mongoose.model('User');
 
 const stats = async () =>
   _.zipObject(
-    ['applications', 'users', 'hackathons', 'teams'],
+    ['applications', 'users', 'hackathons', 'teams', 'date'],
     await Promise.all([
       Application.estimatedDocumentCount(),
       User.estimatedDocumentCount(),
       Hackathon.estimatedDocumentCount(),
-      Team.estimatedDocumentCount()
+      Team.estimatedDocumentCount(),
+      new Date()
     ])
   );
 
 const hackathonStats = async hackathonId =>
   _.zipObject(
-    ['applications', 'hackers', 'teams'],
+    ['applications', 'hackers', 'teams', 'date'],
     await Promise.all([
       Application.countDocuments({ hackathonId }),
       Application.countDocuments({ hackathonId, status: 'ACCEPTED' }),
-      Team.countDocuments({ hackathonId })
+      Team.countDocuments({ hackathonId }),
+      new Date()
     ])
   );
 

@@ -34,8 +34,8 @@
       <b-navbar-item tag="router-link" :to="{ name: 'hackers' }">
         Hackers
       </b-navbar-item>
-      <b-navbar-item tag="router-link" :to="{ name: 'hackathon' }">
-        Hackathon
+      <b-navbar-item tag="router-link" :to="{ name: 'hackathons' }">
+        Hackathons
       </b-navbar-item>
       <b-navbar-item :href="filesLink" target="_blank">
         Files

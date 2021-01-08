@@ -275,6 +275,7 @@ type Stats {
   applications: Int
   teams: Int
   hacks: Int
+  date: Date
 }
 
 type HackathonStats {
@@ -282,6 +283,7 @@ type HackathonStats {
   hackers: Int
   teams: Int
   hacks: Int
+  date: Date
 }
 
 type Sponsor {

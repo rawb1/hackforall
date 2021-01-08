@@ -43,9 +43,9 @@ const routes = [
           (await isAdmin()) ? next() : next({ name: 'dash' })
       },
       {
-        path: 'hackathon',
-        name: 'hackathon',
-        component: () => import('@/views/admin/Hackathon.vue'),
+        path: 'hackathons',
+        name: 'hackathons',
+        component: () => import('@/views/admin/Hackathons.vue'),
         beforeEnter: async (_, __, next) =>
           (await isAdmin()) ? next() : next({ name: 'dash' })
       }

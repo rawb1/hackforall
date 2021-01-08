@@ -76,7 +76,8 @@ export default {
           mutation: DELETE_HACKATHON_MUTATION,
           variables: { id: hackathon.id }
         })
-        .then(() => this.$apollo.queries.hackathons.refetch());
+        .then(() => this.$apollo.queries.hackathons.refetch())
+        .then(() => this.$apollo.queries.stats.refetch());
     }
   },
   apollo: {

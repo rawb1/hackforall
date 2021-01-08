@@ -6,6 +6,7 @@ export const HACKATHON_STATS_QUERY = gql`
       hackers
       applications
       teams
+      date
     }
   }
 `;
@@ -18,6 +19,7 @@ export const STATS_QUERY = gql`
       applications
       teams
       hacks
+      date
     }
   }
 `;
