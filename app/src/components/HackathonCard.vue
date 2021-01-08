@@ -123,11 +123,6 @@
             </b-numberinput>
           </b-field>
         </b-tab-item>
-        <b-tab-item label="Sponsors">
-          <b-notification :closable="false">
-            WIP
-          </b-notification>
-        </b-tab-item>
       </b-tabs>
     </div>
     <footer class="card-footer">

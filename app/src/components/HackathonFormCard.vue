@@ -90,11 +90,6 @@
         >
         </b-numberinput>
       </b-field>
-      <div class="divider">Sponsors</div>
-
-      <b-notification :closable="false">
-        WIP
-      </b-notification>
     </div>
     <footer class="card-footer">
       <p class="card-footer-item">

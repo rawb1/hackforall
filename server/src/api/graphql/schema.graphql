@@ -46,8 +46,6 @@ type Query {
   teams: [Team]
   stats: Stats
   hackathonStats: HackathonStats
-  sponsor(id: ID): Sponsor
-  sponsors: [Sponsor]
   filesLink: String
   fileLink(bucket: String): FileLink
   userFileLink(userId: ID, bucket: String): FileLink
@@ -284,12 +282,6 @@ type HackathonStats {
   teams: Int
   hacks: Int
   date: Date
-}
-
-type Sponsor {
-  id: ID
-  hachathonId: ID
-  name: String
 }
 
 """The `Upload` scalar type represents a file upload."""

@@ -9,7 +9,6 @@ const applicationSchema = require('./applicationSchema');
 const teamSchema = require('./teamSchema');
 const hackathonSchema = require('./hackathonSchema');
 const statsSchema = require('./statsSchema');
-const sponsorSchema = require('./sponsorSchema');
 const fileSchema = require('./fileSchema');
 
 const typeDefs = gql`
@@ -48,7 +47,6 @@ module.exports = {
     applicationSchema.typeDefs,
     teamSchema.typeDefs,
     statsSchema.typeDefs,
-    sponsorSchema.typeDefs,
     fileSchema.typeDefs
   ],
   resolvers: merge(
@@ -59,7 +57,6 @@ module.exports = {
     applicationSchema.resolvers,
     teamSchema.resolvers,
     statsSchema.resolvers,
-    sponsorSchema.resolvers,
     fileSchema.resolvers
   )
 };
